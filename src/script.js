@@ -140,17 +140,15 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     grid.innerHTML = products.map(p => `
       <div class="product_card">
+        <button class="product_add-btn btn_transition" aria-label="Agregar a favoritos" title="Agregar a favoritos" data-id="${p.id}">
+          <i class="ri-heart-line"></i>
+        </button>
         <div class="product_image-wrap">
           <img src="${p.image}" alt="${p.name}" />
         </div>
         <div class="product_card-info">
-          <div class="product_card-header">
-            <h3 class="product_name">${p.name}</h3>
-            <button class="product_add-btn btn_transition" aria-label="Agregar a favoritos" title="Agregar a favoritos" data-id="${p.id}">
-              <i class="ri-heart-line"></i>
-            </button>
-          </div>
-          <!-- <p class="product_description">${p.description || ''}</p> -->
+          <h3 class="product_name">${p.name}</h3>
+          <p class="product_description">${p.description || ''}</p>
         </div>
       </div>
     `).join('');

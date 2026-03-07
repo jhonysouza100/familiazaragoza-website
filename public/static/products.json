@@ -1,26 +1,30 @@
 [
   {
-    "id": 1,
-    "name": "Paquete 500gr",
-    "brand": "YerbaMate",
-    "description": "Envasado en paquete craft para gustos mas exigentes.",
-    "image": "/public/img/home-product-1.png",
-    "price": 8
-  },
-  {
     "id": 2,
-    "name": "Arpillera 500gr",
-    "brand": "YerbaMate",
-    "description": "Envasado en bolsa arpillera para gustos artesanales.",
+    "name": "Arpillera 500g",
+    "description": "Presentación artesanal que destaca el origen, la tradición y el valor simbólico de la yerba mate.",
     "image": "/public/img/home-product-2.png",
     "price": 8
   },
   {
+    "id": 1,
+    "name": "Paquete 500g",
+    "description": "Presentación clásica y accesible, pensada para el consumo diario y la reventa fraccionada.",
+    "image": "/public/img/home-product-1.png",
+    "price": 8
+  },
+  {
     "id": 3,
-    "name": "Bolsa 10kg",
-    "brand": "YerbaMate",
-    "description": "Bolsa mas grande y generosa para largos periodos.",
+    "name": "Bolsa kraft 10kg",
+    "description": "Formato práctico y eficiente, ideal para reventa suelta o consumo de alto volumen.",
     "image": "/public/img/home-product-3.png",
+    "price": 8
+  },
+  {
+    "id": 4,
+    "name": "Venta Mayorista",
+    "description": "Sumá nuestra yerba a tu negocio. Precios especiales por volumen para comercios y distribuidores.",
+    "image": "/public/img/home-product-4.png",
     "price": 8
   }
 ]
