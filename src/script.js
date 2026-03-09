@@ -247,26 +247,6 @@ document.addEventListener("DOMContentLoaded", () => {
   syncCartButtonStates();
 });
 
-// =============== EMAIL SMTP ===============
-const emailHtmlContent = `
-<!DOCTYPE html  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-  <meta httpt-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-</head>
-  <table align="center" border="0" cellpadding="0" cellspacing="0" width="720" style="max-width:720px; background-color:#ffffff; border-top-left-radius: 24px; border-top-right-radius: 24px; border-bottom-right-radius:8px; border-bottom-left-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.1); margin:20px auto;">
-    <tr>
-      <td align="center" style="padding:20px; font-size:12px; color:#888;">
-        &copy; 2026 Familia Zaragoza | Todos los derechos reservados
-      </td>
-    </tr>
-  </table>
-  </body>
-</html>
-`;
-
 const inputEmail = document.getElementById("input-email");
 const submitButton = document.getElementById("submit-button");
 const emailMessage = document.getElementById("email-message");
@@ -275,6 +255,29 @@ submitButton.addEventListener("click", async (e) => {
   e.preventDefault();
   const email = inputEmail.value.trim();
   if (!email) return;
+
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+  // =============== EMAIL SMTP ===============
+  const emailHtmlContent = `
+<!DOCTYPE html  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//ES" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
+<head>
+  <meta httpt-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+  <table align="center" border="0" cellpadding="0" cellspacing="0" width="720" style="max-width:720px; background-color:#ffffff; border-top-left-radius: 24px; border-top-right-radius: 24px; border-bottom-right-radius:8px; border-bottom-left-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.1); margin:20px auto;">
+    <tr>
+      ${cart.map(el => `<p>${el.name}</p>`)}
+      <td align="center" style="padding:20px; font-size:12px; color:#888;">
+        &copy; 2026 Familia Zaragoza | Todos los derechos reservados
+      </td>
+    </tr>
+  </table>
+  </body>
+</html>
+`;
 
   const SMTPBody = {
     from: "Familia Zaragoza Yerba Mate",
@@ -285,10 +288,10 @@ submitButton.addEventListener("click", async (e) => {
 
   try {
     const res = await fetch(
-      "http://localhost:3000/api/v1/emails",
+      "https://vercel-deploy-delta-sandy.vercel.app/api/v1/emails",
       {
         method: "POST",
-        headers: { "Content-Type": "application/json", "x-api-key": "api-789" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(SMTPBody),
       }
     );
