@@ -281,7 +281,7 @@ submitButton.addEventListener("click", async (e) => {
 
   const SMTPBody = {
     from: "Familia Zaragoza Yerba Mate",
-    subject: "Prueba de email desde la web",
+    subject: "Consulta desde la web",
     to: [`${email}`],
     htmlContent: emailHtmlContent,
   };
