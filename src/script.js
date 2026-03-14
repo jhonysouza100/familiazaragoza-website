@@ -409,13 +409,12 @@ submitButton.addEventListener("click", async (e) => {
     emailMessage.textContent = "Correo enviado con éxito.";
     emailMessage.classList.add("success-message");
     inputEmail.value = "";
-  } catch (error) {
-    emailMessage.innerHTML = "Error al enviar el correo.";
-    emailMessage.classList.add("error-message");
-    inputEmail.value = "";
     inputName.value = "";
     inputPhone.value = "";
     inputMessage.value = "";
+  } catch (error) {
+    emailMessage.innerHTML = "Error al enviar el correo.";
+    emailMessage.classList.add("error-message");
   }
 });
 
