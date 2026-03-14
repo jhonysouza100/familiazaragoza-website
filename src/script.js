@@ -1,29 +1,29 @@
 // =============== SHOW MENU ===============
 const navMenu = document.getElementById('nav-menu'),
-      navToggle = document.getElementById('nav-toggle'),
-      navClose = document.getElementById('nav-close')
+  navToggle = document.getElementById('nav-toggle'),
+  navClose = document.getElementById('nav-close')
 
 /* Show menu */
-if(navToggle){
-   navToggle.addEventListener('click', () =>{
-      navMenu.classList.add('show-menu')
-   })
+if (navToggle) {
+  navToggle.addEventListener('click', () => {
+    navMenu.classList.add('show-menu')
+  })
 }
 
 /* Hide menu */
-if(navClose){
-   navClose.addEventListener('click', () =>{
-      navMenu.classList.remove('show-menu')
-   })
+if (navClose) {
+  navClose.addEventListener('click', () => {
+    navMenu.classList.remove('show-menu')
+  })
 }
 
 // =============== REMOVE MENU MOBILE ===============
 const navLink = document.querySelectorAll('.nav_link')
 
-const linkAction = () =>{
-   const navMenu = document.getElementById('nav-menu')
-   // When we click on each nav_link, we remove the show-menu class
-   navMenu.classList.remove('show-menu')
+const linkAction = () => {
+  const navMenu = document.getElementById('nav-menu')
+  // When we click on each nav_link, we remove the show-menu class
+  navMenu.classList.remove('show-menu')
 }
 navLink.forEach(n => n.addEventListener('click', linkAction))
 
@@ -51,11 +51,11 @@ const scrollActive = () => {
 window.addEventListener("scroll", scrollActive);
 
 // =============== CHANGE BACKGROUND HEADER ===============
-const scrollHeader = () =>{
-   const header = document.getElementById('header')
-   // Add the .blur-header class if the bottom scroll of the viewport is greater than 50
-   this.scrollY >= 50 ? header.classList.add('blur-header') 
-                      : header.classList.remove('blur-header')
+const scrollHeader = () => {
+  const header = document.getElementById('header')
+  // Add the .blur-header class if the bottom scroll of the viewport is greater than 50
+  this.scrollY >= 50 ? header.classList.add('blur-header')
+    : header.classList.remove('blur-header')
 }
 window.addEventListener('scroll', scrollHeader)
 
@@ -73,7 +73,7 @@ window.addEventListener("scroll", scrollUp);
 const drop = document.querySelectorAll('.drop-btn')
 
 drop.forEach(item => {
-    const dropList = item.querySelector('.drop_list')
+  const dropList = item.querySelector('.drop_list')
 
   item.addEventListener('click', () => {
     // 2. Close any other drop that are open
@@ -128,7 +128,7 @@ const swiper = new Swiper(".swiper-testimonials", {
 // =============== LOAD PRODUCTS SIMPLE ===============
 window.addEventListener('DOMContentLoaded', async () => {
   const grid = document.querySelector('.products_grid');
-  if (!grid) return;
+  const formContainer = document.getElementById('select_product-container');
 
   try {
     const res = await fetch('/public/static/products.json');
@@ -141,25 +141,44 @@ window.addEventListener('DOMContentLoaded', async () => {
     // Obtener carrito actual para marcar productos seleccionados
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
-    grid.innerHTML = products.map(p => {
-      const isInCart = cart.some(item => String(item.id) === String(p.id));
-      return `
-      <div class="product_card">
-        <input type="checkbox" name="products[]" id="product-${p.id}" value="${p.name}" class="product_checkbox" data-id="${p.id}" ${isInCart ? 'checked' : ''}>
-        <label for="product-${p.id}" class="product_card-label">
-          <span class="product_check-icon">
-            <i class="ri-check-line"></i>
-          </span>
-          <div class="product_image-wrap">
-            <img src="${p.image}" alt="${p.name}" />
-          </div>
-          <div class="product_card-info">
-            <h3 class="product_name">${p.name}</h3>
-            <p class="product_description">${p.description || ''}</p>
-          </div>
-        </label>
-      </div>
-    `}).join('');
+    // Renderizar grid de productos (cards grandes)
+    if (grid) {
+      grid.innerHTML = products.map(p => {
+        const isInCart = cart.some(item => String(item.id) === String(p.id));
+        return `
+        <div class="product_card">
+          <input type="checkbox" name="products[]" id="product-${p.id}" value="${p.name}" class="product_checkbox" data-id="${p.id}" ${isInCart ? 'checked' : ''}>
+          <label for="product-${p.id}" class="product_card-label">
+            <span class="product_check-icon">
+              <i class="ri-heart-fill"></i>
+            </span>
+            <div class="product_image-wrap">
+              <img src="${p.image}" alt="${p.name}" />
+            </div>
+            <div class="product_card-info">
+              <h3 class="product_name">${p.name}</h3>
+              <p class="product_description">${p.description || ''}</p>
+            </div>
+          </label>
+        </div>
+      `}).join('');
+    }
+
+    // Renderizar checkboxes del formulario (miniaturas)
+    if (formContainer) {
+      formContainer.innerHTML = products.map(p => {
+        const isInCart = cart.some(item => String(item.id) === String(p.id));
+        return `
+          <input type="checkbox" name="products[]" id="product-form-${p.id}" value="${p.name}" class="product_checkbox" data-id="${p.id}" ${isInCart ? 'checked' : ''}>
+          <label for="product-form-${p.id}" class="product_label">
+            <img src="${p.image}" alt="${p.name}">
+            <span class="product_check-icon">
+              <i class="ri-check-line"></i>
+            </span>
+          </label>
+        `;
+      }).join('');
+    }
   } catch (error) {
     console.error('Error loading products:', error);
   }
@@ -185,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-/** 🎯 Marca los checkboxes de productos activos según el localStorage */
+  /** 🎯 Marca los checkboxes de productos activos según el localStorage */
   const syncCartButtonStates = () => {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
     const productCheckboxes = document.querySelectorAll(".product_checkbox");
@@ -340,9 +359,9 @@ submitButton.addEventListener("click", async (e) => {
 
 // =============== SCROLL REVEAL ANIMATION ===============
 const sr = ScrollReveal({
-   origin: 'bottom',
-   distance: '60px',
-   duration: 2500
+  origin: 'bottom',
+  distance: '60px',
+  duration: 2500
 })
 
 sr.reveal(`.home_img, .footer_columns`, { opacity: 1, distance: '120px', delay: 400 })
