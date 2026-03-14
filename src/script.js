@@ -1,29 +1,29 @@
 // =============== SHOW MENU ===============
 const navMenu = document.getElementById('nav-menu'),
-      navToggle = document.getElementById('nav-toggle'),
-      navClose = document.getElementById('nav-close')
+  navToggle = document.getElementById('nav-toggle'),
+  navClose = document.getElementById('nav-close')
 
 /* Show menu */
-if(navToggle){
-   navToggle.addEventListener('click', () =>{
-      navMenu.classList.add('show-menu')
-   })
+if (navToggle) {
+  navToggle.addEventListener('click', () => {
+    navMenu.classList.add('show-menu')
+  })
 }
 
 /* Hide menu */
-if(navClose){
-   navClose.addEventListener('click', () =>{
-      navMenu.classList.remove('show-menu')
-   })
+if (navClose) {
+  navClose.addEventListener('click', () => {
+    navMenu.classList.remove('show-menu')
+  })
 }
 
 // =============== REMOVE MENU MOBILE ===============
 const navLink = document.querySelectorAll('.nav_link')
 
-const linkAction = () =>{
-   const navMenu = document.getElementById('nav-menu')
-   // When we click on each nav_link, we remove the show-menu class
-   navMenu.classList.remove('show-menu')
+const linkAction = () => {
+  const navMenu = document.getElementById('nav-menu')
+  // When we click on each nav_link, we remove the show-menu class
+  navMenu.classList.remove('show-menu')
 }
 navLink.forEach(n => n.addEventListener('click', linkAction))
 
@@ -51,11 +51,11 @@ const scrollActive = () => {
 window.addEventListener("scroll", scrollActive);
 
 // =============== CHANGE BACKGROUND HEADER ===============
-const scrollHeader = () =>{
-   const header = document.getElementById('header')
-   // Add the .blur-header class if the bottom scroll of the viewport is greater than 50
-   this.scrollY >= 50 ? header.classList.add('blur-header') 
-                      : header.classList.remove('blur-header')
+const scrollHeader = () => {
+  const header = document.getElementById('header')
+  // Add the .blur-header class if the bottom scroll of the viewport is greater than 50
+  this.scrollY >= 50 ? header.classList.add('blur-header')
+    : header.classList.remove('blur-header')
 }
 window.addEventListener('scroll', scrollHeader)
 
@@ -73,7 +73,7 @@ window.addEventListener("scroll", scrollUp);
 const drop = document.querySelectorAll('.drop-btn')
 
 drop.forEach(item => {
-    const dropList = item.querySelector('.drop_list')
+  const dropList = item.querySelector('.drop_list')
 
   item.addEventListener('click', () => {
     // 2. Close any other drop that are open
@@ -128,7 +128,7 @@ const swiper = new Swiper(".swiper-testimonials", {
 // =============== LOAD PRODUCTS SIMPLE ===============
 window.addEventListener('DOMContentLoaded', async () => {
   const grid = document.querySelector('.products_grid');
-  if (!grid) return;
+  const formContainer = document.getElementById('select_product-container');
 
   try {
     const res = await fetch('/public/static/products.json');
@@ -138,20 +138,47 @@ window.addEventListener('DOMContentLoaded', async () => {
     // Guardar para que el resto del script (carrito) pueda leerlos
     localStorage.setItem('products', JSON.stringify(products));
 
-    grid.innerHTML = products.map(p => `
-      <div class="product_card">
-        <button class="product_add-btn btn_transition" aria-label="Agregar a favoritos" title="Agregar a favoritos" data-id="${p.id}">
-          <i class="ri-heart-line"></i>
-        </button>
-        <div class="product_image-wrap">
-          <img src="${p.image}" alt="${p.name}" />
+    // Obtener carrito actual para marcar productos seleccionados
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+    // Renderizar grid de productos (cards grandes)
+    if (grid) {
+      grid.innerHTML = products.map(p => {
+        const isInCart = cart.some(item => String(item.id) === String(p.id));
+        return `
+        <div class="product_card">
+          <input type="checkbox" name="products[]" id="product-${p.id}" value="${p.name}" class="product_checkbox" data-id="${p.id}" ${isInCart ? 'checked' : ''}>
+          <label for="product-${p.id}" class="product_card-label">
+            <span class="product_check-icon">
+              <i class="ri-heart-fill"></i>
+            </span>
+            <div class="product_image-wrap">
+              <img src="${p.image}" alt="${p.name}" />
+            </div>
+            <div class="product_card-info">
+              <h3 class="product_name">${p.name}</h3>
+              <p class="product_description">${p.description || ''}</p>
+            </div>
+          </label>
         </div>
-        <div class="product_card-info">
-          <h3 class="product_name">${p.name}</h3>
-          <p class="product_description">${p.description || ''}</p>
-        </div>
-      </div>
-    `).join('');
+      `}).join('');
+    }
+
+    // Renderizar checkboxes del formulario (miniaturas)
+    if (formContainer) {
+      formContainer.innerHTML = products.map(p => {
+        const isInCart = cart.some(item => String(item.id) === String(p.id));
+        return `
+          <input type="checkbox" name="products[]" id="product-form-${p.id}" value="${p.name}" class="product_checkbox" data-id="${p.id}" ${isInCart ? 'checked' : ''}>
+          <label for="product-form-${p.id}" class="product_label">
+            <img src="${p.image}" alt="${p.name}">
+            <span class="product_check-icon">
+              <i class="ri-check-line"></i>
+            </span>
+          </label>
+        `;
+      }).join('');
+    }
   } catch (error) {
     console.error('Error loading products:', error);
   }
@@ -177,35 +204,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  /** 🎯 Marca los botones de carrito activos según el localStorage */
+  /** 🎯 Marca los checkboxes de productos activos según el localStorage */
   const syncCartButtonStates = () => {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const cartButtons = document.querySelectorAll(".product_add-btn");
+    const productCheckboxes = document.querySelectorAll(".product_checkbox");
 
-    if (cartButtons.length === 0) {
-      // Si aún no hay botones, reintentar después de un corto tiempo
+    if (productCheckboxes.length === 0) {
+      // Si aún no hay checkboxes, reintentar después de un corto tiempo
       setTimeout(syncCartButtonStates, 100);
-      // 👉 syncCartButtonStates() se ejecuta antes de que los productos se hayan renderizado en
-      // el DOM, por eso los botones .product_add-btn aún no existen cuando se llama por primera vez, y
-      // los estilos “in-cart” no se aplican hasta que ocurre una interacción.
-      // Esto pasa normalmente si los productos se inyectan dinámicamente en el DOM después del
-      // DOMContentLoaded (por ejemplo, desde otra función que los renderiza).
       return;
     }
 
-    cartButtons.forEach((btn) => {
-      const productId = btn.getAttribute("data-id");
+    productCheckboxes.forEach((checkbox) => {
+      const productId = checkbox.getAttribute("data-id");
       const exists = cart.some((item) => String(item.id) === String(productId));
-      btn.classList.toggle("in-cart", exists);
-
-      const icon = btn.querySelector("i");
-      if (icon) {
-        // Reemplaza la clase del icono según el estado
-        icon.className = exists ? "ri-heart-fill" : "ri-heart-line";
-      } else {
-        // Si no hay elemento <i>, inyectarlo
-        btn.innerHTML = exists ? '<i class="ri-heart-fill"></i>' : '<i class="ri-heart-line"></i>';
-      }
+      checkbox.checked = exists;
     });
   };
 
@@ -241,27 +254,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  /** �🛒 Escuchar clics en botones de carrito */
-  document.addEventListener("click", (e) => {
-    const cartBtn = e.target.closest(".product_add-btn");
-    if (cartBtn) {
-      const productId = cartBtn.getAttribute("data-id");
+  /** 🛒 Escuchar cambios en los checkboxes de productos */
+  document.addEventListener("change", (e) => {
+    const checkbox = e.target.closest(".product_checkbox");
+    if (checkbox) {
+      const productId = checkbox.getAttribute("data-id");
       const products = JSON.parse(localStorage.getItem("products") || "[]");
       const product = products.find((p) => String(p.id) === String(productId));
 
       if (product) {
         let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-        const index = cart.findIndex((item) => String(item.id) === String(productId));
-
-        if (index === -1) {
-          // 🟩 No existe → agregar al carrito
-          cart.push(product);
-          cartBtn.classList.add("in-cart");
+        if (checkbox.checked) {
+          // 🟩 Checkbox marcado → agregar al carrito si no existe
+          const exists = cart.some((item) => String(item.id) === String(productId));
+          if (!exists) {
+            cart.push(product);
+          }
         } else {
-          // 🟥 Ya existe → eliminar del carrito
-          cart.splice(index, 1);
-          cartBtn.classList.remove("in-cart");
+          // 🟥 Checkbox desmarcado → eliminar del carrito
+          cart = cart.filter((item) => String(item.id) !== String(productId));
         }
 
         // Guardar cambios
@@ -283,41 +295,100 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const inputEmail = document.getElementById("input-email");
+const inputName = document.getElementById("input-name");
+const inputPhone = document.getElementById("input-phone");
+const inputMessage = document.getElementById("input-message");
 const submitButton = document.getElementById("submit-button");
 const emailMessage = document.getElementById("email-message");
 
 submitButton.addEventListener("click", async (e) => {
   e.preventDefault();
-  const email = inputEmail.value.trim();
+  
+  const email = inputEmail?.value.trim() || "";
+  const name = inputName?.value.trim() || "";
+  const phone = inputPhone?.value.trim() || "";
+  const message = inputMessage?.value.trim() || "";
+  
   if (!email) return;
 
   const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  const productsList = cart.length > 0 
+    ? cart.map(el => `<li style="padding:8px 0; border-bottom:1px solid #eee;">${el.name}</li>`).join('')
+    : '<li style="padding:8px 0; color:#888;">No se seleccionaron productos</li>';
 
   // =============== EMAIL SMTP ===============
   const emailHtmlContent = `
-<!DOCTYPE html  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//ES" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
 <head>
-  <meta httpt-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
-  <table align="center" border="0" cellpadding="0" cellspacing="0" width="720" style="max-width:720px; background-color:#ffffff; border-top-left-radius: 24px; border-top-right-radius: 24px; border-bottom-right-radius:8px; border-bottom-left-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.1); margin:20px auto;">
+<body style="margin-inline: 1rem; font-family:'Montserrat', sans-serif;">
+  <table align="center" border="0" cellpadding="0" cellspacing="0" style="max-width:600px; background-color:#ffffff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin:20px auto;">
+    <!-- Header -->
     <tr>
-      ${cart.map(el => `<p>${el.name}</p>`)}
-      <td align="center" style="padding:20px; font-size:12px; color:#888;">
-        &copy; 2026 Familia Zaragoza | Todos los derechos reservados
+      <td align="center" style="padding:30px 20px; background:linear-gradient(145deg, hsl(31, 32%, 49%) 0%, hsl(32, 38%, 58%) 50%, hsl(35, 26%, 73%) 100%); border-radius:12px 12px 0 0;">
+        <h1 style="margin:0; color:#ffffff; font-size:24px;">Familia Zaragoza Website</h1>
+        <!-- <p style="margin:8px 0 0; color:#ffffff; font-size:18px;">Website</p> -->
+      </td>
+    </tr>
+    
+    <!-- Datos del contacto -->
+    <tr>
+      <td style="padding:30px 30px 20px;">
+        <h2 style="margin:0 0 20px; color:#333; font-size:18px; border-bottom:2px solid hsl(31, 32%, 49%); padding-bottom:10px;">Datos del Contacto</h2>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tr>
+            <td style="padding:10px 10px 10px 0; color:#666; font-size:14px; width:80px;"><strong>Nombre:</strong></td>
+            <td style="padding:10px 0; color:#333; font-size:14px; max-width: 620px; word-wrap: break-word;">${name || 'No especificado'}</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 10px 10px 0; color:#666; font-size:14px;"><strong>Email:</strong></td>
+            <td style="padding:10px 0; font-size:14px; max-width: 620px;">${email ? `<a href="mailto:${email}" style="color:#D2691E; text-decoration:none; word-wrap: break-word;">${email ? email : 'No especificado'}</a>` : 'No especificado'}</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 10px 10px 0; color:#666; font-size:14px;"><strong>Telefono:</strong></td>
+            <td style="padding:10px 0; font-size:14px; max-width: 620px;">${phone ? `<a href="https://api.whatsapp.com/send?phone=54${phone.replace(/\D/g, '')}" style="color:#25D366; text-decoration:none; word-wrap: break-word;">${phone}</a>` : 'No especificado'}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    
+    <!-- Mensaje -->
+    <tr>
+      <td style="padding:0 30px 20px; max-width: 620px;">
+        <h2 style="margin:0 0 15px; color:#333; font-size:18px; border-bottom:2px solid hsl(31, 32%, 49%); padding-bottom:10px;">Mensaje</h2>
+        <p style="margin:0; padding:15px; background:#f9f9f9; border-radius:8px; color:#333; font-size:14px; line-height:1.6; word-wrap: break-word;">${message || 'Sin mensaje'}</p>
+      </td>
+    </tr>
+    
+    <!-- Productos de interes -->
+    <tr>
+      <td style="padding:0 30px 30px;">
+        <h2 style="margin:0 0 15px; color:#333; font-size:18px; border-bottom:2px solid hsl(31, 32%, 49%); padding-bottom:10px;">Productos de Interes</h2>
+        <ul style="margin:0; padding:0 0 0 20px; list-style:none;">
+          ${productsList}
+        </ul>
+      </td>
+    </tr>
+    
+    <!-- Footer -->
+    <tr>
+      <td align="center" style="padding:20px; background:#f9f9f9; border-radius:0 0 12px 12px; font-size:12px; color:#888;">
+        &copy; Impulsado por ChillHop Studio | 2026
       </td>
     </tr>
   </table>
-  </body>
+</body>
 </html>
 `;
 
   const SMTPBody = {
-    from: "Familia Zaragoza Yerba Mate",
-    subject: "Consulta desde la web",
-    to: [`${email}`],
+    from: "Consulta desde la web",
+    subject: `${name ? `Consulta de ${name}` : 'Nueva consulta desde la web'}`,
+    to: [`hola@familiazaragoza.com`], // ${email}
     htmlContent: emailHtmlContent,
   };
 
@@ -342,21 +413,24 @@ submitButton.addEventListener("click", async (e) => {
     emailMessage.innerHTML = "Error al enviar el correo.";
     emailMessage.classList.add("error-message");
     inputEmail.value = "";
+    inputName.value = "";
+    inputPhone.value = "";
+    inputMessage.value = "";
   }
 });
 
 // =============== SCROLL REVEAL ANIMATION ===============
 const sr = ScrollReveal({
-   origin: 'bottom',
-   distance: '60px',
-   duration: 2500
+  origin: 'bottom',
+  distance: '60px',
+  duration: 2500
 })
 
 sr.reveal(`.home_img, .footer_columns`, { opacity: 1, distance: '120px', delay: 400 })
 sr.reveal(`.home_badge-right, .faq_list, .testimonials_title`, { origin: 'right', distance: '120px', delay: 400 })
 sr.reveal(`.products_description, .testimonials_description`, { delay: 600 })
 sr.reveal(`.home_badge-left, .products_grid`, { origin: 'left', distance: '120px', delay: 400 })
-sr.reveal(`.home_title, .products_title, .faq_title`, { delay: 1000 })
+sr.reveal(`.home_title, .products_title, .contact_title, .faq_title`, { delay: 1000 })
 sr.reveal(`.home_description`, { delay: 1200 })
 sr.reveal(`.home_button`, { delay: 1400 })
 sr.reveal(`.home_footer`, { delay: 1600 })

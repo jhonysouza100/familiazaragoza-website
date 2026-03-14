@@ -88,6 +88,7 @@
               <li><a class="nav_link" href="#catalog">Nuestra Yerba</a></li>
               <li><a class="nav_link" href="#testimonials">Reseñas</a></li>
               <li><a class="nav_link" href="#faq">FAQ</a></li>
+              <li><a class="nav_link" href="#contact">Contacto</a></li>
             </ul>
             <!-- Close Button -->
             <div class="header-btn nav_close" id="nav-close">
@@ -342,55 +343,64 @@
     </main>
 
     <!--==================== FOOTER ====================-->
-    <footer class="footer section" id="footer">
-      <div class="footer_inner container">
-        <div class="footer_top">
-          <div class="footer_logo">
-            <img class="logo_img" src="/public/img/favicon.png" alt="Familia Zaragoza Yerba Mate">
-            Famila Zaragoza
-          </div>
-        </div>
-
-        <div class="footer_columns">
-          <div class="footer_col">
-            <div class="footer_col-title">Información</div>
-            <div class="footer_phone">+54 9 3755 53-1691</div>
-            <p>hola@familiazaragoza.com</p>
-            <p>Papa Francisco, San Cayetano 01, N3370 Puerto Iguazú, Misiones</p>
-          </div>
-          <div class="footer_col">
-            <div class="footer_col-title">Navegación</div>
-            <a href="#home">Inicio</a>
-            <a href="#catalog">Nuestra Yerba</a>
-            <a href="#testimonials">Reseñas</a>
-            <a href="#faq">FAQ</a>
-          </div>
-          <form class="contact_form" aria-label="formulario de contacto" id="contact-form">
-            <div class="contact_grid-left">
-              <div>
-                <input type="text" class="contact_input" id="input-name" placeholder="Nombre completo" aria-label="Nombre completo">
+    <section class="footer section" id="contact">
+      <footer class="footer_inner container">
+        
+        <div class="footer_content section">
+          <div class="contact_section">
+            <h2 class="section_title contact_title">
+              Contacto
+            </h2>
+            <p class="products_description">
+              Para consultas, pedidos o más información, no dudes en contactarnos. Estamos aquí para ayudarte a disfrutar de la mejor experiencia de yerba mate.
+            </p>
+            <form class="contact_form" aria-label="formulario de contacto" id="contact-form">
+              <div class="contact_inputs">
+                <input type="text" class="contact_input" id="input-name" placeholder="Nombre completo" aria-label="Nombre completo" required>
+                <input type="text" class="contact_input" id="input-phone" placeholder="Número de teléfono" aria-label="Número de teléfono" required>
                 <span class="email_message" id="email-message"></span>
                 <input type="email" class="contact_input" id="input-email" placeholder="Correo electrónico" aria-label="Correo electrónico" required>
+                <textarea class="contact_input contact_textarea" id="input-message" placeholder="Escribe tu consulta aquí..." aria-label="Escribe tu consulta aquí" required></textarea>
+                <div class="select_product-container" id="select_product-container">
+                  <!-- Dynamic with Js -->
+                </div>
               </div>
-              <div class="select_product-container" id="select_product-container">
-                 <label for="product-1">
-                  <img src="/public/img/home-product-1.png" alt="" srcset="">
-                 </label>
-                 <input type="checkbox" name="products[]" id="product-1" value="Producto 1" class="product_checkbox">
+              <button type="submit" class="contact_button button" id="submit-button">
+                Contactar
+                <i class="ri-mail-send-line"></i>
+              </button>
+            </form>
+          </div>
+
+          <div>
+            <div class="footer_top">
+              <div class="footer_logo">
+                <img class="logo_img" src="/public/img/favicon.png" alt="Familia Zaragoza Yerba Mate">
+                Famila Zaragoza
               </div>
             </div>
-            <div class="contact_grid-right"></div>
-            <button type="submit" class="contact_button button" id="submit-button">
-              Contactar
-              <i class="ri-mail-send-line"></i>
-            </button>
-          </form>
+            <div class="footer_columns">
+              <div class="footer_col">
+                <div class="footer_col-title">Información</div>
+                <div class="footer_phone">+54 9 3755 53-1691</div>
+                <p>hola@familiazaragoza.com</p>
+                <p>Papa Francisco, San Cayetano 01, N3370 Puerto Iguazú, Misiones</p>
+              </div>
+              <div class="footer_col">
+                <div class="footer_col-title">Navegación</div>
+                <a href="#home">Inicio</a>
+                <a href="#catalog">Nuestra Yerba</a>
+                <a href="#testimonials">Reseñas</a>
+                <a href="#faq">FAQ</a>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="footer_bottom">
+        <div class="footer_bottom section">
           <span class="footer_copyright">
             © Copyright 2026, 
-            <a href="https://jhonysouza100.site" title="Developer website" target="_blank" rel="nofollow">Chill Hop Studio</a>
+            <a href="https://jhonysouza100.site" title="Developer website" target="_blank" rel="nofollow">ChillHop Studio</a>
           </span>
           <div class="footer_bottom-links">
             <a href="#home">Inicio</a>
@@ -407,8 +417,8 @@
             </a>
           </div>
         </div>
-      </div>
-    </footer>
+      </footer>
+    </section>
 
     <!--========== SCROLL UP ==========-->
     <div class="scrollup" id="scroll-up">
