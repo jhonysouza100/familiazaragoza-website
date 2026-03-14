@@ -295,34 +295,93 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const inputEmail = document.getElementById("input-email");
+const inputName = document.getElementById("input-name");
+const inputPhone = document.getElementById("input-phone");
+const inputMessage = document.getElementById("input-message");
 const submitButton = document.getElementById("submit-button");
 const emailMessage = document.getElementById("email-message");
 
 submitButton.addEventListener("click", async (e) => {
   e.preventDefault();
-  const email = inputEmail.value.trim();
+  
+  const email = inputEmail?.value.trim() || "";
+  const name = inputName?.value.trim() || "";
+  const phone = inputPhone?.value.trim() || "";
+  const message = inputMessage?.value.trim() || "";
+  
   if (!email) return;
 
   const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  const productsList = cart.length > 0 
+    ? cart.map(el => `<li style="padding:8px 0; border-bottom:1px solid #eee;">${el.name}</li>`).join('')
+    : '<li style="padding:8px 0; color:#888;">No se seleccionaron productos</li>';
 
   // =============== EMAIL SMTP ===============
   const emailHtmlContent = `
-<!DOCTYPE html  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//ES" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
 <head>
-  <meta httpt-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
-  <table align="center" border="0" cellpadding="0" cellspacing="0" width="720" style="max-width:720px; background-color:#ffffff; border-top-left-radius: 24px; border-top-right-radius: 24px; border-bottom-right-radius:8px; border-bottom-left-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.1); margin:20px auto;">
+<body style="margin:0; padding:20px; background-color:#f5f5f5; font-family:Arial, sans-serif;">
+  <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="max-width:600px; background-color:#ffffff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin:20px auto;">
+    <!-- Header -->
     <tr>
-      ${cart.map(el => `<p>${el.name}</p>`)}
-      <td align="center" style="padding:20px; font-size:12px; color:#888;">
+      <td align="center" style="padding:30px 20px; background:linear-gradient(135deg, #8B4513 0%, #D2691E 100%); border-radius:12px 12px 0 0;">
+        <h1 style="margin:0; color:#ffffff; font-size:24px;">Nueva Consulta</h1>
+        <p style="margin:8px 0 0; color:#f5deb3; font-size:14px;">Familia Zaragoza Yerba Mate</p>
+      </td>
+    </tr>
+    
+    <!-- Datos del contacto -->
+    <tr>
+      <td style="padding:30px 30px 20px;">
+        <h2 style="margin:0 0 20px; color:#333; font-size:18px; border-bottom:2px solid #D2691E; padding-bottom:10px;">Datos del Contacto</h2>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tr>
+            <td style="padding:10px 0; color:#666; font-size:14px; width:120px;"><strong>Nombre:</strong></td>
+            <td style="padding:10px 0; color:#333; font-size:14px;">${name || 'No especificado'}</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 0; color:#666; font-size:14px;"><strong>Email:</strong></td>
+            <td style="padding:10px 0; color:#333; font-size:14px;">${email}</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 0; color:#666; font-size:14px;"><strong>Telefono:</strong></td>
+            <td style="padding:10px 0; color:#333; font-size:14px;">${phone || 'No especificado'}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    
+    <!-- Mensaje -->
+    <tr>
+      <td style="padding:0 30px 20px;">
+        <h2 style="margin:0 0 15px; color:#333; font-size:18px; border-bottom:2px solid #D2691E; padding-bottom:10px;">Mensaje</h2>
+        <p style="margin:0; padding:15px; background:#f9f9f9; border-radius:8px; color:#333; font-size:14px; line-height:1.6;">${message || 'Sin mensaje'}</p>
+      </td>
+    </tr>
+    
+    <!-- Productos de interes -->
+    <tr>
+      <td style="padding:0 30px 30px;">
+        <h2 style="margin:0 0 15px; color:#333; font-size:18px; border-bottom:2px solid #D2691E; padding-bottom:10px;">Productos de Interes</h2>
+        <ul style="margin:0; padding:0 0 0 20px; list-style:none;">
+          ${productsList}
+        </ul>
+      </td>
+    </tr>
+    
+    <!-- Footer -->
+    <tr>
+      <td align="center" style="padding:20px; background:#f9f9f9; border-radius:0 0 12px 12px; font-size:12px; color:#888;">
         &copy; 2026 Familia Zaragoza | Todos los derechos reservados
       </td>
     </tr>
   </table>
-  </body>
+</body>
 </html>
 `;
 
@@ -368,7 +427,7 @@ sr.reveal(`.home_img, .footer_columns`, { opacity: 1, distance: '120px', delay: 
 sr.reveal(`.home_badge-right, .faq_list, .testimonials_title`, { origin: 'right', distance: '120px', delay: 400 })
 sr.reveal(`.products_description, .testimonials_description`, { delay: 600 })
 sr.reveal(`.home_badge-left, .products_grid`, { origin: 'left', distance: '120px', delay: 400 })
-sr.reveal(`.home_title, .products_title, .faq_title`, { delay: 1000 })
+sr.reveal(`.home_title, .products_title, .contact_title, .faq_title`, { delay: 1000 })
 sr.reveal(`.home_description`, { delay: 1200 })
 sr.reveal(`.home_button`, { delay: 1400 })
 sr.reveal(`.home_footer`, { delay: 1600 })
