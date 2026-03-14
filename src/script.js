@@ -346,11 +346,11 @@ submitButton.addEventListener("click", async (e) => {
           </tr>
           <tr>
             <td style="padding:10px 0; color:#666; font-size:14px;"><strong>Email:</strong></td>
-            <td style="padding:10px 0; color:#333; font-size:14px;">${email}</td>
+            <td style="padding:10px 0; font-size:14px;"><a href="mailto:${email}" style="color:#D2691E; text-decoration:none;">${email}</a></td>
           </tr>
           <tr>
             <td style="padding:10px 0; color:#666; font-size:14px;"><strong>Telefono:</strong></td>
-            <td style="padding:10px 0; color:#333; font-size:14px;">${phone || 'No especificado'}</td>
+            <td style="padding:10px 0; font-size:14px;">${phone ? `<a href="https://wa.me/${phone.replace(/[^0-9]/g, '')}" style="color:#25D366; text-decoration:none;">${phone}</a>` : 'No especificado'}</td>
           </tr>
         </table>
       </td>
