@@ -129,10 +129,9 @@
               Una yerba distinta, intensa y duradera, hecha con método tradicional para quienes buscan calidad real y una experiencia de mate auténtica.
             </p>
             <a class="home_button button"
-              href="https://api.whatsapp.com/send?phone=543755531691&text=Vengo%20desde%20la%20pagina%20web%2C%20me%20gustar%C3%ADa%20hacer%20una%20consulta.%0Ahttps%3A%2F%2Ffamiliazaragoza.com"
-              aria-label="Mandar un mensaje de whatsapp para Familia Zaragoza Yerba Mate"
-              title="Contactar al whatsapp"
-              target="_blank"
+              href="#contact-form"
+              aria-label="Ir al formulario de contacto"
+              title="Ir al formulario de contacto"
               rel="nofollow"
             >
               Pedila Ya!
@@ -367,8 +366,20 @@
             <a href="#faq">FAQ</a>
           </div>
           <form class="contact_form" aria-label="formulario de contacto" id="contact-form">
-            <span class="email_message" id="email-message"></span>
-            <input type="email" class="contact_input" id="input-email" placeholder="Ingresa tu correo electrónico" aria-label="Suscription input" required>
+            <div class="contact_grid-left">
+              <div>
+                <input type="text" class="contact_input" id="input-name" placeholder="Nombre completo" aria-label="Nombre completo">
+                <span class="email_message" id="email-message"></span>
+                <input type="email" class="contact_input" id="input-email" placeholder="Correo electrónico" aria-label="Correo electrónico" required>
+              </div>
+              <div class="select_product-container" id="select_product-container">
+                 <label for="product-1">
+                  <img src="/public/img/home-product-1.png" alt="" srcset="">
+                 </label>
+                 <input type="checkbox" name="products[]" id="product-1" value="Producto 1" class="product_checkbox">
+              </div>
+            </div>
+            <div class="contact_grid-right"></div>
             <button type="submit" class="contact_button button" id="submit-button">
               Contactar
               <i class="ri-mail-send-line"></i>
@@ -406,7 +417,9 @@
         title="Contactar al whatsapp"
         target="_blank"
         rel="nofollow"
-        class="whatsapp_btn">
+        class="whatsapp_btn"
+        id="whatsapp-btn"
+        >
         <i class="ri-whatsapp-fill"></i>
       </a>
       <a class="scrollup-button button" id="scroll-up" title="Subir al inicio" href="#" aria-label="scroll up button">

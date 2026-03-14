@@ -19,12 +19,5 @@
     "description": "Formato práctico y eficiente, ideal para reventa suelta o consumo de alto volumen.",
     "image": "/public/img/home-product-3.png",
     "price": 8
-  },
-  {
-    "id": 4,
-    "name": "Venta Mayorista",
-    "description": "Sumá nuestra yerba a tu negocio. Precios especiales por volumen para comercios y distribuidores.",
-    "image": "/public/img/home-product-4.png",
-    "price": 8
   }
 ]

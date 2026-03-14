@@ -209,7 +209,39 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  /** 🛒 Escuchar clics en botones de carrito */
+  /** � Actualiza el enlace de WhatsApp con los productos del carrito */
+  const updateWhatsAppLink = () => {
+    try {
+      const whatsappBtn = document.getElementById('whatsapp-btn');
+      if (!whatsappBtn) return;
+
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+      // Mensaje base (coincide con el original del HTML)
+      let message = 'Vengo desde la pagina web, me gustaría hacer una consulta.';
+
+      if (cart.length > 0) {
+        message += '\n\nProductos en mis favoritos:';
+        cart.forEach((p, i) => {
+          // Si existe nombre, lo agregamos. Si hubiera cantidad, podría incluirse.
+          const name = p.name || p.title || `Producto ${i + 1}`;
+          message += `\n- ${name}`;
+        });
+      }
+
+      // Añadir URL al final (opcional)
+      message += '\n\nhttps://familiazaragoza.com';
+
+      const encoded = encodeURIComponent(message);
+      const phone = '543755531691';
+      whatsappBtn.setAttribute('href', `https://api.whatsapp.com/send?phone=${phone}&text=${encoded}`);
+    } catch (err) {
+      // No bloquear si algo falla
+      console.error('updateWhatsAppLink error:', err);
+    }
+  };
+
+  /** �🛒 Escuchar clics en botones de carrito */
   document.addEventListener("click", (e) => {
     const cartBtn = e.target.closest(".product_add-btn");
     if (cartBtn) {
@@ -238,6 +270,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // 🔄 Actualizar tooltip y estados
         updateCartTooltip();
         syncCartButtonStates();
+        // 🔄 Actualizar enlace de Whatsapp
+        updateWhatsAppLink();
       }
     }
   });
@@ -245,6 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Ejecutar una vez al cargar
   updateCartTooltip();
   syncCartButtonStates();
+  updateWhatsAppLink();
 });
 
 const inputEmail = document.getElementById("input-email");
