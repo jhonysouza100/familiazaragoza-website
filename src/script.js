@@ -138,20 +138,28 @@ window.addEventListener('DOMContentLoaded', async () => {
     // Guardar para que el resto del script (carrito) pueda leerlos
     localStorage.setItem('products', JSON.stringify(products));
 
-    grid.innerHTML = products.map(p => `
+    // Obtener carrito actual para marcar productos seleccionados
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+    grid.innerHTML = products.map(p => {
+      const isInCart = cart.some(item => String(item.id) === String(p.id));
+      return `
       <div class="product_card">
-        <button class="product_add-btn btn_transition" aria-label="Agregar a favoritos" title="Agregar a favoritos" data-id="${p.id}">
-          <i class="ri-heart-line"></i>
-        </button>
-        <div class="product_image-wrap">
-          <img src="${p.image}" alt="${p.name}" />
-        </div>
-        <div class="product_card-info">
-          <h3 class="product_name">${p.name}</h3>
-          <p class="product_description">${p.description || ''}</p>
-        </div>
+        <input type="checkbox" name="products[]" id="product-${p.id}" value="${p.name}" class="product_checkbox" data-id="${p.id}" ${isInCart ? 'checked' : ''}>
+        <label for="product-${p.id}" class="product_card-label">
+          <span class="product_check-icon">
+            <i class="ri-check-line"></i>
+          </span>
+          <div class="product_image-wrap">
+            <img src="${p.image}" alt="${p.name}" />
+          </div>
+          <div class="product_card-info">
+            <h3 class="product_name">${p.name}</h3>
+            <p class="product_description">${p.description || ''}</p>
+          </div>
+        </label>
       </div>
-    `).join('');
+    `}).join('');
   } catch (error) {
     console.error('Error loading products:', error);
   }
@@ -177,35 +185,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  /** 🎯 Marca los botones de carrito activos según el localStorage */
+/** 🎯 Marca los checkboxes de productos activos según el localStorage */
   const syncCartButtonStates = () => {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const cartButtons = document.querySelectorAll(".product_add-btn");
+    const productCheckboxes = document.querySelectorAll(".product_checkbox");
 
-    if (cartButtons.length === 0) {
-      // Si aún no hay botones, reintentar después de un corto tiempo
+    if (productCheckboxes.length === 0) {
+      // Si aún no hay checkboxes, reintentar después de un corto tiempo
       setTimeout(syncCartButtonStates, 100);
-      // 👉 syncCartButtonStates() se ejecuta antes de que los productos se hayan renderizado en
-      // el DOM, por eso los botones .product_add-btn aún no existen cuando se llama por primera vez, y
-      // los estilos “in-cart” no se aplican hasta que ocurre una interacción.
-      // Esto pasa normalmente si los productos se inyectan dinámicamente en el DOM después del
-      // DOMContentLoaded (por ejemplo, desde otra función que los renderiza).
       return;
     }
 
-    cartButtons.forEach((btn) => {
-      const productId = btn.getAttribute("data-id");
+    productCheckboxes.forEach((checkbox) => {
+      const productId = checkbox.getAttribute("data-id");
       const exists = cart.some((item) => String(item.id) === String(productId));
-      btn.classList.toggle("in-cart", exists);
-
-      const icon = btn.querySelector("i");
-      if (icon) {
-        // Reemplaza la clase del icono según el estado
-        icon.className = exists ? "ri-heart-fill" : "ri-heart-line";
-      } else {
-        // Si no hay elemento <i>, inyectarlo
-        btn.innerHTML = exists ? '<i class="ri-heart-fill"></i>' : '<i class="ri-heart-line"></i>';
-      }
+      checkbox.checked = exists;
     });
   };
 
@@ -241,27 +235,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  /** �🛒 Escuchar clics en botones de carrito */
-  document.addEventListener("click", (e) => {
-    const cartBtn = e.target.closest(".product_add-btn");
-    if (cartBtn) {
-      const productId = cartBtn.getAttribute("data-id");
+  /** 🛒 Escuchar cambios en los checkboxes de productos */
+  document.addEventListener("change", (e) => {
+    const checkbox = e.target.closest(".product_checkbox");
+    if (checkbox) {
+      const productId = checkbox.getAttribute("data-id");
       const products = JSON.parse(localStorage.getItem("products") || "[]");
       const product = products.find((p) => String(p.id) === String(productId));
 
       if (product) {
         let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-        const index = cart.findIndex((item) => String(item.id) === String(productId));
-
-        if (index === -1) {
-          // 🟩 No existe → agregar al carrito
-          cart.push(product);
-          cartBtn.classList.add("in-cart");
+        if (checkbox.checked) {
+          // 🟩 Checkbox marcado → agregar al carrito si no existe
+          const exists = cart.some((item) => String(item.id) === String(productId));
+          if (!exists) {
+            cart.push(product);
+          }
         } else {
-          // 🟥 Ya existe → eliminar del carrito
-          cart.splice(index, 1);
-          cartBtn.classList.remove("in-cart");
+          // 🟥 Checkbox desmarcado → eliminar del carrito
+          cart = cart.filter((item) => String(item.id) !== String(productId));
         }
 
         // Guardar cambios

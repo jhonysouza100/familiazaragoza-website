@@ -431,26 +431,73 @@ img {
   display: grid;
   gap: .5rem;
 }
-.product_card:hover .product_image-wrap {
-  transform: scale(1.1);
+
+/* Ocultar checkbox pero mantenerlo funcional */
+.product_card .product_checkbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Label clickeable que envuelve toda la card */
+.product_card-label {
+  display: grid;
+  gap: .5rem;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Icono de check para estado seleccionado */
+.product_card .product_check-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gradient-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--text-color);
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity .3s, transform .3s;
+  z-index: 5;
+}
+
+/* Estado seleccionado - mostrar icono de check */
+.product_card .product_checkbox:checked + .product_card-label .product_check-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Estado seleccionado - borde destacado en la imagen */
+.product_card .product_checkbox:checked + .product_card-label .product_image-wrap {
+  box-shadow: 0 0 0 3px var(--first-color), 0 8px 24px rgba(181, 117, 71, 0.3);
+  border-radius: .75rem;
+}
+
+/* Estado seleccionado - fondo destacado en la info */
+.product_card .product_checkbox:checked + .product_card-label .product_card-info {
+  border-color: var(--first-color);
+  background: rgba(181, 117, 71, 0.15);
+}
+
+/* Hover en el label */
+.product_card-label:hover .product_image-wrap {
+  transform: scale(1.05);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
 }
-.product_card:hover .product_card-info {
+.product_card-label:hover .product_card-info {
   background: rgba(255, 255, 255, 0.15);
 }
 
-.product_add-btn {
-  position: absolute;
-  right: 0rem;
-  top: 0;
-  border: none;
-  background: none;
-  color: var(--text-color);
-  font-size: 1.95rem;
-  display: inline-flex;
-  cursor: pointer;
-  z-index: 3;
-  transition: color .3s;
+/* Focus para accesibilidad */
+.product_card .product_checkbox:focus + .product_card-label .product_image-wrap {
+  outline: 2px solid var(--second-color-alt);
+  outline-offset: 2px;
 }
 .product_image-wrap {
   width: fit-content;
