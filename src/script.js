@@ -303,16 +303,16 @@ const emailMessage = document.getElementById("email-message");
 
 submitButton.addEventListener("click", async (e) => {
   e.preventDefault();
-  
+
   const email = inputEmail?.value.trim() || "";
   const name = inputName?.value.trim() || "";
   const phone = inputPhone?.value.trim() || "";
   const message = inputMessage?.value.trim() || "";
-  
+
   if (!email) return;
 
   const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-  const productsList = cart.length > 0 
+  const productsList = cart.length > 0
     ? cart.map(el => `<li style="padding:8px 0; border-bottom:1px solid #eee;">${el.name}</li>`).join('')
     : '<li style="padding:8px 0; color:#888;">No se seleccionaron productos</li>';
 
@@ -326,10 +326,10 @@ submitButton.addEventListener("click", async (e) => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body style="margin:0; padding:20px; background-color:#f5f5f5; font-family:Arial, sans-serif;">
-  <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="max-width:600px; background-color:#ffffff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin:20px auto;">
+  <table align="center" border="0" cellpadding="0" cellspacing="0" style="max-width:600px; background-color:#ffffff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin:20px auto;">
     <!-- Header -->
     <tr>
-      <td align="center" style="padding:30px 20px; background:linear-gradient(135deg, #8B4513 0%, #D2691E 100%); border-radius:12px 12px 0 0;">
+      <td align="center" style="padding:30px 20px; background:linear-gradient(145deg, hsl(31, 32%, 49%) 0%, hsl(32, 38%, 58%) 50%, hsl(35, 26%, 73%) 100%); border-radius:12px 12px 0 0;">
         <h1 style="margin:0; color:#ffffff; font-size:24px;">Nueva Consulta</h1>
         <p style="margin:8px 0 0; color:#f5deb3; font-size:14px;">Familia Zaragoza Yerba Mate</p>
       </td>
@@ -338,7 +338,7 @@ submitButton.addEventListener("click", async (e) => {
     <!-- Datos del contacto -->
     <tr>
       <td style="padding:30px 30px 20px;">
-        <h2 style="margin:0 0 20px; color:#333; font-size:18px; border-bottom:2px solid #D2691E; padding-bottom:10px;">Datos del Contacto</h2>
+        <h2 style="margin:0 0 20px; color:#333; font-size:18px; border-bottom:2px solid hsl(31, 32%, 49%); padding-bottom:10px;">Datos del Contacto</h2>
         <table border="0" cellpadding="0" cellspacing="0" width="100%">
           <tr>
             <td style="padding:10px 0; color:#666; font-size:14px; width:120px;"><strong>Nombre:</strong></td>
@@ -350,7 +350,7 @@ submitButton.addEventListener("click", async (e) => {
           </tr>
           <tr>
             <td style="padding:10px 0; color:#666; font-size:14px;"><strong>Telefono:</strong></td>
-            <td style="padding:10px 0; font-size:14px;">${phone ? `<a href="https://wa.me/${phone.replace(/[^0-9]/g, '')}" style="color:#25D366; text-decoration:none;">${phone}</a>` : 'No especificado'}</td>
+            <td style="padding:10px 0; font-size:14px;">${phone ? `<a href="https://wa.me/${phone.replace(/\D/g, '')}" style="color:#25D366; text-decoration:none;">${phone}</a>` : 'No especificado'}</td>
           </tr>
         </table>
       </td>
@@ -359,7 +359,7 @@ submitButton.addEventListener("click", async (e) => {
     <!-- Mensaje -->
     <tr>
       <td style="padding:0 30px 20px;">
-        <h2 style="margin:0 0 15px; color:#333; font-size:18px; border-bottom:2px solid #D2691E; padding-bottom:10px;">Mensaje</h2>
+        <h2 style="margin:0 0 15px; color:#333; font-size:18px; border-bottom:2px solid hsl(31, 32%, 49%); padding-bottom:10px;">Mensaje</h2>
         <p style="margin:0; padding:15px; background:#f9f9f9; border-radius:8px; color:#333; font-size:14px; line-height:1.6;">${message || 'Sin mensaje'}</p>
       </td>
     </tr>
@@ -367,7 +367,7 @@ submitButton.addEventListener("click", async (e) => {
     <!-- Productos de interes -->
     <tr>
       <td style="padding:0 30px 30px;">
-        <h2 style="margin:0 0 15px; color:#333; font-size:18px; border-bottom:2px solid #D2691E; padding-bottom:10px;">Productos de Interes</h2>
+        <h2 style="margin:0 0 15px; color:#333; font-size:18px; border-bottom:2px solid hsl(31, 32%, 49%); padding-bottom:10px;">Productos de Interes</h2>
         <ul style="margin:0; padding:0 0 0 20px; list-style:none;">
           ${productsList}
         </ul>
