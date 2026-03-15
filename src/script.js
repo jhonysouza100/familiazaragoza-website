@@ -319,96 +319,98 @@ submitButton.addEventListener("click", async (e) => {
   // =============== EMAIL SMTP ===============
   const emailHtmlContent = `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body style="margin-inline: 1rem; font-family:'Montserrat', sans-serif;">
-  <table align="center" border="0" cellpadding="0" cellspacing="0" style="max-width:600px; background-color:#ffffff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin:20px auto;">
-    <!-- Header -->
-    <tbody><tr>
-      <td align="center" style="padding:30px 20px;background: linear-gradient(145deg, hsl(148.33deg 32% 49%) 0%, hsl(55.38deg 38% 58%) 50%, hsl(0deg 95.15% 70.58%) 100%);border-radius:12px 12px 0 0;">
-        <h1 style="margin:0; color:#ffffff; font-size:24px;">Contactos RRHH Puerto Iguazu</h1>
-        <!-- <p style="margin:8px 0 0; color:#ffffff; font-size:18px;">Website</p> -->
-      </td>
-    </tr>
-   
-    <!-- Lista de Emails -->
-    <tr>
-      <td style="padding:30px 30px 20px;">
-        <h2 style="margin:0 0 15px; color:#333; font-size:18px; border-bottom:2px solid hsl(31, 32%, 49%); padding-bottom:10px;">Contactos RRHH</h2>
-        <ul style="margin:0; padding:0 0 0 20px; list-style:none;">
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh.empresas.igr@gmail.com">rrhh.empresas.igr@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:busquedacm.iguazu@gmail.com">busquedacm.iguazu@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:info@iguazuargentina.com">info@iguazuargentina.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:_iguazu@awasi.com">_iguazu@awasi.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:iguazurrhh22@gmail.com">iguazurrhh22@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@iguazuargentina.com">rrhh@iguazuargentina.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:daniel.gonzalez@accor.com">daniel.gonzalez@accor.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:gerencia@selvadelaurel.com.ar">gerencia@selvadelaurel.com.ar</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:sumate@grupobordin.com">sumate@grupobordin.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:terraiguazusuites@gmail.com">terraiguazusuites@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@hotelsaintgeorge.com">rrhh@hotelsaintgeorge.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:gerencia@brutalcreativos.com">gerencia@brutalcreativos.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhhiguazuportal@gmail.com">rrhhiguazuportal@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:administracion.rrhh@brunohnos.com">administracion.rrhh@brunohnos.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:iguazu.rrhh@citycenter-iguazu.com.ar">iguazu.rrhh@citycenter-iguazu.com.ar</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh.iguazu2023@gmail.com">rrhh.iguazu2023@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh.melia@melia.com">rrhh.melia@melia.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@citysalud.com.ar">rrhh@citysalud.com.ar</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@crucerodelnorte.com.ar">rrhh@crucerodelnorte.com.ar</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@dfspi.com">rrhh@dfspi.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@distridelnorte.com.ar">rrhh@distridelnorte.com.ar</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@dln-logistica.com.ar">rrhh@dln-logistica.com.ar</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@grandhotelslux.com">rrhh@grandhotelslux.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rr.hh@hotelesbagu.com">rr.hh@hotelesbagu.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:recursoshumanos@iguazujunglelodge.com">recursoshumanos@iguazujunglelodge.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:berenice.marcoppido@swissport.com">berenice.marcoppido@swissport.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:busqueda@electro.com.ar">busqueda@electro.com.ar</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:bvdesingventas@gmail.com">bvdesingventas@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:capitalhumano@viacorreo.com.ar">capitalhumano@viacorreo.com.ar</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:culturaspark@gmail.com">culturaspark@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:cv.dagusupermercado@gmail.com">cv.dagusupermercado@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:fortincataratas@gmail.com">fortincataratas@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:gestiondepersonas@serviciosnea.com.ar">gestiondepersonas@serviciosnea.com.ar</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:gestionrrhhfortin@gmail.com">gestionrrhhfortin@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:giofarmaiguazu@gmail.com">giofarmaiguazu@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:grupoantonowicz@gmail.com">grupoantonowicz@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:housekeepinghe@raicesdelplata.com">housekeepinghe@raicesdelplata.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:cv_iguazu@ruta17.com">cv_iguazu@ruta17.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:iguazufoodpatagonia@gmail.com">iguazufoodpatagonia@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:Iguazuurbanhotel@gmail.com">Iguazuurbanhotel@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:mensugrandhotel@gmail.com">mensugrandhotel@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:personal@iguazujungle.com">personal@iguazujungle.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:simplementelamejor1260@gmail.com">simplementelamejor1260@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh_cuenca@cuencadelplata.com">rrhh_cuenca@cuencadelplata.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@lareservavirginlodge.com">rrhh@lareservavirginlodge.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:reclutamiento@brunohnos.com">reclutamiento@brunohnos.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:seleccion@mooksrrhh.com">seleccion@mooksrrhh.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@yvyhotel.com.ar">rrhh@yvyhotel.com.ar</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@logexsrl.com.ar">rrhh@logexsrl.com.ar</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh.granmelia.iguazu@melia.com">rrhh.granmelia.iguazu@melia.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:area.rrhh@siliconmisiones.gob.ar">area.rrhh@siliconmisiones.gob.ar</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:roxana.mancilla@flybondi.com">roxana.mancilla@flybondi.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhhpandelaabuela@gmail.com">rrhhpandelaabuela@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:argwineinfo@gmail.com">argwineinfo@gmail.com</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh_seleccion@parbras.com.ar">rrhh_seleccion@parbras.com.ar</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@treiguazu.com.ar">rrhh@treiguazu.com.ar</a></li>
-          <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:kaizenconsultora.info@gmail.com">kaizenconsultora.info@gmail.com</a></li>
-        </ul>
-      </td>
-    </tr>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body style="margin-inline: 1rem; font-family:'Montserrat', sans-serif;">
+    <table align="center" border="0" cellpadding="0" cellspacing="0" style="max-width:600px; background-color:#ffffff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin:20px auto;">
+      <!-- Header -->
+      <tbody>
+        <tr>
+          <td align="center" style="padding:30px 20px;background: linear-gradient(145deg, hsl(148.33deg 32% 49%) 0%, hsl(55.38deg 38% 58%) 50%, hsl(0deg 95.15% 70.58%) 100%);border-radius:12px 12px 0 0;">
+            <h1 style="margin:0; color:#ffffff; font-size:24px;">Contactos RRHH Puerto Iguazu</h1>
+          </td>
+        </tr>
     
-    <!-- Footer -->
-    <tr>
-      <td align="center" style="padding:20px; background:#f9f9f9; border-radius:0 0 12px 12px; font-size:12px; color:#888;">
-        © Desarrolado por Jhonatan Leon Souza | 2026
-      </td>
-    </tr>
-  </tbody></table>
-
-</body></html>
+        <!-- Lista de Emails -->
+        <tr>
+          <td style="padding:30px 30px 20px;">
+            <h2 style="margin:0 0 15px; color:#333; font-size:18px; border-bottom:2px solid hsl(31, 32%, 49%); padding-bottom:10px;">Contactos RRHH</h2>
+            <ul style="margin:0; padding:0 0 0 20px; list-style:none;">
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh.empresas.igr@gmail.com">rrhh.empresas.igr@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:busquedacm.iguazu@gmail.com">busquedacm.iguazu@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:info@iguazuargentina.com">info@iguazuargentina.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:_iguazu@awasi.com">_iguazu@awasi.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:iguazurrhh22@gmail.com">iguazurrhh22@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@iguazuargentina.com">rrhh@iguazuargentina.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:daniel.gonzalez@accor.com">daniel.gonzalez@accor.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:gerencia@selvadelaurel.com.ar">gerencia@selvadelaurel.com.ar</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:sumate@grupobordin.com">sumate@grupobordin.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:terraiguazusuites@gmail.com">terraiguazusuites@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@hotelsaintgeorge.com">rrhh@hotelsaintgeorge.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:gerencia@brutalcreativos.com">gerencia@brutalcreativos.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhhiguazuportal@gmail.com">rrhhiguazuportal@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:administracion.rrhh@brunohnos.com">administracion.rrhh@brunohnos.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:iguazu.rrhh@citycenter-iguazu.com.ar">iguazu.rrhh@citycenter-iguazu.com.ar</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh.iguazu2023@gmail.com">rrhh.iguazu2023@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh.melia@melia.com">rrhh.melia@melia.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@citysalud.com.ar">rrhh@citysalud.com.ar</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@crucerodelnorte.com.ar">rrhh@crucerodelnorte.com.ar</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@dfspi.com">rrhh@dfspi.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@distridelnorte.com.ar">rrhh@distridelnorte.com.ar</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@dln-logistica.com.ar">rrhh@dln-logistica.com.ar</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@grandhotelslux.com">rrhh@grandhotelslux.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rr.hh@hotelesbagu.com">rr.hh@hotelesbagu.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:recursoshumanos@iguazujunglelodge.com">recursoshumanos@iguazujunglelodge.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:berenice.marcoppido@swissport.com">berenice.marcoppido@swissport.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:busqueda@electro.com.ar">busqueda@electro.com.ar</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:bvdesingventas@gmail.com">bvdesingventas@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:capitalhumano@viacorreo.com.ar">capitalhumano@viacorreo.com.ar</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:culturaspark@gmail.com">culturaspark@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:cv.dagusupermercado@gmail.com">cv.dagusupermercado@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:fortincataratas@gmail.com">fortincataratas@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:gestiondepersonas@serviciosnea.com.ar">gestiondepersonas@serviciosnea.com.ar</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:gestionrrhhfortin@gmail.com">gestionrrhhfortin@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:giofarmaiguazu@gmail.com">giofarmaiguazu@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:grupoantonowicz@gmail.com">grupoantonowicz@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:housekeepinghe@raicesdelplata.com">housekeepinghe@raicesdelplata.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:cv_iguazu@ruta17.com">cv_iguazu@ruta17.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:iguazufoodpatagonia@gmail.com">iguazufoodpatagonia@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:Iguazuurbanhotel@gmail.com">Iguazuurbanhotel@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:mensugrandhotel@gmail.com">mensugrandhotel@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:personal@iguazujungle.com">personal@iguazujungle.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:simplementelamejor1260@gmail.com">simplementelamejor1260@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh_cuenca@cuencadelplata.com">rrhh_cuenca@cuencadelplata.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@lareservavirginlodge.com">rrhh@lareservavirginlodge.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:reclutamiento@brunohnos.com">reclutamiento@brunohnos.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:seleccion@mooksrrhh.com">seleccion@mooksrrhh.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@yvyhotel.com.ar">rrhh@yvyhotel.com.ar</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@logexsrl.com.ar">rrhh@logexsrl.com.ar</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh.granmelia.iguazu@melia.com">rrhh.granmelia.iguazu@melia.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:area.rrhh@siliconmisiones.gob.ar">area.rrhh@siliconmisiones.gob.ar</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:roxana.mancilla@flybondi.com">roxana.mancilla@flybondi.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhhpandelaabuela@gmail.com">rrhhpandelaabuela@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:argwineinfo@gmail.com">argwineinfo@gmail.com</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh_seleccion@parbras.com.ar">rrhh_seleccion@parbras.com.ar</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:rrhh@treiguazu.com.ar">rrhh@treiguazu.com.ar</a></li>
+              <li style="padding:8px 0; border-bottom:1px solid #eee;"><a href="mailto:kaizenconsultora.info@gmail.com">kaizenconsultora.info@gmail.com</a></li>
+            </ul>
+          </td>
+        </tr>
+      
+        <!-- Footer -->
+        <tr>
+          <td align="center" style="padding:20px; background:#f9f9f9; border-radius:0 0 12px 12px; font-size:12px; color:#888;">
+            © Desarrolado por Jhonatan Leon Souza | 2026
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
 `;
 
   const SMTPBody = {
