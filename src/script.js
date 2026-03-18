@@ -173,8 +173,9 @@ window.addEventListener('DOMContentLoaded', async () => {
           <label for="product-form-${p.id}" class="product_label">
             <img src="${p.image}" alt="${p.name}">
             <span class="product_check-icon">
-              <i class="ri-check-line"></i>
+            <i class="ri-check-line"></i>
             </span>
+            <p class="product_check-name">${p.name}</p>
           </label>
         `;
       }).join('');
@@ -311,6 +312,26 @@ submitButton.addEventListener("click", async (e) => {
   
   if (!email) return;
 
+  // Guardar estado del botón para restaurar luego
+  const originalButtonContent = submitButton.innerHTML;
+  const originalDisabled = submitButton.disabled;
+  // Funciones auxiliares para mostrar/ocultar loader
+  const showLoader = () => {
+    submitButton.classList.add("sending");
+    submitButton.setAttribute("aria-busy", "true");
+    submitButton.innerHTML = `
+      Enviando...
+      <i class="ri-loader-4-line"></i>
+    `;
+  };
+
+  const hideLoader = () => {
+    submitButton.disabled = originalDisabled;
+    submitButton.removeAttribute("aria-busy");
+    submitButton.innerHTML = originalButtonContent;
+    submitButton.classList.remove("sending");
+  };
+
   const cart = JSON.parse(localStorage.getItem("cart") || "[]");
   const productsList = cart.length > 0 
     ? cart.map(el => `<li style="padding:8px 0; border-bottom:1px solid #eee;">${el.name}</li>`).join('')
@@ -393,6 +414,8 @@ submitButton.addEventListener("click", async (e) => {
   };
 
   try {
+    showLoader();
+
     const res = await fetch(
       "https://vercel-deploy-delta-sandy.vercel.app/api/v1/emails",
       {
@@ -404,8 +427,9 @@ submitButton.addEventListener("click", async (e) => {
 
     const data = await res.json();
 
-    if (!res.ok) throw new Error(data.message || "Error al enviar el correo.");
-
+    if(!res.ok) {
+      throw new Error(data.message || 'Error desconocido al enviar el correo');
+    }
     emailMessage.textContent = "Correo enviado con éxito.";
     emailMessage.classList.add("success-message");
     inputEmail.value = "";
@@ -415,6 +439,11 @@ submitButton.addEventListener("click", async (e) => {
   } catch (error) {
     emailMessage.innerHTML = "Error al enviar el correo.";
     emailMessage.classList.add("error-message");
+  } finally {
+    // Asegurar restauración del botón incluso si hay error
+    hideLoader();
+    // Actualizar enlace de WhatsApp y tooltip si es necesario
+    try { updateWhatsAppLink(); updateCartTooltip(); } catch(e) {}
   }
 });
 
@@ -425,11 +454,11 @@ const sr = ScrollReveal({
   duration: 2500
 })
 
-sr.reveal(`.home_img, .footer_columns`, { opacity: 1, distance: '120px', delay: 400 })
-sr.reveal(`.home_badge-right, .faq_list, .testimonials_title`, { origin: 'right', distance: '120px', delay: 400 })
-sr.reveal(`.products_description, .testimonials_description`, { delay: 600 })
-sr.reveal(`.home_badge-left, .products_grid`, { origin: 'left', distance: '120px', delay: 400 })
+sr.reveal(`.home_img`, { opacity: 1, distance: '120px', delay: 400 })
+sr.reveal(`.home_badge-right, .testimonials_title, .footer_columns`, { origin: 'right', distance: '120px', delay: 400 })
+sr.reveal(`.products_description, .contact_description, .testimonials_description`, { delay: 600 })
+sr.reveal(`.home_badge-left, .products_grid, .faq_list`, { origin: 'left', distance: '120px', delay: 400 })
 sr.reveal(`.home_title, .products_title, .contact_title, .faq_title`, { delay: 1000 })
-sr.reveal(`.home_description`, { delay: 1200 })
+sr.reveal(`.home_description, .contact_subtitle`, { delay: 1200 })
 sr.reveal(`.home_button`, { delay: 1400 })
 sr.reveal(`.home_footer`, { delay: 1600 })

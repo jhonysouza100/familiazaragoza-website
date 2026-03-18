@@ -2,21 +2,21 @@
   {
     "id": 2,
     "name": "Arpillera 500g",
-    "description": "Presentación artesanal que destaca el origen, la tradición y el valor simbólico de la yerba mate.",
+    "description": "Cada bolsa de arpillera es preparada a mano, la tela se corta, se cose, se llena y se termina una a una. Un trabajo artesanal que envuelve nuestra yerba barbacuá y la convierte en un detalle único",
     "image": "/public/img/home-product-2.png",
     "price": 8
   },
   {
     "id": 1,
     "name": "Paquete 500g",
-    "description": "Presentación clásica y accesible, pensada para el consumo diario y la reventa fraccionada.",
+    "description": "Cada paquete se llena y se cierra a mano, uno por uno, manteniendo el mismo cuidado artesanal que distingue a nuestra yerba barbacuá. Práctico, rendidor y pensado para acompañar la rutina diaria.",
     "image": "/public/img/home-product-1.png",
     "price": 8
   },
   {
     "id": 3,
-    "name": "Bolsa kraft 10kg",
-    "description": "Formato práctico y eficiente, ideal para reventa suelta o consumo de alto volumen.",
+    "name": "Bolsa Kraft 10kg",
+    "description": "Cada bolsa se llena y se cierra con costura reforzada, cuidando la yerba desde el origen hasta su presentación final. Pensada para abastecimiento, consumo frecuente o venta fraccionada, manteniendo el mismo perfil barbacuá",
     "image": "/public/img/home-product-3.png",
     "price": 8
   }

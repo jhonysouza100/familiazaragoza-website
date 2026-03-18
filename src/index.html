@@ -86,9 +86,9 @@
             <ul class="nav_list">
               <li><a class="nav_link active-link" href="#home">Inicio</a></li>
               <li><a class="nav_link" href="#catalog">Nuestra Yerba</a></li>
+              <li><a class="nav_link" href="#contact">Contacto</a></li>
               <li><a class="nav_link" href="#testimonials">Reseñas</a></li>
               <li><a class="nav_link" href="#faq">FAQ</a></li>
-              <li><a class="nav_link" href="#contact">Contacto</a></li>
             </ul>
             <!-- Close Button -->
             <div class="header-btn nav_close" id="nav-close">
@@ -126,54 +126,26 @@
               <span>Familia Zaragoza</span>
             </h1>
             <p class="home_description">
-              Secada a leña, sabor ahumado y profundo.
-              Una yerba distinta, intensa y duradera, hecha con método tradicional para quienes buscan calidad real y una experiencia de mate auténtica.
+              Si usted gusta del mate con carácter, esta es una yerba de selección. Secada a leña, desarrollando ese toque ahumado tan particular y un sabor profundo que se mantiene. Tiene presencia y una duración que se aprecia desde el primer cebado.
             </p>
             <a class="home_button button"
-              href="#contact-form"
+              href="#contact"
               aria-label="Ir al formulario de contacto"
               title="Ir al formulario de contacto"
               rel="nofollow"
             >
-              Pedila Ya!
+              Más información
             </a>
           </div>
 
           <div class="home_group">
             <div class="home_images">
+              <img src="/public/img/home-product-2.png" class="home_img home_img-2">
               <div class="home_badge home_badge-left">
                 <span class="home_badge-icon">
                   <i class="ri-award-line"></i>
                 </span>
-                <span>Pensada para quienes <br> valoran lo artesanal</span>
-              </div>
-              <img src="/public/img/home-product-1.png" class="home_img home_img-1">
-              <img src="/public/img/home-product-2.png" class="home_img home_img-2">
-              <div class="home_badge home_badge-right">
-                <span class="home_badge-icon">
-                  <i class="ri-award-line"></i>
-                </span>
                 <span>Secada siguiendo <br> el método barbacuá</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="home_footer">
-            <div>
-              <span class="home_footer_title">Ideal para souvenirs</span>
-              <h3 class="home_footer_number">
-                500Gr & 10Kg
-              </h3>
-            </div>
-
-            <div>
-              <span class="home_footer_title">
-                Ahora en versión arpillera
-              </span>
-              <div class="home_footer_time">
-                <span class="home_footer_subtitle">Rústico</span>
-                <span class="home_footer_subtitle">Noble</span>
-                <span class="home_footer_subtitle">Ecológico</span>
               </div>
             </div>
           </div>
@@ -183,11 +155,11 @@
       <!--==================== PRODUCTS ====================-->
       <section class="products-section container section" id="catalog">
         <div class="products_info">
-          <h2 class="products_title">
-            Nuestra Yerba
+          <h2 class="products_title section_title">
+            ¿Qué es el barbacuá?
           </h2>
-          <p class="products_description">
-            Barbacuá artesanal, sabor sostenible hasta el ultimo sorbo. Cada bolsa está almacenada de forma cuidadosa para que el sabor barbacuá llegue de manera pareja, con cuerpo y sabor.
+          <p class="products_description section_description">
+            El barbacuá es un método de secado a leña que consiste en deshidratar lentamente la hoja de Yerba Mate mediante calor indirecto durante aproximadamente 10 a 18 horas. Este proceso se realiza después del sapecado, un golpe rápido de fuego que evita la oxidación de la hoja y se aplica el mismo día de la cosecha. Luego, la yerba se estaciona entre 18 y 24 meses para permitir que la hoja madure y desarrolle un sabor más equilibrado. Finalmente, se selecciona y muele para llegar a usted en nuestras distintas presentaciones.
           </p>
         </div>
         <div class="products_grid">
@@ -195,14 +167,46 @@
         </div>
       </section>
 
+      <!--==================== CONTACT ====================-->
+      <section class="contact_section section container" id="contact">
+        <h2 class="contact_title section_title">
+          Ahora sí, la pregunta es simple...
+        </h2>
+        <h3 class="contact_subtitle">
+          ¿Cómo quiere recibir su yerba?
+        </h3>
+        <p class="contact_description section_description">
+          Déjenos sus datos y nos pondremos en contacto para coordinar el despacho de su pedido a cualquier punto del país.
+        </p>
+        <form class="contact_form" aria-label="formulario de contacto" id="contact-form">
+          <div class="contact_inputs">
+            <input type="text" class="contact_input" id="input-name" placeholder="Nombre completo" aria-label="Nombre completo" required>
+            <input type="text" class="contact_input" id="input-phone" placeholder="Whatsapp" aria-label="Número de teléfono" required>
+            <span class="email_message" id="email-message"></span>
+            <input type="email" class="contact_input" id="input-email" placeholder="Email" aria-label="Correo electrónico" required>
+            <textarea class="contact_input contact_textarea" id="input-message" placeholder="Detalle su consulta" aria-label="Escribe tu consulta aquí" required></textarea>
+            <div>
+              <p class="section_description">Seleccione su producto de interes</p>
+              <div class="select_product-container" id="select_product-container">
+                <!-- Dynamic with Js -->
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="contact_button button" id="submit-button">
+            Enviar
+            <i class="ri-mail-send-line"></i>
+          </button>
+        </form>
+      </section>
+
       <!--==================== TESTIMONIALS ====================-->
       <section class="testimonials section" id="testimonials">
         <div class="testimonials_overlay"></div>
         <div class="testimonials_content container">
-          <h2 class="testimonials_title">
+          <h2 class="testimonials_title section_title">
             Reseñas de Google
           </h2>
-          <p class="testimonials_description">
+          <p class="testimonials_description section_description">
             Tienda física
             <a href="https://share.google/uNEwRbGf0jRyag5SY" 
               title="Ir a opiniones de Google" 
@@ -307,7 +311,7 @@
 
       <!--==================== FAQ ====================-->
       <section class="faq_section section container" id="faq">
-        <h2 class="faq_title section_title">FAQ</h2>
+        <h2 class="faq_title section_title">Preguntas Frecuentes</h2>
         <div class="faq_list">
           <div class="faq_item drop-btn show-drop">
             <div class="faq_item-left">
@@ -334,7 +338,8 @@
           <div class="faq_item drop-btn">
             <div class="faq_item-left">
               <div class="faq_question">¿Dónde están ubicados?</div>
-              <div class="faq_answer drop_list">Nos encontramos en Oberá, Misiones. <br> Por el momento sin atención al público.</div>
+              <div class="faq_answer drop_list">Nos encontramos en puerto Iguazú, con atención comercial por mayor y menor.
+Elaborado y envasado en Oberá Misiones.</div>
             </div>
             <span class="faq_number">04</span>
           </div>
@@ -343,35 +348,9 @@
     </main>
 
     <!--==================== FOOTER ====================-->
-    <section class="footer section" id="contact">
-      <footer class="footer_inner container">
-        
-        <div class="footer_content section">
-          <div class="contact_section">
-            <h2 class="section_title contact_title">
-              Contacto
-            </h2>
-            <p class="products_description">
-              Para consultas, pedidos o más información, no dudes en contactarnos. Estamos aquí para ayudarte a disfrutar de la mejor experiencia de yerba mate.
-            </p>
-            <form class="contact_form" aria-label="formulario de contacto" id="contact-form">
-              <div class="contact_inputs">
-                <input type="text" class="contact_input" id="input-name" placeholder="Nombre completo" aria-label="Nombre completo" required>
-                <input type="text" class="contact_input" id="input-phone" placeholder="Número de teléfono" aria-label="Número de teléfono" required>
-                <span class="email_message" id="email-message"></span>
-                <input type="email" class="contact_input" id="input-email" placeholder="Correo electrónico" aria-label="Correo electrónico" required>
-                <textarea class="contact_input contact_textarea" id="input-message" placeholder="Escribe tu consulta aquí..." aria-label="Escribe tu consulta aquí" required></textarea>
-                <div class="select_product-container" id="select_product-container">
-                  <!-- Dynamic with Js -->
-                </div>
-              </div>
-              <button type="submit" class="contact_button button" id="submit-button">
-                Contactar
-                <i class="ri-mail-send-line"></i>
-              </button>
-            </form>
-          </div>
-
+    <footer class="footer section">
+      <div class="footer_inner container">
+        <div class="footer_content">
           <div>
             <div class="footer_top">
               <div class="footer_logo">
@@ -390,6 +369,7 @@
                 <div class="footer_col-title">Navegación</div>
                 <a href="#home">Inicio</a>
                 <a href="#catalog">Nuestra Yerba</a>
+                <a href="#contact">Contacto</a>
                 <a href="#testimonials">Reseñas</a>
                 <a href="#faq">FAQ</a>
               </div>
@@ -397,7 +377,7 @@
           </div>
         </div>
 
-        <div class="footer_bottom section">
+        <div class="footer_bottom">
           <span class="footer_copyright">
             © Copyright 2026, 
             <a href="https://jhonysouza100.site" title="Developer website" target="_blank" rel="nofollow">ChillHop Studio</a>
@@ -417,8 +397,8 @@
             </a>
           </div>
         </div>
-      </footer>
-    </section>
+      </div>
+    </footer>
 
     <!--========== SCROLL UP ==========-->
     <div class="scrollup" id="scroll-up">

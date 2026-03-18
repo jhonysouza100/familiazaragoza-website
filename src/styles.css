@@ -90,13 +90,17 @@ img {
 
 .section_title {
   font-size: 1.95rem;
-  font-style: italic;
   line-height: 1.25;
-  max-width: 420px;
-  text-align: center;
   margin-block: 0.5rem 1.25rem;
-  margin-inline: auto;
-  margin-bottom: 40px;
+  text-align: start;
+  margin-inline: 0 auto;
+}
+
+.section_description {
+  text-align: justify;
+  hyphens: auto;
+  color: var(--text-color-light);
+  margin-bottom: 1.5rem;
 }
 
 .button {
@@ -270,7 +274,7 @@ img {
   position: relative;
   padding: 7rem 0 2rem;
 }
-.home_title, .products_title {
+.home_title{
   font-size: var(--biggest-font-size);
   margin-bottom: .75rem;
 }
@@ -279,7 +283,7 @@ img {
   -webkit-background-clip: text;
   color: transparent;
 }
-.home_description, .products_description, .testimonials_description {
+.home_description {
   color: var(--text-color-light);
   margin-bottom: 1.5rem;
 }
@@ -292,10 +296,12 @@ img {
 
 .home_group {
   position: relative;
+  display: grid;
+  place-content: center;
 }
 .home_images {
   position: relative;
-  width: 340px;
+  width: 320px;
   aspect-ratio: 1/ 1;
   margin-top: 1.75rem;
 }
@@ -306,11 +312,7 @@ img {
   top: 0;
   left: 0;
 }
-.home_img-1 {
-  transform: translateX(3.75rem) rotate(10deg);
-}
 .home_img-2 {
-  transform: translateX(-3.75rem) rotate(-10deg);
   z-index: 3;
 }
 .home_badge {
@@ -332,11 +334,6 @@ img {
   left: 0;
   bottom: 30%;
   z-index: 4;
-}
-.home_badge-right {
-  right: 0;
-  bottom: 70%;
-  z-index: 2;
 }
 .home_badge-icon {
   display: flex;
@@ -413,12 +410,9 @@ img {
 }
 
 /* ==================== PRODUCTS ==================== */
-.products_title {
-  text-align: initial;
-}
 .products_grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   justify-items: center;
   row-gap: 4rem;
   column-gap: 24px;
@@ -428,8 +422,7 @@ img {
 .product_card {
   position: relative;
   border-radius: 1.25rem;
-  display: grid;
-  gap: .5rem;
+  max-width: 280px;
 }
 
 /* Ocultar checkbox pero mantenerlo funcional */
@@ -449,8 +442,8 @@ img {
 /* Icono de check para estado seleccionado */
 .product_card .product_check-icon {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 12px;
+  right: 1rem;
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -458,12 +451,14 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
   color: var(--text-color);
   opacity: 0;
   transform: scale(0);
   transition: opacity .3s, transform .3s;
   z-index: 5;
+}
+.product_card .product_check-icon i {
+  font-size: 38px;
 }
 /* Estado seleccionado - mostrar icono de check */
 .product_card .product_checkbox:checked + .product_card-label .product_check-icon {
@@ -487,7 +482,7 @@ img {
 
 .product_image-wrap {
   width: fit-content;
-  height: 180px;
+  height: 280px;
   aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
@@ -518,7 +513,186 @@ img {
 .product_description {
   font-size: 13px;
   text-align: center;
+  hyphens: auto;
   line-height: 1.5;
+}
+
+/* ==================== CONTACT ==================== */
+.contact_subtitle {
+  font-size: var(--normal-font-size);
+  text-align: start;
+}
+
+/* Contact form */
+.contact_form {
+  position: relative;
+  display: grid;
+  row-gap: 2rem;
+}
+.contact_inputs {
+  display: grid;
+  gap: 1rem;
+  padding-top: 1rem;
+  position: relative;
+}
+.email_message {
+  position: absolute;
+  top: 18px;
+  left: 0;
+  transform: translateY(-2rem);
+}
+.error-message {
+  color: var(--error-color);
+}
+.success-message {
+  color: var(--success-color);
+}
+.contact_input {
+  color: var(--text-color);               /* color del texto que escribe el usuario */
+  caret-color: var(--text-color);         /* color del cursor */
+  -webkit-text-fill-color: var(--text-color);/* para compatibilidad WebKit */
+  padding-block: 1.25rem;
+  padding-inline: 1rem;
+  border: none;
+  border-radius: .75rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  transition: background .4s;
+}
+.contact_input:autofill {
+  transition: background-color 6000s, color 6080s;
+}
+.contact_input:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+.contact_input::-webkit-input-placeholder { font-family: var(--body-font); color: var(--text-color); }
+.contact_input::-moz-placeholder { font-family: var(--body-font); color: var(--text-color); }
+.contact_input:-ms-input-placeholder { font-family: var(--body-font); color: var(--text-color); }
+.contact_input::-ms-input-placeholder { font-family: var(--body-font); color: var(--text-color); }
+.contact_input::placeholder { font-family: var(--body-font); color: var(--text-color); }
+
+/* Opcional: mantener el placeholder más tenue */
+input::placeholder,
+textarea::placeholder,
+.contact_input::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+.contact_input-error {
+  color: var(--alert-color);
+  position: absolute;
+  top: -.75rem;
+  right: 1.5rem;
+  transform: translateY(-5rem);
+}
+
+/* Product checkbox selection */
+.select_product-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.product_checkbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.product_label {
+  position: relative;
+  display: block;
+  width: 80px;
+  height: 80px;
+  border-radius: .75rem;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: border-color .3s, transform .3s, box-shadow .3s;
+}
+.product_label img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8px;
+  transition: transform .3s;
+}
+.product_label:hover {
+  border-color: var(--second-color-alt);
+  transform: scale(1.05);
+}
+.product_label .product_check-icon {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--gradient-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--text-color);
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity .3s, transform .3s;
+}
+.product_label .product_check-icon i {
+  color: var(--text-color);
+  font-size: initial;
+}
+.product_check-name {
+  position: absolute;
+  bottom: -1rem;
+  left: 50%;
+  width: 70px;
+  font-size: .55rem;
+  text-align: center;
+  transform: translateX(-50%);
+}
+/* Checkbox checked state */
+.product_checkbox:checked + .product_label {
+  border-color: var(--first-color);
+  box-shadow: 0 0 12px rgba(181, 117, 71, 0.4);
+}
+.product_checkbox:checked + .product_label .product_check-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+.product_checkbox:checked + .product_label img {
+  transform: scale(1.05);
+}
+
+.contact_button {
+  text-align: start;
+  min-width: 300px;
+  justify-self: center;
+  transition: box-shadow .3s;
+}
+.contact_button i {
+  font-size: 1.25rem;
+  font-weight: initial;
+  transition: transform .3s;
+}
+.contact_button:hover  {
+  box-shadow: 0 8px 48px hsl(35, 26%, 73%);
+}
+
+.sending {
+  pointer-events: none;
+  user-select: none;
+  filter: grayscale(50%);
+}
+.sending i {
+ animation: rotation .4s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
 }
 
 /* ==================== TESTIMONIALS ==================== */
@@ -546,10 +720,9 @@ img {
 .testimonials_content {
   position: relative;
 }
-.testimonials_title {
-  font-size: var(--biggest-font-size);
-  margin-bottom: .75rem;
+.testimonials_title, .faq_title {
   text-align: end;
+  margin-inline: auto 0;
 }
 .testimonials_description {
   text-align: end;
@@ -625,9 +798,6 @@ img {
   border-bottom: 1px solid #ddd8cc;
   cursor: pointer;
   transition: background .3s;
-}
-.faq_item:first-child {
-  border-top: 1px solid #ddd8cc;
 }
 .faq_item:last-child {
   border-bottom: none;
@@ -796,152 +966,6 @@ footer {
   color: var(--second-color-alt);
 }
 
-/* Contact form */
-.contact_form {
-  position: relative;
-  display: grid;
-  row-gap: 1rem;
-}
-.contact_inputs {
-  display: grid;
-  gap: 1rem;
-  padding-top: 1rem;
-  position: relative;
-}
-.email_message {
-  position: absolute;
-  top: 18px;
-  left: 0;
-  transform: translateY(-2rem);
-}
-.error-message {
-  color: var(--error-color);
-}
-.success-message {
-  color: var(--success-color);
-}
-.contact_input {
-  color: var(--text-color);               /* color del texto que escribe el usuario */
-  caret-color: var(--text-color);         /* color del cursor */
-  -webkit-text-fill-color: var(--text-color);/* para compatibilidad WebKit */
-  padding-block: 1.25rem;
-  padding-inline: 1rem;
-  border: none;
-  border-radius: .75rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.08);
-  transition: background .4s;
-}
-.contact_input:autofill {
-  transition: background-color 6000s, color 6080s;
-}
-.contact_input:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
-.contact_input::-webkit-input-placeholder { font-family: var(--body-font); color: var(--text-color); }
-.contact_input::-moz-placeholder { font-family: var(--body-font); color: var(--text-color); }
-.contact_input:-ms-input-placeholder { font-family: var(--body-font); color: var(--text-color); }
-.contact_input::-ms-input-placeholder { font-family: var(--body-font); color: var(--text-color); }
-.contact_input::placeholder { font-family: var(--body-font); color: var(--text-color); }
-
-/* Opcional: mantener el placeholder más tenue */
-input::placeholder,
-textarea::placeholder,
-.contact_input::placeholder {
-  color: rgba(255,255,255,0.6);
-}
-
-.contact_input-error {
-  color: var(--alert-color);
-  position: absolute;
-  top: -.75rem;
-  right: 1.5rem;
-  transform: translateY(-5rem);
-}
-
-/* Product checkbox selection */
-.select_product-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-.product_checkbox {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-.product_label {
-  position: relative;
-  display: block;
-  width: 80px;
-  height: 80px;
-  border-radius: .75rem;
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.08);
-  cursor: pointer;
-  overflow: hidden;
-  transition: border-color .3s, transform .3s, box-shadow .3s;
-}
-.product_label img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 8px;
-  transition: transform .3s;
-}
-.product_label:hover {
-  border-color: var(--second-color-alt);
-  transform: scale(1.05);
-}
-.product_label .product_check-icon {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--gradient-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  color: var(--text-color);
-  opacity: 0;
-  transform: scale(0);
-  transition: opacity .3s, transform .3s;
-}
-.product_label .product_check-icon i {
-  color: var(--text-color);
-  font-size: initial;
-}
-/* Checkbox checked state */
-.product_checkbox:checked + .product_label {
-  border-color: var(--first-color);
-  box-shadow: 0 0 12px rgba(181, 117, 71, 0.4);
-}
-.product_checkbox:checked + .product_label .product_check-icon {
-  opacity: 1;
-  transform: scale(1);
-}
-.product_checkbox:checked + .product_label img {
-  transform: scale(1.05);
-}
-
-.contact_button {
-  text-align: start;
-  min-width: 300px;
-  justify-self: center;
-  margin-top: 1rem;
-}
-.contact_button i {
-  font-size: 1.25rem;
-  font-weight: initial;
-  transition: transform .3s;
-}
-.contact_button:hover i {
-  transform: translateX(4px);
-}
-
 /* Whatsapp button */
 .whatsapp_btn {
   z-index: var(--z-fixed);
@@ -1002,19 +1026,14 @@ textarea::placeholder,
   .container {
     margin-inline: 1rem;
   }
-  .home_images {
-    width: 280px;
-  }
   .home_footer {
     flex-direction: column;
     row-gap: 2rem;
   }
   .products_grid {
-    grid-template-columns: repeat(1, 1fr);
     gap: 54px;
   }
   .product_card-info {
-    max-width: 200px;
     justify-self: center;
   }
   .footer_columns {
@@ -1046,7 +1065,7 @@ textarea::placeholder,
     display: grid;
     grid-template-columns: repeat(2, max-content);
     align-content: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: 1rem 2rem;
   }
   .home_group {
@@ -1058,17 +1077,14 @@ textarea::placeholder,
     font-size: 13px;
     padding: 12px 18px;
   }
-  .home_description, .products_description, .testimonials_description {
-    max-width: 600px;
+  .home_description {
+    max-width: 420px;
   }
   .products_grid {
     grid-template-columns: repeat(3, 1fr);
   }
   .product_add-btn {
     right: 1.5rem;
-  }
-  .product_image-wrap {
-    height: 280px;
   }
   .product_name {
     font-size: 18px;
@@ -1081,11 +1097,8 @@ textarea::placeholder,
     grid-template-columns: repeat(2, 1fr);
     column-gap: 36px;
   }
-  .contact_section {
-    order: 2;
-  }
-  .contact_section h2, .contact_section p {
-    display: none;
+  .contact_form {
+    row-gap: 1rem;
   }
   .contact_inputs {
     grid-template-columns: repeat(2, 1fr);
@@ -1108,15 +1121,19 @@ textarea::placeholder,
 
 /* For large devices */
 @media screen and (min-width: 1024px) {
+  .section_description {
+    max-width: 920px;
+    margin-bottom: 3rem;
+  }
   .home_title, .products_title {
     margin-bottom: 1rem;
   }
-  .home_description, .products_description, .testimonials_description   {
+  .home_description   {
+    max-width: 620px;
     margin-bottom: 3rem;
-    max-width: 520px;
   }
   .home_images {
-    width: 420px;
+    width: 480px;
   }
   .home_shape-small,
   .home_shape-big-1,
@@ -1148,7 +1165,7 @@ textarea::placeholder,
   }
 }
 
-@media screen and (min-width: 1048px) {
+@media screen and (min-width: 1280px) {
   .container {
     margin-inline: auto;
   }
