@@ -454,7 +454,7 @@ const sr = ScrollReveal({
   duration: 2500
 })
 
-sr.reveal(`.home_img`, { opacity: 1, distance: '120px', delay: 400 })
+sr.reveal(`.home_img-animation`, { origin: 'top', opacity: 1, distance: '120px', delay: 400 })
 sr.reveal(`.home_badge-right, .testimonials_title, .footer_columns`, { origin: 'right', distance: '120px', delay: 400 })
 sr.reveal(`.products_description, .contact_description, .testimonials_description`, { delay: 600 })
 sr.reveal(`.home_badge-left, .products_grid, .faq_list`, { origin: 'left', distance: '120px', delay: 400 })
