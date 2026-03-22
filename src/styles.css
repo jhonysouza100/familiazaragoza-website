@@ -321,7 +321,7 @@ img {
   filter: brightness(.8) drop-shadow(0 4px 32px hsla(30, 7%, 16%, 0.5));
   transform: rotate(15deg);
 }
-.home_img-reveal-2 {
+.home_img-reflect {
   position: absolute;
   right: 0;
   bottom: -95%;
@@ -329,7 +329,7 @@ img {
   --webkkit-mask-image: linear-gradient(to top, var(--body-color), transparent);
   mask-image: linear-gradient(to top, var(--body-color), transparent);
 }
-.home_img-reveal-2 img {
+.home_img-reflect img {
   opacity: .9;
   filter: brightness(.3) blur(4px);
 }
@@ -1189,4 +1189,18 @@ footer {
   .product_shape-big-2 {
     left: 28rem;
   }
+}
+
+/* persosonalize scroll bar */
+::-webkit-scrollbar {
+  width: .5rem;
+  border-radius: .5rem;
+  background-color: hsl(0, 0%, 10%);
+}
+::-webkit-scrollbar-thumb {
+  border-radius: .5rem;
+  background-color: hsl(0, 0%, 20%);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(0, 0%, 30%);
 }
