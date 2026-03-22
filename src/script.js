@@ -454,11 +454,11 @@ const sr = ScrollReveal({
   duration: 2500
 })
 
-sr.reveal(`.home_img-animation`, { origin: 'top', opacity: 1, distance: '120px', delay: 400 })
+sr.reveal(`.home_img-reveal-1, .home_img-reveal-2`, { origin: 'top', opacity: 1, distance: '120px', delay: 400 })
 sr.reveal(`.home_badge-right, .testimonials_title, .footer_columns`, { origin: 'right', distance: '120px', delay: 400 })
 sr.reveal(`.products_description, .contact_description, .testimonials_description`, { delay: 600 })
 sr.reveal(`.home_badge-left, .products_grid, .faq_list`, { origin: 'left', distance: '120px', delay: 400 })
-sr.reveal(`.home_title, .products_title, .contact_title, .faq_title`, { delay: 1000 })
-sr.reveal(`.home_description, .contact_subtitle`, { delay: 1200 })
-sr.reveal(`.home_button`, { delay: 1400 })
-sr.reveal(`.home_footer`, { delay: 1600 })
+sr.reveal(`.products_title, .contact_title, .faq_title`, { delay: 1000 })
+sr.reveal(`.contact_subtitle`, { delay: 1200 })
+sr.reveal(`.home_title, .home_button`, { delay: 2000 })
+sr.reveal(`.home_description, .home_footer`, { delay: 2400 })
