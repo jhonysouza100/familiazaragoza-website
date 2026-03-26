@@ -300,7 +300,22 @@ img {
   place-content: end;
   justify-content: center;
 }
-.home_img-reveal, .home_img-reflect  {
+.home_images-container {
+  position: relative;
+}
+.home_reflect-container {
+  position: absolute;
+  right: 0;
+  bottom: -97%;
+  transform: scaleY(-1);
+  overflow: hidden;
+  --webkkit-mask-image: linear-gradient(to top, var(--body-color), transparent 45%);
+  mask-image: linear-gradient(to top, var(--body-color), transparent 45%);
+  clip-path: inset(55% 0 0 0);
+  z-index: -1;
+  user-select: none;
+}
+.home_img-reveal, .home_reflect-reveal  {
   display: grid;
   justify-items: center;
 }
@@ -309,19 +324,7 @@ img {
   filter: brightness(.8) drop-shadow(0 4px 32px hsla(30, 7%, 16%, 0.5));
   transform: rotate(15deg);
 }
-.home_images-container {
-  position: relative;
-}
-.home_img-reflect {
-  position: absolute;
-  right: 0;
-  bottom: -97%;
-  transform: scaleY(-1);
-  --webkkit-mask-image: linear-gradient(to top, var(--body-color), transparent);
-  mask-image: linear-gradient(to top, var(--body-color), transparent);
-  z-index: -1;
-}
-.home_img-reflect img {
+.home_reflect-reveal img {
   opacity: .9;
   filter: brightness(.3) blur(4px);
 }
