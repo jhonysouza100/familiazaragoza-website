@@ -451,12 +451,13 @@ submitButton.addEventListener("click", async (e) => {
 const sr = ScrollReveal({
   origin: 'bottom',
   distance: '60px',
-  duration: 2500
+  duration: 2500,
 })
 
-sr.reveal(`.home_img-reveal, .home_img-reflect`, { origin: 'top', opacity: 1, distance: '120px', delay: 400 })
-sr.reveal(`.testimonials_title, .footer_columns`, { origin: 'right', distance: '120px', delay: 400 })
-sr.reveal(`.products_description, .contact_description, .testimonials_description`, { delay: 600 })
-sr.reveal(`.products_grid, .faq_list`, { origin: 'left', distance: '120px', delay: 400 })
-sr.reveal(`.home_title, .products_title, .contact_title, .faq_title`, { delay: 1000 })
-sr.reveal(`.contact_subtitle`, { delay: 1200 })
+sr.reveal(`.home_img-reveal, .home_reflect-reveal`, { origin: 'top', opacity: 1, distance: '120px', delay: 400 })
+sr.reveal(`.products_grid, .contact_form, .faq_list, .footer_bottom`)
+sr.reveal(`.blog_image, .products_title, .about_title`, { origin: 'right'})
+sr.reveal(`.blog_info, .contact_title, .testimonials_title, .faq_title`, { origin: 'left'})
+sr.reveal(`.home_title`, { delay: 400 })
+sr.reveal(`.about_description, .contact_description, .testimonials_description`, { delay: 600 })
+sr.reveal(`.about_external`, { delay: 1200 })

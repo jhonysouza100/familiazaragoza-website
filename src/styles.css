@@ -120,6 +120,21 @@ img {
 }
 
 
+/* Effects */
+.initial_letter {
+  font-size: 3rem;
+  float: left;
+  margin-right: 0.1em;
+  line-height: 0.7em;
+}
+
+.bg_clip-text {
+  background: var(--gradient-color);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+
 /*=============== HEADER & NAV ===============*/
 
 .header {
@@ -281,15 +296,13 @@ img {
   position: relative;
   display: grid;
 }
+.home_info {
+  align-self: self-end;
+}
 .home_title{
   font-size: var(--biggest-font-size);
-  margin-bottom: .75rem;
+  /* margin-bottom: .75rem; */
   display: none;
-}
-.home_title span {
-  background: var(--gradient-color);
-  -webkit-background-clip: text;
-  color: transparent;
 }
 .outher {
   display: block;
@@ -369,15 +382,48 @@ img {
   z-index: -2;
 }
 
+/* ==================== BLOG ==================== */
+.blog_antetitle {
+  font-size: var(--biggest-font-size);
+}
+.blog_subtitle {
+  margin-bottom: .5rem;
+}
+.blog_container {
+  display: grid;
+  row-gap: 1.5rem;
+}
+.blog_image {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  transition: background .4s;
+  border-radius: .75rem;
+  padding: 1rem;
+  overflow: hidden;
+}
+.blog_image:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+.blog_img {
+  border-radius: .75rem;
+  object-fit: contain;
+}
+.blog_image-caption {
+  margin-top: .5rem;
+  margin-inline-end: .5rem;
+  text-align: end;
+}
+
+
 /* ==================== PRODUCTS ==================== */
 .products_section {
   position: relative;
 }
-.products_title {
+.products_title, .blog_title, .about_title {
   text-align: start;
   margin-inline: 0 auto;
 }
-.products_description {
+.products_description, .blog_description, .about_description {
   text-align: justify;
   margin-left: 0;
 }
@@ -533,12 +579,16 @@ img {
   mask-image: linear-gradient(var(--body-color) 60%, transparent);
 }
 
-/* ==================== CONTACT ==================== */
-.contact_subtitle {
-  font-size: var(--h2-font-size);
-  text-align: start;
+/* ==================== ABOUT ==================== */
+.about_external {
+  font-weight: var(--font-semi-bold);
+  transition: color .3s;
+}
+.about_external:hover {
+  color: var(--second-color-alt);
 }
 
+/* ==================== CONTACT ==================== */
 /* Contact form */
 .contact_form {
   position: relative;
@@ -929,6 +979,7 @@ footer {
 }
 .footer_bottom {
   display: flex;
+  column-gap: .25rem;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
@@ -949,6 +1000,7 @@ footer {
 }
 .footer_bottom-links {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
 }
 .footer_bottom-links a {
@@ -1044,6 +1096,9 @@ footer {
   .home_images {
     width: 280px;
   }
+  .blog_image-caption {
+    font-size: .75rem;
+  }
   .products_grid {
     gap: 54px;
   }
@@ -1055,9 +1110,6 @@ footer {
   }
   .footer_top {
     column-gap: .5rem;
-  }
-  .footer_bottom-links {
-    flex-wrap: wrap;
   }
 }
 
@@ -1135,16 +1187,17 @@ footer {
   .home_title {
     display: block;
   }
-  .outher {
-    display: none;
-  }
   .home_title {
     margin-bottom: 1rem;
   }
   .home_images {
     width: 420px;
   }
-  .products_description {
+  .blog_container {
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+  }
+  .products_description, .blog_description {
     max-width: 90%;
   }
   .product_shape-small,

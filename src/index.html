@@ -72,6 +72,16 @@
     <meta name="twitter:title" content="Yerba Mate Familia Zaragoza">
     <meta name="twitter:description" content="Tienda física en Iguazú, Misiones, especializada en venta de yerba mate Barbacuá. Atención al público, venta minorista. Envíos a todo el país y asesoramiento personalizado por WhatsApp.">
     <meta name="twitter:image" content="https://res.cloudinary.com/dgyscrnpp/image/upload/v1772313919/familiazaragoza-twitterimage_vg7nu7.jpg">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VZFRVNFFZH"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-VZFRVNFFZH');
+    </script>
   </head>
   <body>
     <!--==================== HEADER ====================-->
@@ -85,7 +95,9 @@
           <div class="nav_menu" id="nav-menu">
             <ul class="nav_list">
               <li><a class="nav_link active-link" href="#home">Inicio</a></li>
+              <li><a class="nav_link active-link" href="#blog">Introdución</a></li>
               <li><a class="nav_link" href="#catalog">Nuestra Yerba</a></li>
+              <li><a class="nav_link" href="#about">Nosotros</a></li>
               <li><a class="nav_link" href="#contact">Contacto</a></li>
               <li><a class="nav_link" href="#testimonials">Reseñas</a></li>
               <li><a class="nav_link" href="#faq">FAQ</a></li>
@@ -119,11 +131,12 @@
         <div class="home_container container">
           <div class="home_info">
             <h1 class="home_title">
-              Yerba Mate
+              El tiempo 
               <br>
-              <span>Barbacuá</span>
+              encuentra su lugar
               <br>
-              Familia Zaragoza
+              en el
+              <span class="bg_clip-text">Barbacuá</span>
             </h1>
           </div>
 
@@ -142,15 +155,25 @@
         </div>
       </section>
 
-      <div class="home_info section container">
-        <h1 class="home_title outher">
-          Yerba Mate
-          <br>
-          <span>Barbacuá</span>
-          <br>
-          Familia Zaragoza
-        </h1>
-      </div>
+      <!--==================== BLOG ====================-->
+      <section class="blog_section section" id="blog">
+        <div class="blog_container container">
+          <div class="blog_info">
+            <h3 class="blog_antetitle bg_clip-text">Barbacuá</h3>
+            <h2 class="blog_title section_title">
+              El porqué un sabor respetado
+            </h2>
+            <h4 class="blog_subtitle">¿Qué es el barbacuá?</h4>
+            <p class="blog_description section_description">
+              El barbacuá es un método de secado a leña que consiste en deshidratar lentamente la hoja de Yerba Mate mediante calor indirecto durante aproximadamente 10 a 18 horas. Este proceso se realiza después del sapecado, un golpe rápido de fuego que evita la oxidación de la hoja y se aplica el mismo día de la cosecha. Luego, la yerba se estaciona entre 18 y 24 meses para permitir que la hoja madure y desarrolle un sabor más equilibrado. Finalmente, se selecciona y muele para llegar a usted en nuestras distintas presentaciones.
+            </p>
+          </div>
+          <div class="blog_image">
+            <img src="/public/img/production-img.jpeg" alt="Proceso de producción del barbacuá" class="blog_img">
+            <p class="blog_image-caption">Proceso de producción del barbacuá</p>
+          </div>
+        </div>
+      </section>
 
       <!--==================== PRODUCTS ====================-->
       <section class="products_section container section" id="catalog">
@@ -159,10 +182,9 @@
         <div class="product_shape-big-2"></div>
         <div class="products_info">
           <h2 class="products_title section_title">
-            ¿Qué es el barbacuá?
+            Nuestras Presentaciones
           </h2>
           <p class="products_description section_description">
-            El barbacuá es un método de secado a leña que consiste en deshidratar lentamente la hoja de Yerba Mate mediante calor indirecto durante aproximadamente 10 a 18 horas. Este proceso se realiza después del sapecado, un golpe rápido de fuego que evita la oxidación de la hoja y se aplica el mismo día de la cosecha. Luego, la yerba se estaciona entre 18 y 24 meses para permitir que la hoja madure y desarrolle un sabor más equilibrado. Finalmente, se selecciona y muele para llegar a usted en nuestras distintas presentaciones.
           </p>
         </div>
         <div class="products_grid">
@@ -170,25 +192,41 @@
         </div>
       </section>
 
+      <!--==================== ABOUT ====================-->
+      <section class="about_section section container" id="about">
+        <h2 class="about_title section_title">
+          Quienes Somos
+        </h2>
+        <p class="about_description section_description">
+          Somos una familia apasionada por la yerba mate. Nos dedicamos a compartir lo mejor de nuestra tierra a través de una yerba que refleja cuidado, tiempo y dedicación. Para nosotros, la calidad es fundamental. creemos que una buena yerba no solo se toma, también s edisfruta. Agradecemos que se haya tomado el timepo de conocernos.
+        </p>
+
+        <a href="https://www.mercadolibre.com.ar/tienda/familia-zaragoza"
+          title="Ver en www.mercadolibre.com.ar" 
+          aria-label="Ir a opiniones de Google"
+          target="_blank"
+          rel="nofollow"
+          class="about_external bg_clip-text">
+          Adquirir por Mercado Libre
+          <i class="ri-external-link-line"></i>
+        </a>
+      </section>
+
       <!--==================== CONTACT ====================-->
       <section class="contact_section section container" id="contact">
         <h2 class="contact_title section_title">
-          Ahora sí, la pregunta es simple...
-          <br>
-          <span class="contact_subtitle">
-            ¿Cómo quiere recibir su yerba?
-          </span>
+          Atención  Personalizada
         </h2>
         <p class="contact_description section_description">
-          Déjenos sus datos y nos pondremos en contacto para coordinar el despacho de su pedido a cualquier punto del país.
+          Déjanos sus datos y nos pondremos en contacto con usted.
         </p>
         <form class="contact_form" aria-label="formulario de contacto" id="contact-form">
           <div class="contact_inputs">
-            <input type="text" class="contact_input" id="input-name" placeholder="Nombre completo" aria-label="Nombre completo" required>
-            <input type="text" class="contact_input" id="input-phone" placeholder="Whatsapp" aria-label="Número de teléfono" required>
+            <input type="text" class="contact_input" id="input-name" title="Por favor introduzca su nombre y apellido" placeholder="Nombre completo" aria-label="Nombre completo" required>
+            <input type="text" class="contact_input" id="input-phone" title="Por favor introduzca su número de teléfono" placeholder="Whatsapp" aria-label="Número de teléfono" required>
             <span class="email_message" id="email-message"></span>
-            <input type="email" class="contact_input" id="input-email" placeholder="Email" aria-label="Correo electrónico" required>
-            <textarea class="contact_input contact_textarea" id="input-message" placeholder="Detalle su consulta" aria-label="Escribe tu consulta aquí" required></textarea>
+            <input type="email" class="contact_input" id="input-email" title="Por favor introduzca su dirección de correo electrónico" placeholder="Email" aria-label="Correo electrónico" required>
+            <textarea class="contact_input contact_textarea" id="input-message" title="Por favor no se olvide rellenar este campo" placeholder="Detalle su consulta" aria-label="Escribe tu consulta aquí" required></textarea>
             <div>
               <p class="select_product-title">Seleccione su producto de interes</p>
               <div class="select_product-container" id="select_product-container">
@@ -196,7 +234,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" class="contact_button button" id="submit-button">
+          <button type="submit" class="contact_button button" title="Enviar datos de contacto" id="submit-button">
             Enviar
             <i class="ri-mail-send-line"></i>
           </button>
@@ -370,12 +408,7 @@ Elaborado y envasado en Oberá Misiones.</div>
                 <p>Papa Francisco, San Cayetano 01, N3370 Puerto Iguazú, Misiones</p>
               </div>
               <div class="footer_col">
-                <div class="footer_col-title">Navegación</div>
-                <a href="#home">Inicio</a>
-                <a href="#catalog">Nuestra Yerba</a>
-                <a href="#contact">Contacto</a>
-                <a href="#testimonials">Reseñas</a>
-                <a href="#faq">FAQ</a>
+                <div class="footer_col-title"></div>
               </div>
             </div>
           </div>
@@ -388,7 +421,10 @@ Elaborado y envasado en Oberá Misiones.</div>
           </span>
           <div class="footer_bottom-links">
             <a href="#home">Inicio</a>
+            <a href="#blog">Introdución</a>
             <a href="#catalog">Nuestra Yerba</a>
+            <a href="#about">Nosotros</a>
+            <a href="#contact">Contacto</a>
             <a href="#testimonials">Reseñas</a>
             <a href="#faq">FAQ</a>
           </div>
