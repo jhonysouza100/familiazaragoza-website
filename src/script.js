@@ -456,8 +456,8 @@ const sr = ScrollReveal({
 
 sr.reveal(`.home_img-reveal, .home_reflect-reveal`, { origin: 'top', opacity: 1, distance: '120px', delay: 400 })
 sr.reveal(`.products_grid, .contact_form, .faq_list, .footer_bottom`)
-sr.reveal(`.blog_image, .products_title, .about_title`, { origin: 'right'})
-sr.reveal(`.blog_info, .contact_title, .testimonials_title, .faq_title`, { origin: 'left'})
+sr.reveal(`.blog_image, .products_title, .about_title`, { origin: 'right' })
+sr.reveal(`.blog_info, .contact_title, .testimonials_title, .faq_title`, { origin: 'left' })
 sr.reveal(`.home_title`, { delay: 400 })
 sr.reveal(`.about_description, .contact_description, .testimonials_description`, { delay: 600 })
 sr.reveal(`.about_external`, { delay: 1200 })
