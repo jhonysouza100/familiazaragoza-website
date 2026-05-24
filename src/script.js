@@ -158,6 +158,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             <div class="product_card-info">
               <h3 class="product_name">${p.name}</h3>
               <p class="product_description">${p.description || ''}</p>
+              <span class="product_card-badge">Mayorista</span>
             </div>
           </label>
         </div>
@@ -454,10 +455,10 @@ const sr = ScrollReveal({
   duration: 2500,
 })
 
-sr.reveal(`.home_img-reveal, .home_reflect-reveal`, { origin: 'top', opacity: 1, distance: '120px', delay: 400 })
+sr.reveal(`.home_img-reveal, .home_reflect-reveal`, { origin: 'top', opacity: 1, distance: '120px', delay: 1200 })
 sr.reveal(`.products_grid, .contact_form, .faq_list, .footer_bottom`)
-sr.reveal(`.blog_image, .products_title, .about_title`, { origin: 'right' })
+sr.reveal(`.blog_image, .products_title`, { origin: 'right' })
 sr.reveal(`.blog_info, .contact_title, .testimonials_title, .faq_title`, { origin: 'left' })
 sr.reveal(`.home_title`, { delay: 400 })
-sr.reveal(`.about_description, .contact_description, .testimonials_description`, { delay: 600 })
-sr.reveal(`.about_external`, { delay: 1200 })
+sr.reveal(`.home_description`, { delay: 1200 })
+sr.reveal(`.contact_description, .testimonials_description`, { delay: 600 })
