@@ -2,22 +2,25 @@
   {
     "id": 2,
     "name": "Arpillera 500g",
-    "description": "Hecha a mano. barcacuá con palo.",
+    "description": "Barbacuá con palo. Hecha a mano",
+    "tag": "+ Envío gratis incluido",
     "image": "/public/img/product-1.webp",
     "price": 8
   },
   {
     "id": 1,
     "name": "Paquete 500g",
-    "description": "Barbacuá elaborada con palo.",
+    "description": "Barbacuá elaborada con palo",
+    "tag": "+ Envío gratis incluido",
     "image": "/public/img/product-2.webp",
     "price": 8
   },
   {
     "id": 3,
-    "name": "Bolsa Kraft 10kg",
-    "description": "minimo 10Kg.",
+    "name": "Granel",
+    "description": "10Kg Barbacuá con palo",
     "image": "/public/img/product-3.webp",
+    "tag": "+ Envío gratis incluido",
     "price": 8
   }
 ]

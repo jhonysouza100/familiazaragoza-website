@@ -146,7 +146,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       grid.innerHTML = products.map(p => {
         const isInCart = cart.some(item => String(item.id) === String(p.id));
         return `
-        <div class="product_card">
+        <div class="product_card" title="Toca para elegir">
           <input type="checkbox" name="products[]" id="product-${p.id}" value="${p.name}" class="product_checkbox" data-id="${p.id}" ${isInCart ? 'checked' : ''}>
           <label for="product-${p.id}" class="product_card-label">
             <span class="product_check-icon">
@@ -158,7 +158,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             <div class="product_card-info">
               <h3 class="product_name">${p.name}</h3>
               <p class="product_description">${p.description || ''}</p>
-              <span class="product_card-badge">Mayorista</span>
+              <div class="product_card-badge">${p.tag}</div>
             </div>
           </label>
         </div>
@@ -452,13 +452,12 @@ submitButton.addEventListener("click", async (e) => {
 const sr = ScrollReveal({
   origin: 'bottom',
   distance: '60px',
-  duration: 2500,
+  duration: 2500
 })
 
 sr.reveal(`.home_img-reveal, .home_reflect-reveal`, { origin: 'top', distance: '120px', delay: 1200 })
 sr.reveal(`.products_grid, .contact_form, .faq_list, .footer_bottom`)
-sr.reveal(`.blog_image, .products_title`, { origin: 'right' })
-sr.reveal(`.blog_info, .contact_title, .testimonials_title, .faq_title`, { origin: 'left' })
 sr.reveal(`.home_title`, { delay: 400 })
 sr.reveal(`.home_description`, { delay: 1200 })
-sr.reveal(`.contact_description, .testimonials_description`, { delay: 600 })
+sr.reveal(`.section_title`, { delay: 200 })
+sr.reveal(`.section_description`, { delay: 800 })
