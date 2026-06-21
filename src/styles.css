@@ -292,7 +292,6 @@ img {
 .home_container {
   position: relative;
   display: grid;
-  justify-items: center;
   grid-template-rows: 100vh auto;
 }
 .home_info {
@@ -300,7 +299,6 @@ img {
 }
 .home_title {
   font-size: var(--biggest-font-size);
-  /* margin-bottom: .75rem; */
   position: relative;
 }
 .home_title:after {
@@ -331,8 +329,6 @@ img {
 .home_images {
   position: relative;
   display: grid;
-  place-content: end;
-  justify-content: center;
   place-content: center;
   order: -1;
 }

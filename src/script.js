@@ -455,7 +455,7 @@ const sr = ScrollReveal({
   duration: 2500,
 })
 
-sr.reveal(`.home_img-reveal, .home_reflect-reveal`, { origin: 'top', opacity: 1, distance: '120px', delay: 1200 })
+sr.reveal(`.home_img-reveal, .home_reflect-reveal`, { origin: 'top', distance: '120px', delay: 1200 })
 sr.reveal(`.products_grid, .contact_form, .faq_list, .footer_bottom`)
 sr.reveal(`.blog_image, .products_title`, { origin: 'right' })
 sr.reveal(`.blog_info, .contact_title, .testimonials_title, .faq_title`, { origin: 'left' })
