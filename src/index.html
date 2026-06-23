@@ -94,9 +94,9 @@
         <nav class="nav">
           <div class="nav_menu" id="nav-menu">
             <ul class="nav_list">
-              <li><a class="nav_link active-link" href="#home">Inicio</a></li>
+              <li><a class="nav_link active-link" href="#hero">Inicio</a></li>
               <li><a class="nav_link" href="#history">Nuestra Historia</a></li>
-              <li><a class="nav_link" href="#blog">El Barbacuá</a></li>
+              <li><a class="nav_link" href="#manifest">El Barbacuá</a></li>
               <li><a class="nav_link" href="#catalog">Productos</a></li>
               <li><a class="nav_link" href="#contact">Contacto</a></li>
               <li><a class="nav_link" href="#testimonials">Reseñas</a></li>
@@ -123,34 +123,33 @@
 
     <!--==================== MAIN ====================-->
     <main class="main">
-      <!-- <img src="/public/img/shape-bg.png" alt="shape image" class="product_shape-bg"> -->
-      <!--==================== HOME ====================-->
-      <section class="home section" id="home">
-        <img src="/public/img/home-bg.webp" alt="shape image" class="home_image-bg">
-
-        <div class="home_container container">
-          <div class="home_info">
-            <h1 class="home_title">
+      <!--==================== hero ====================-->
+      <section class="hero_section section" id="hero">
+        <img src="/public/img/hero-bg.webp" alt="hero image" class="hero_image-bg">
+        <img src="/public/img/shape-bg.png" alt="shape image" class="hero_shape-bg">
+        <div class="hero_container container">
+          <div class="hero_info">
+            <h1 class="hero_title">
               Una yerba con
               <br>
               nombre de mujer
               <!-- <span class="bg_clip-text">Barbacuá</span> -->
             </h1>
-            <p class="home_description">
+            <p class="hero_description">
               Carla Zaragoza crió sola a sus hijos en una ciudad donde no conocia a nadie.
               Su apellido hoy está en cada paquete - no como adorno, sino como el agradecimiento
               más honesto que sus hijos pudiron darle.
             </p>
           </div>
 
-          <div class="home_images">
-            <div class="home_images-container">
-              <div class="home_img-reveal">
-                <img src="/public/img/product-1.webp" class="home_img" title="Yerba Mate Barbacuá presentación Arpillera" alt="Yerba Mate Barbacuá presentación Arpillera">
+          <div class="hero_images">
+            <div class="hero_images-container">
+              <div class="hero_img-reveal">
+                <img src="/public/img/product-1.webp" class="hero_img" title="Yerba Mate Barbacuá presentación Arpillera" alt="Yerba Mate Barbacuá presentación Arpillera">
               </div>
-              <div class="home_reflect-container">
-                <div class="home_reflect-reveal">
-                  <img src="/public/img/product-1.webp" class="home_img" title="Yerba Mate Barbacuá presentación a granel" alt="Yerba Mate Barbacuá presentación a Arpillera">
+              <div class="hero_reflect-container">
+                <div class="hero_reflect-reveal">
+                  <img src="/public/img/product-1.webp" class="hero_img" title="Yerba Mate Barbacuá presentación a granel" alt="Yerba Mate Barbacuá presentación a Arpillera">
                 </div>
               </div>
             </div>
@@ -159,7 +158,7 @@
       </section>
 
       <!--==================== HISTORY ====================-->
-      <section class="history section" id="history">
+      <section class="history_section section" id="history">
         <div class="history_container container">
           <span class="section_antetitle bg_clip-text">Nuestra Historia</span>
           <h2 class="history_title section_title">
@@ -175,37 +174,39 @@
             la respuesta fue simple: el apellido de ella. La mujer que los sacó adelante.
             La que merece el reconocimiento en vida, no después.
           </p>
-          <blockquote class="history_quote">
-            "De qué sirve el homenaje cuando ya no esté. Ella lo tiene que ver ahora."
-          </blockquote>
-          <span class="history_founders">Damian y Santiago, fundadores de Familia Zaragoza</span>
+          <div class="history_info">
+            <blockquote class="history_quote">
+              "De qué sirve el heronaje cuando ya no esté. Ella lo tiene que ver ahora."
+            </blockquote>
+            <span class="history_founders">Damian y Santiago, fundadores de Familia Zaragoza</span>
+          </div>
         </div>
       </section>
 
-      <!--==================== BLOG ====================-->
-      <section class="blog_section section" id="blog">
-        <div class="blog_container container">
+      <!--==================== MANIFEST ====================-->
+      <section class="manifest_section section" id="manifest">
+        <div class="manifest_container container">
           <span class="section_antetitle bg_clip-text">Por qué Barbacuá</span>
-          <h2 class="blog_title section_title">
+          <h2 class="manifest_title section_title">
             La direfencia que se siente en el primer mate
           </h2>
 
-          <div class="blog_grid">
-            <article class="blog_card">
-              <div class="blog_card-title">
+          <div class="manifest_grid">
+            <article class="manifest_card">
+              <div class="manifest_card-title">
                 Yerba Convencional
               </div>
-              <div class="blog_card-description">
+              <div class="manifest_card-description">
                 Secado con calor industrial en pocas horas. Como
                 hacer un asado en horno eléctrico - sale, pero no es
                 lo mismo.
               </div>
             </article>
-            <article class="blog_card blog_card-alt">
-              <div class="blog_card-title">
+            <article class="manifest_card manifest_card-alt">
+              <div class="manifest_card-title">
                   Barbacuá
               </div>
-              <div class="blog_card-description">
+              <div class="manifest_card-description">
                 Secado lento a leña, entre 10 y 18 horas. Como el
                 asado bien criollo - a los machetazos, sin apuro. El
                 humo le da el carácter que no se puede limitar.
@@ -213,7 +214,7 @@
             </article>
           </div>
 
-          <p class="blog_description section_description">
+          <p class="manifest_description section_description">
             Después viene el estacionamiento: entre 18 y 24 meses para que la hoja madure.
             El resultado es una yerba que no produce acidez, que rinde más y que tiene un sabor que no se olvida.
           </p>
@@ -221,11 +222,12 @@
       </section>
 
       <!--==================== PRODUCTS ====================-->
-      <section class="products_section container section" id="catalog">
+      <section class="products_section" id="catalog">
         <div class="product_shape-small"></div>
         <div class="product_shape-big-1"></div>
-        <div class="product_shape-big-2"></div>
-        <div class="products_info">
+        <img src="/public/img/shape-bg.png" alt="shape image" class="hero_shape-bg">
+        <div class="section container">
+          <div class="products_info">
           <span class="section_antetitle bg_clip-text">Nuestros Productos</span>
           <h2 class="products_title section_title">
             Elegí tu presentación
@@ -234,8 +236,11 @@
             Todos los envios incluidos. Sin costos extra.
           </p>
         </div>
-        <div class="products_grid">
-          <!-- Dynamic with Js -->
+        <div class="swiper products_swiper" id="products-swiper">
+          <div class="swiper-wrapper" id="products-wrapper">
+            <!-- Dynamic with Js -->
+          </div>
+        </div>
         </div>
       </section>
 
@@ -289,7 +294,7 @@
             </a>
             en Iguazú, Misiones. Especializada en venta de yerba mate Barbacuá. Atención al público, venta minorista. Envíos a todo el país y asesoramiento personalizado por WhatsApp.
           </p>
-          <div class="swiper swiper-testimonials">
+          <div class="swiper testimonials_swiper" id="testimonials-swiper">
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                 <div class="testimonial_card">
@@ -450,9 +455,9 @@ Elaborado y envasado en Oberá Misiones.</div>
             <a href="https://jhonysouza100.site" title="Developer website" target="_blank" rel="nofollow">ChillHop Studio</a>
           </span>
           <div class="footer_bottom-links">
-            <a href="#home">Inicio</a>
+            <a href="#hero">Inicio</a>
             <a href="#history">Nuestra Historia</a>
-            <a href="#blog">El Barbacuá</a>
+            <a href="#manifest">El Barbacuá</a>
             <a href="#catalog">Productos</a>
             <a href="#contact">Contacto</a>
             <a href="#testimonials">Reseñas</a>

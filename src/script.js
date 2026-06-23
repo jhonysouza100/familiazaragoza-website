@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 })
 
 // =============== SWIPERJS TESTIMONIALS ===============
-const swiper = new Swiper(".swiper-testimonials", {
+const swiperTestimonials = new Swiper(".testimonials_swiper", {
   autoplay: { delay: 5000, disableOnInteraction: true },
   loop: true,
   grabCursor: true,
@@ -127,7 +127,7 @@ const swiper = new Swiper(".swiper-testimonials", {
 
 // =============== LOAD PRODUCTS SIMPLE ===============
 window.addEventListener('DOMContentLoaded', async () => {
-  const grid = document.querySelector('.products_grid');
+  const grid = document.getElementById('products-wrapper');
   const formContainer = document.getElementById('select_product-container');
 
   try {
@@ -146,21 +146,23 @@ window.addEventListener('DOMContentLoaded', async () => {
       grid.innerHTML = products.map(p => {
         const isInCart = cart.some(item => String(item.id) === String(p.id));
         return `
-        <div class="product_card" title="Toca para elegir">
-          <input type="checkbox" name="products[]" id="product-${p.id}" value="${p.name}" class="product_checkbox" data-id="${p.id}" ${isInCart ? 'checked' : ''}>
-          <label for="product-${p.id}" class="product_card-label">
-            <span class="product_check-icon">
-              <i class="ri-heart-fill"></i>
-            </span>
-            <div class="product_image-wrap">
-              <img src="${p.image}" alt="${p.name}" />
-            </div>
-            <div class="product_card-info">
-              <h3 class="product_name">${p.name}</h3>
-              <p class="product_description">${p.description || ''}</p>
-              <div class="product_card-badge">${p.tag}</div>
-            </div>
-          </label>
+        <div class="swiper-slide">
+          <div class="product_card" title="Toca para elegir">
+            <input type="checkbox" name="products[]" id="product-${p.id}" value="${p.name}" class="product_checkbox" data-id="${p.id}" ${isInCart ? 'checked' : ''}>
+            <label for="product-${p.id}" class="product_card-label">
+              <span class="product_check-icon">
+                <i class="ri-heart-fill"></i>
+              </span>
+              <div class="product_image-wrap">
+                <img src="${p.image}" alt="${p.name}" />
+              </div>
+              <div class="product_card-info">
+                <h3 class="product_name">${p.name}</h3>
+                <p class="product_description">${p.description || ''}</p>
+                <div class="product_card-badge">${p.tag}</div>
+              </div>
+            </label>
+          </div>
         </div>
       `}).join('');
     }
@@ -183,10 +185,33 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
   } catch (error) {
     console.error('Error loading products:', error);
+  } finally {
+    // =============== SWIPERJS PRODUCTS ===============
+    // Inicializar SwiperJS para productos después de que el DOM esté listo y los productos hayan sido cargados
+    const swiperProducts = new Swiper(".products_swiper", {
+      autoplay: { delay: 5000, disableOnInteraction: true },
+      loop: true,
+      grabCursor: true,
+      slidesPerView: 1,
+      spaceBetween: 10,
+      breakpoints: {
+        // tablets
+        520: {
+          slidesPerView: 2,
+        },
+        // desktops
+        767: {
+          // Asegurarte de que tu slider tenga al menos el doble de diapositivas que el valor asignado a slidesPerView, o desactivar el loop dinámicamente si no hay suficientes elementos.
+          loop: false,
+          slidesPerView: 3,
+          spaceBetween: 20,
+        },
+      },
+    });
   }
 });
 
-// =============== ADD / REMOVE TO CART FUNCTIONALITY + TOOLTIP UPDATE (FIXED) ===============
+// Escuchar cambios en los checkboxes de productos y actualizar el carrito en localStorage
 document.addEventListener("DOMContentLoaded", () => {
   const tooltip = document.getElementById("cart-badge");
 
@@ -452,12 +477,16 @@ submitButton.addEventListener("click", async (e) => {
 const sr = ScrollReveal({
   origin: 'bottom',
   distance: '60px',
-  duration: 2500
+  duration: 1000,
 })
 
-sr.reveal(`.home_img-reveal, .home_reflect-reveal`, { origin: 'top', distance: '120px', delay: 1200 })
-sr.reveal(`.products_grid, .contact_form, .faq_list, .footer_bottom`)
-sr.reveal(`.home_title`, { delay: 400 })
-sr.reveal(`.home_description`, { delay: 1200 })
-sr.reveal(`.section_title`, { delay: 200 })
-sr.reveal(`.section_description`, { delay: 800 })
+// HERO SCROLL SCROLL ANIMATIONS
+sr.reveal(`.hero_img-reveal, .hero_reflect-reveal`, { origin: 'top', delay: 600, duration: 2500 })
+sr.reveal(`.hero_title`, { delay: 600, duration: 2500 })
+sr.reveal(`.hero_description`, { delay: 1200, duration: 2500 })
+
+// SECTION TEXT SCROLL ANIMATIONS
+sr.reveal(`.section_title, .section_description`)
+
+// ELEMETS SCROLL ANIMATIONS
+sr.reveal(`.history_info, .manifest_grid, .contact_form, .faq_list, . footer_content, .footer_bottom`, { duration: 1200 })
