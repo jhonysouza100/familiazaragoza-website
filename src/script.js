@@ -193,11 +193,12 @@ window.addEventListener('DOMContentLoaded', async () => {
       loop: true,
       grabCursor: true,
       slidesPerView: 1,
-      spaceBetween: 10,
+      spaceBetween: 54,
       breakpoints: {
         // tablets
         520: {
           slidesPerView: 2,
+          spaceBetween: 24,
         },
         // desktops
         767: {
@@ -489,4 +490,4 @@ sr.reveal(`.hero_description`, { delay: 1200, duration: 2500 })
 sr.reveal(`.section_title, .section_description`)
 
 // ELEMETS SCROLL ANIMATIONS
-sr.reveal(`.history_info, .manifest_grid, .contact_form, .faq_list, . footer_content, .footer_bottom`, { duration: 1200 })
+sr.reveal(`.history_info, .manifest_grid, .contact_form, .faq_list, .footer_content, .footer_bottom`, { duration: 1200 })
