@@ -315,8 +315,8 @@ img {
   font-size: var(--biggest-font-size);
   position: relative;
 }
-.hero_title:after {
-  content: 'Oberá, Misiones';
+/* .hero_title:after {
+  content: 'Yerba Mate Familia Zaragoza';
   font-weight: var(--font-semi-bold);
   position: absolute;
   top: -3.25rem;
@@ -333,7 +333,7 @@ img {
   font-weight: 700;
   color: #333;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
+} */
 .hero_description {
   max-width: 600px;
 }
