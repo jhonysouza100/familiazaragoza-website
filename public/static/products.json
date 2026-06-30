@@ -2,7 +2,7 @@
   {
     "id": 2,
     "name": "Arpillera 500g",
-    "description": "Barbacuá con palo. Hecha a mano",
+    "description": "Una presentación especial pensada para quienes disfrutan de los detalles. Su exclusiva bolsa de arpillera reutilizable aporta un estilo rústico y auténtico. Ideal para regalar, coleccionar o disfrutar de una yerba con carácter.",
     "tag": "+ Envío gratis incluido",
     "image": "/public/img/product-1.webp",
     "price": 8
@@ -10,15 +10,15 @@
   {
     "id": 1,
     "name": "Paquete 500g",
-    "description": "Barbacuá elaborada con palo",
+    "description": "La presentación clásica para el consumo diario acompañando cada mate desde la primera hasta la última cebada. Una opción elegida por quienes buscan calidad, rendimiento y una experiencia matera auténtica.",
     "tag": "+ Envío gratis incluido",
     "image": "/public/img/product-2.webp",
     "price": 8
   },
   {
     "id": 3,
-    "name": "Granel",
-    "description": "10Kg Barbacuá con palo",
+    "name": "Granel 10kg",
+    "description": "Pensada para quienes comparten la pasión por una buena yerba. Una presentación práctica para negocios, revendedores y consumidores frecuentes que buscan abastecerse con una yerba de identidad marcada.",
     "image": "/public/img/product-3.webp",
     "tag": "+ Envío gratis incluido",
     "price": 8
