@@ -109,10 +109,10 @@
           </div>
         </nav>
         <div class="header-actions">
-          <a href="#catalog" title="Favoritos" class="header-btn" aria-label="Cart">
+          <button type="button" id="cart-toggle" title="Carrito" class="header-btn" aria-label="Abrir carrito" aria-controls="cart-panel" aria-expanded="false">
             <i class="ri-shopping-cart-line"></i>
             <span class="cart-badge" id="cart-badge"></span>
-          </a>
+          </button>
           <!-- Toggle button -->
           <button class="header-btn nav_toggle" id="nav-toggle" aria-label="Menu">
             <i class="ri-menu-line"></i>
@@ -120,6 +120,30 @@
         </div>
       </div>
     </header>
+
+    <!--==================== CART PANEL ====================-->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <aside class="cart-panel" id="cart-panel" role="dialog" aria-modal="true" aria-label="Carrito de productos" aria-hidden="true">
+      <div class="cart-panel-header">
+        <h2 class="cart-panel-title">Tus productos</h2>
+        <button type="button" class="cart-close" id="cart-close" aria-label="Cerrar carrito">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
+      <div class="cart-panel-body" id="cart-items">
+        <!-- Dynamic with Js -->
+      </div>
+      <div class="cart-panel-footer">
+        <div class="cart-total-row">
+          <span>Total</span>
+          <span class="cart-total" id="cart-total">$0</span>
+        </div>
+        <a href="checkout.html" class="button cart-checkout" id="cart-checkout">
+          Ir a pagar
+          <i class="ri-arrow-right-line"></i>
+        </a>
+      </div>
+    </aside>
 
     <!--==================== MAIN ====================-->
     <main class="main">

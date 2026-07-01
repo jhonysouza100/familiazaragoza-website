@@ -264,9 +264,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (cart.length > 0) {
         message += '\n\nProductos en mis favoritos:';
         cart.forEach((p, i) => {
-          // Si existe nombre, lo agregamos. Si hubiera cantidad, podría incluirse.
+          // Si existe nombre, lo agregamos. Incluimos la cantidad si está disponible.
           const name = p.name || p.title || `Producto ${i + 1}`;
-          message += `\n- ${name}`;
+          const qty = Number(p.quantity) > 0 ? ` (x${p.quantity})` : '';
+          message += `\n- ${name}${qty}`;
         });
       }
 
@@ -297,7 +298,9 @@ document.addEventListener("DOMContentLoaded", () => {
           // 🟩 Checkbox marcado → agregar al carrito si no existe
           const exists = cart.some((item) => String(item.id) === String(productId));
           if (!exists) {
-            cart.push(product);
+            // Cantidad inicial = cantidad mínima del producto (por defecto 20)
+            const minCant = Number(product.minCant) > 0 ? Number(product.minCant) : 20;
+            cart.push({ ...product, quantity: minCant });
           }
         } else {
           // 🟥 Checkbox desmarcado → eliminar del carrito
@@ -312,14 +315,178 @@ document.addEventListener("DOMContentLoaded", () => {
         syncCartButtonStates();
         // 🔄 Actualizar enlace de Whatsapp
         updateWhatsAppLink();
+        // 🔄 Actualizar panel lateral del carrito
+        renderCartPanel();
       }
     }
   });
+
+  // =============== CARRITO LATERAL (PANEL DESLIZANTE) ===============
+  const cartPanel = document.getElementById("cart-panel");
+  const cartOverlay = document.getElementById("cart-overlay");
+  const cartToggle = document.getElementById("cart-toggle");
+  const cartClose = document.getElementById("cart-close");
+  const cartCheckout = document.getElementById("cart-checkout");
+  const cartItemsContainer = document.getElementById("cart-items");
+  const cartTotalEl = document.getElementById("cart-total");
+
+  /** 💵 Formatea un número como precio en dólares */
+  const formatPrice = (value) => `$${Number(value || 0).toLocaleString("es-AR")}`;
+
+  /** 🧾 Renderiza los productos del carrito dentro del panel y actualiza el total */
+  const renderCartPanel = () => {
+    if (!cartItemsContainer) return;
+
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    if (cart.length === 0) {
+      cartItemsContainer.innerHTML = `<p class="cart-empty">Todavía no agregaste productos.</p>`;
+      if (cartTotalEl) cartTotalEl.textContent = formatPrice(0);
+      return;
+    }
+
+    let total = 0;
+
+    cartItemsContainer.innerHTML = cart.map((item) => {
+      const price = Number(item.price) || 0;
+      const minCant = Number(item.minCant) > 0 ? Number(item.minCant) : 1;
+      const stock = Number(item.stock) > 0 ? Number(item.stock) : Infinity;
+      const quantity = Number(item.quantity) > 0 ? Number(item.quantity) : minCant;
+      const subtotal = price * quantity;
+      total += subtotal;
+
+      const minusDisabled = quantity <= minCant ? "disabled" : "";
+      // El botón "-" elimina cuando ya está en el mínimo; el "+" avanza de a minCant
+      const plusDisabled = quantity + minCant > stock ? "disabled" : "";
+
+      return `
+        <article class="cart-item" data-id="${item.id}">
+          <img class="cart-item-img" src="${item.image}" alt="${item.name}">
+          <div class="cart-item-info">
+            <h3 class="cart-item-name">${item.name}</h3>
+            <span class="cart-item-price">${formatPrice(price)} c/u</span>
+            <div class="cart-item-qty">
+              <button type="button" class="cart-qty-btn" data-action="decrease" data-id="${item.id}" aria-label="Restar cantidad" ${minusDisabled}>
+                <i class="ri-subtract-line"></i>
+              </button>
+              <span class="cart-qty-value">${quantity}u</span>
+              <button type="button" class="cart-qty-btn" data-action="increase" data-id="${item.id}" aria-label="Sumar cantidad" ${plusDisabled}>
+                <i class="ri-add-line"></i>
+              </button>
+            </div>
+          </div>
+          <div class="cart-item-end">
+            <button type="button" class="cart-remove" data-action="remove" data-id="${item.id}" aria-label="Eliminar producto">
+              <i class="ri-delete-bin-line"></i>
+            </button>
+            <span class="cart-item-subtotal">${formatPrice(subtotal)}</span>
+          </div>
+        </article>
+      `;
+    }).join("");
+
+    if (cartTotalEl) cartTotalEl.textContent = formatPrice(total);
+  };
+
+  /** 📂 Abrir / cerrar el panel lateral */
+  const openCart = () => {
+    if (!cartPanel) return;
+    renderCartPanel();
+    cartPanel.classList.add("show-cart");
+    cartOverlay.classList.add("show-cart");
+    cartPanel.setAttribute("aria-hidden", "false");
+    if (cartToggle) cartToggle.setAttribute("aria-expanded", "true");
+  };
+  const closeCart = () => {
+    if (!cartPanel) return;
+    cartPanel.classList.remove("show-cart");
+    cartOverlay.classList.remove("show-cart");
+    cartPanel.setAttribute("aria-hidden", "true");
+    if (cartToggle) cartToggle.setAttribute("aria-expanded", "false");
+  };
+
+  if (cartToggle) cartToggle.addEventListener("click", openCart);
+  if (cartClose) cartClose.addEventListener("click", closeCart);
+  if (cartOverlay) cartOverlay.addEventListener("click", closeCart);
+  if (cartCheckout) cartCheckout.addEventListener("click", closeCart);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && cartPanel && cartPanel.classList.contains("show-cart")) {
+      closeCart();
+    }
+  });
+
+  /**
+   * 🔢 Cambia la cantidad de un producto usando su minCant como paso dinámico.
+   * @param {string} productId - id del producto
+   * @param {number} direction - 1 para incrementar, -1 para decrementar
+   */
+  const changeQuantity = (productId, direction) => {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const item = cart.find((p) => String(p.id) === String(productId));
+    if (!item) return;
+
+    // El paso es siempre el minCant del propio producto (cada uno puede tener uno distinto)
+    const minCant = Number(item.minCant) > 0 ? Number(item.minCant) : 1;
+    const stock = Number(item.stock) > 0 ? Number(item.stock) : Infinity;
+    const current = Number(item.quantity) > 0 ? Number(item.quantity) : minCant;
+    const next = current + direction * minCant;
+
+    // No permitir superar el stock
+    if (next > stock) return;
+
+    // Si al decrementar quedaría por debajo del mínimo, eliminar reutilizando la lógica existente
+    if (next < minCant) {
+      removeProduct(productId);
+      return;
+    }
+
+    item.quantity = next;
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    // 🔄 Reutilizar funciones existentes + refrescar panel
+    updateCartTooltip();
+    updateWhatsAppLink();
+    renderCartPanel();
+  };
+
+  /** 🗑️ Elimina un producto reutilizando el flujo existente del checkbox */
+  const removeProduct = (productId) => {
+    const checkbox = document.querySelector(`.product_checkbox[data-id="${productId}"]`);
+    if (checkbox) {
+      // Desmarcar y disparar el evento 'change' → reutiliza la lógica de borrado existente
+      checkbox.checked = false;
+      checkbox.dispatchEvent(new Event("change", { bubbles: true }));
+    } else {
+      // Fallback si el checkbox no está en el DOM
+      let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      cart = cart.filter((item) => String(item.id) !== String(productId));
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartTooltip();
+      syncCartButtonStates();
+      updateWhatsAppLink();
+      renderCartPanel();
+    }
+  };
+
+  /** 🎛️ Delegación de eventos para los botones del panel (+ / - / eliminar) */
+  if (cartItemsContainer) {
+    cartItemsContainer.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-action]");
+      if (!btn) return;
+      const productId = btn.getAttribute("data-id");
+      const action = btn.getAttribute("data-action");
+
+      if (action === "increase") changeQuantity(productId, 1);
+      else if (action === "decrease") changeQuantity(productId, -1);
+      else if (action === "remove") removeProduct(productId);
+    });
+  }
 
   // Ejecutar una vez al cargar
   updateCartTooltip();
   syncCartButtonStates();
   updateWhatsAppLink();
+  renderCartPanel();
 });
 
 const inputEmail = document.getElementById("input-email");
