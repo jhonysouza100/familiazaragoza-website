@@ -223,3 +223,117 @@ select.form_input {
     top: 1.5rem;
   }
 }
+
+/*=============== PAYMENT MODAL (MERCADO PAGO) ===============*/
+.payment_modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.payment_modal.is-open {
+  display: flex;
+}
+.payment_modal-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: hsla(0, 0%, 0%, 0.7);
+  backdrop-filter: blur(2px);
+}
+.payment_modal-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  background-color: hsl(0, 0%, 8%);
+  border: 1px solid hsl(0, 0%, 18%);
+  border-radius: 1rem;
+  padding: 2.5rem 1.75rem 2rem;
+  text-align: center;
+  animation: payment-modal-in 0.25s ease;
+}
+@keyframes payment-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.payment_modal-close {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  color: var(--text-color-light);
+  font-size: 1.35rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.payment_modal-close:hover {
+  background-color: hsl(0, 0%, 15%);
+  color: var(--text-color);
+}
+.payment_modal-icon {
+  font-size: 3rem;
+  color: var(--success-color);
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+.payment_modal-title {
+  font-size: var(--h1-font-size);
+  font-weight: var(--font-semi-bold);
+  margin-bottom: 0.75rem;
+}
+.payment_modal-text {
+  color: var(--text-color-light);
+  font-size: var(--small-font-size);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+.payment_modal-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background-color: hsl(0, 0%, 11%);
+  border-radius: 0.6rem;
+  margin-bottom: 1.5rem;
+  font-weight: var(--font-semi-bold);
+}
+.payment_modal-total {
+  font-size: var(--h2-font-size);
+  color: var(--first-color);
+}
+.payment_mp-btn {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  background-color: hsl(206, 100%, 45%);
+  color: hsl(0, 0%, 100%);
+  font-size: var(--normal-font-size);
+}
+.payment_mp-btn:hover {
+  background-color: hsl(206, 100%, 40%);
+}
+.payment_mp-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.payment_modal-note {
+  margin-top: 0.85rem;
+  font-size: var(--smaller-font-size);
+  color: var(--text-color-light);
+}

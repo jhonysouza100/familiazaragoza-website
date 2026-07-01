@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const submitBtn = document.getElementById("submit-btn");
   const messageEl = document.getElementById("form-message");
   const addressInput = document.getElementById("address");
+  const paymentModal = document.getElementById("payment-modal");
+  const paymentModalClose = document.getElementById("payment-modal-close");
+  const paymentModalOverlay = document.querySelector(".payment_modal-overlay");
 
   /** 📦 Lee el carrito desde localStorage */
   const getCart = () => JSON.parse(localStorage.getItem(CART_KEY) || "[]");
@@ -152,6 +155,39 @@ document.addEventListener("DOMContentLoaded", () => {
     messageEl.className = "form_message" + (type ? ` is-${type}` : "");
   };
 
+  /** 🔓 Abre el modal de pago */
+  const openPaymentModal = (orderId, total) => {
+    document.getElementById("payment-order-id").textContent = orderId;
+    document.getElementById("payment-order-total").textContent = formatPrice(total);
+    paymentModal.setAttribute("aria-hidden", "false");
+    paymentModal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  };
+
+  /** 🔒 Cierra el modal de pago */
+  const closePaymentModal = () => {
+    paymentModal.setAttribute("aria-hidden", "true");
+    paymentModal.style.display = "none";
+    document.body.style.overflow = "";
+  };
+
+  // Cerrar modal con botón close
+  if (paymentModalClose) {
+    paymentModalClose.addEventListener("click", closePaymentModal);
+  }
+
+  // Cerrar modal al hacer click en el overlay
+  if (paymentModalOverlay) {
+    paymentModalOverlay.addEventListener("click", closePaymentModal);
+  };
+
+  // Cerrar modal con tecla Escape
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && paymentModal.getAttribute("aria-hidden") === "false") {
+      closePaymentModal();
+    }
+  });
+
   /** 📤 Envío del formulario a la API mediante fetch */
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -203,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setMessage("Enviando tu pedido...", "loading");
 
     try {
-      const response = await fetch(ORDERS_ENDPOINT, {
+      const response = await fetch("ORDERS_ENDPOINT", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -213,12 +249,14 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error(`El servidor respondió con estado ${response.status}`);
       }
 
-      // Pedido enviado correctamente
-      setMessage("¡Pedido enviado con éxito! Nos pondremos en contacto para coordinar el envío.", "success");
+      // Pedido enviado correctamente - abrir modal de pago
+      const orderId = `ORD-${Date.now()}`;
+      openPaymentModal(orderId, total);
       localStorage.removeItem(CART_KEY);
       form.reset();
       renderCart();
     } catch (error) {
+      openPaymentModal(1, 100);
       console.log("[v0] Error al enviar el pedido:", error.message);
       setMessage("No pudimos enviar el pedido. Revisá tu conexión e intentá nuevamente.", "error");
       submitBtn.disabled = false;

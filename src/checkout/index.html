@@ -135,6 +135,36 @@
     </div>
   </main>
 
+  <!--==================== MODAL PAGO (MERCADO PAGO) ====================-->
+  <div class="payment_modal" id="payment-modal" role="dialog" aria-modal="true" aria-labelledby="payment-modal-title" aria-hidden="true">
+    <div class="payment_modal-overlay" data-close-modal></div>
+    <div class="payment_modal-content" role="document">
+      <button type="button" class="payment_modal-close" id="payment-modal-close" aria-label="Cerrar">
+        <i class="ri-close-line"></i>
+      </button>
+
+      <div class="payment_modal-icon">
+        <i class="ri-checkbox-circle-line"></i>
+      </div>
+      <h2 class="payment_modal-title" id="payment-modal-title">¡Pedido confirmado!</h2>
+      <p class="payment_modal-text">
+        Tu pedido <strong id="payment-order-id">#—</strong> fue registrado correctamente.
+        Completá el pago para finalizar la compra.
+      </p>
+
+      <div class="payment_modal-summary">
+        <span>Total a pagar</span>
+        <span class="payment_modal-total" id="payment-order-total">$0</span>
+      </div>
+
+      <button type="button" class="button payment_mp-btn" id="mp-checkout-btn">
+        <i class="ri-secure-payment-line"></i>
+        Pagar con Mercado Pago
+      </button>
+      <p class="payment_modal-note">Serás redirigido al Checkout Pro seguro de Mercado Pago.</p>
+    </div>
+  </div>
+
   <!--==================== FOOTER ====================-->
   <footer class="footer section">
     <div class="footer_inner container">
