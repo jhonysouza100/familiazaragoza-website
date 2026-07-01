@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--=============== FAVICON ===============-->
+    <link rel="icon" type="image/png" href="/public/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/public/favicon.svg" />
+    <link rel="shortcut icon" type="image/x-icon" href="/public/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png" />
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Finalizar compra | Familia Zaragoza</title>
+  </head>
+<body>
+  <!--==================== HEADER ====================-->
+  <header class="checkout_header">
+    <div class="checkout_header-inner container">
+      <a href="/src/index.html" class="checkout_logo" aria-label="Volver al inicio">
+        <img class="checkout_logo-img" src="/public/img/favicon.png" alt="Familia Zaragoza Yerba Mate" />
+        Familia Zaragoza
+      </a>
+      <a href="/src/index.html#catalog" class="checkout_back">
+        <i class="ri-arrow-left-line"></i>
+        Seguir comprando
+      </a>
+    </div>
+  </header>
+
+  <!--==================== MAIN ====================-->
+  <main class="checkout section">
+    <div class="container">
+      <h1 class="checkout_title">Finalizar Compra</h1>
+      <p class="checkout_subtitle">Revisá tu pedido y completá los datos para el envío.</p>
+
+      <div class="checkout_grid">
+        <!--=============== COLUMNA 1: DETALLE DEL CARRITO ===============-->
+        <section class="checkout_cart" aria-label="Detalle del pedido">
+          <h2 class="checkout_block-title">Tu pedido</h2>
+          <div class="checkout_items" id="checkout-items">
+            <!-- Dynamic with JS -->
+          </div>
+          <div class="checkout_total-row">
+            <span>Total</span>
+            <span class="checkout_total" id="checkout-total">$0</span>
+          </div>
+        </section>
+
+        <!--=============== COLUMNA 2: FORMULARIO DE ENVÍO ===============-->
+        <section class="checkout_form-wrap" aria-label="Datos de envío">
+          <h2 class="checkout_block-title">Datos de envío</h2>
+          <form class="checkout_form" id="shipping-form" novalidate>
+            <div class="form_field">
+              <label class="form_label" for="fullName">Nombre y apellido</label>
+              <input class="form_input" type="text" id="fullName" name="fullName" autocomplete="name" required />
+            </div>
+
+            <div class="form_field">
+              <label class="form_label" for="dni">DNI</label>
+              <input class="form_input" type="text" inputmode="numeric" id="dni" name="dni" autocomplete="off" required />
+            </div>
+
+            <!--=============== MÉTODO DE ENTREGA ===============-->
+            <fieldset class="form_field form_delivery">
+              <legend class="form_label">Método de entrega</legend>
+              <label class="form_radio">
+                <input type="radio" name="deliveryMethod" value="domicilio" checked />
+                <span>Envío a domicilio</span>
+              </label>
+              <label class="form_radio">
+                <input type="radio" name="deliveryMethod" value="sucursal" />
+                <span>Retiro en sucursal</span>
+              </label>
+            </fieldset>
+
+            <div class="form_field">
+              <label class="form_label" for="address">Domicilio</label>
+              <input class="form_input" type="text" id="address" name="address" autocomplete="street-address" required />
+            </div>
+
+            <div class="form_row">
+              <div class="form_field">
+                <label class="form_label" for="city">Ciudad</label>
+                <input class="form_input" type="text" id="city" name="city" autocomplete="address-level2" required />
+              </div>
+              <div class="form_field">
+                <label class="form_label" for="postalCode">Código postal</label>
+                <input class="form_input" type="text" inputmode="numeric" id="postalCode" name="postalCode" autocomplete="postal-code" required />
+              </div>
+            </div>
+
+            <div class="form_field">
+              <label class="form_label" for="province">Provincia</label>
+              <select class="form_input" id="province" name="province" autocomplete="address-level1" required>
+                <option value="" disabled selected>Seleccioná una provincia</option>
+                <option value="Buenos Aires">Buenos Aires</option>
+                <option value="Ciudad Autónoma de Buenos Aires">Ciudad Autónoma de Buenos Aires</option>
+                <option value="Catamarca">Catamarca</option>
+                <option value="Chaco">Chaco</option>
+                <option value="Chubut">Chubut</option>
+                <option value="Córdoba">Córdoba</option>
+                <option value="Corrientes">Corrientes</option>
+                <option value="Entre Ríos">Entre Ríos</option>
+                <option value="Formosa">Formosa</option>
+                <option value="Jujuy">Jujuy</option>
+                <option value="La Pampa">La Pampa</option>
+                <option value="La Rioja">La Rioja</option>
+                <option value="Mendoza">Mendoza</option>
+                <option value="Misiones">Misiones</option>
+                <option value="Neuquén">Neuquén</option>
+                <option value="Río Negro">Río Negro</option>
+                <option value="Salta">Salta</option>
+                <option value="San Juan">San Juan</option>
+                <option value="San Luis">San Luis</option>
+                <option value="Santa Cruz">Santa Cruz</option>
+                <option value="Santa Fe">Santa Fe</option>
+                <option value="Santiago del Estero">Santiago del Estero</option>
+                <option value="Tierra del Fuego">Tierra del Fuego</option>
+                <option value="Tucumán">Tucumán</option>
+              </select>
+            </div>
+
+            <p class="form_message" id="form-message" role="status" aria-live="polite"></p>
+
+            <button type="submit" class="button checkout_submit" id="submit-btn">
+              Confirmar pedido
+              <i class="ri-check-line"></i>
+            </button>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!--==================== FOOTER ====================-->
+  <footer class="footer section">
+    <div class="footer_inner container">
+      <div class="footer_content">
+        <div>
+          <div class="footer_top">
+            <div class="footer_logo">
+              <img class="logo_img" src="/public/img/favicon.png" alt="Familia Zaragoza Yerba Mate">
+              Famila Zaragoza
+            </div>
+          </div>
+          <div class="footer_columns">
+            <div class="footer_col">
+              <div class="footer_col-title">Información</div>
+              <div class="footer_phone">+54 9 3755 53-1691</div>
+              <p>hola@familiazaragoza.com</p>
+              <p>Papa Francisco, San Cayetano 01, N3370 Puerto Iguazú, Misiones</p>
+            </div>
+            <div class="footer_col">
+              <div class="footer_col-title"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer_bottom">
+        <span class="footer_copyright">
+          © Copyright 2026, 
+          <a href="https://jhonysouza100.site" title="Developer website" target="_blank" rel="nofollow">ChillHop Studio</a>
+        </span>
+        <div class="footer_bottom-links">
+          
+        </div>
+        <div class="footer_socials">
+          <a href="https://www.instagram.com/familiazaragoza_ym/" class="footer_social-icon" aria-label="perfil de instagram" title="@familiazaragoza_ym" rel="nofollow" target="_blank">
+            <i class="ri-instagram-line"></i>
+          </a>
+          <a href="https://web.facebook.com/profile.php?id=61558365211172&ref=NONE_xav_ig_profile_page_web" class="footer_social-icon" aria-label="perfil de facebook" title="Perfil de Facebook" rel="nofollow" target="_blank">
+            <i class="ri-facebook-fill"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!--=============== MAIN JS ===============-->
+  <script src="script.js"></script>
+</body>
+</html>

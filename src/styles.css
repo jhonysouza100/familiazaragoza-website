@@ -1345,6 +1345,9 @@ footer {
   padding-bottom: 1rem;
   border-bottom: 1px solid hsl(0, 0%, 14%);
 }
+.cart-item:last-child {
+  border-bottom: none;
+}
 .cart-item-img {
   width: 64px;
   height: 64px;
