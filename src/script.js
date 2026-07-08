@@ -126,14 +126,48 @@ const swiperTestimonials = new Swiper(".testimonials_swiper", {
 });
 
 // =============== LOAD PRODUCTS SIMPLE ===============
+const normalizeProduct = (product) => {
+  const rawImages = product?.images;
+  const images = typeof rawImages === 'string'
+    ? [rawImages]
+    : Array.isArray(rawImages)
+      ? rawImages
+      : [];
+  const firstImage = images[0] || {};
+  const imageUrl = product?.image || firstImage?.secure_url || firstImage?.url || firstImage || '';
+
+  return {
+    ...product,
+    id: product?.id,
+    name: product?.name || 'Producto',
+    description: product?.description || '',
+    image: imageUrl,
+    tag: product?.tag || product?.category || product?.brand || '',
+    minCant: Number(product?.minCount || product?.minCant || 1),
+    price: Number(product?.price || 0),
+    stock: Number(product?.stock || 0),
+  };
+};
+
 window.addEventListener('DOMContentLoaded', async () => {
   const grid = document.getElementById('products-wrapper');
   const formContainer = document.getElementById('select_product-container');
 
   try {
-    const res = await fetch('/public/static/products.json');
+    const res = await fetch('https://restful-api-v4.vercel.app/api/v1/products?tenant_id=3', {
+      headers: {
+        'x-api-key': 'x-api-fliazaragoza'
+      }
+    });
     if (!res.ok) throw new Error('Failed to load products: ' + res.status);
-    const products = await res.json();
+
+    const payload = await res.json();
+    const productList = Array.isArray(payload)
+      ? payload
+      : Array.isArray(payload?.products)
+        ? payload.products
+        : [];
+    const products = productList.map(normalizeProduct);
 
     // Guardar para que el resto del script (carrito) pueda leerlos
     localStorage.setItem('products', JSON.stringify(products));
@@ -159,7 +193,7 @@ window.addEventListener('DOMContentLoaded', async () => {
               <div class="product_card-info">
                 <h3 class="product_name">${p.name}</h3>
                 <p class="product_description">${p.description || ''}</p>
-                <div class="product_card-badge">${p.tag}</div>
+                <div class="product_card-badge">+ Envío gratis incluido</div>
               </div>
             </label>
           </div>
@@ -298,8 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
           // 🟩 Checkbox marcado → agregar al carrito si no existe
           const exists = cart.some((item) => String(item.id) === String(productId));
           if (!exists) {
-            // Cantidad inicial = cantidad mínima del producto (por defecto 20)
-            const minCant = Number(product.minCant) > 0 ? Number(product.minCant) : 20;
+            const minCant = Number(product.minCant) > 0 ? Number(product.minCant) : 1;
             cart.push({ ...product, quantity: minCant });
           }
         } else {
