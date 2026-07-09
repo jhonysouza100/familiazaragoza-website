@@ -149,6 +149,74 @@ const normalizeProduct = (product) => {
   };
 };
 
+let productsCatalog = [];
+
+const renderProductCards = () => {
+  const grid = document.getElementById('products-wrapper');
+  const formContainer = document.getElementById('select_product-container');
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+  if (grid) {
+    grid.innerHTML = productsCatalog.map((p) => {
+      const cartItem = cart.find((item) => String(item.id) === String(p.id));
+      const quantity = Number(cartItem?.quantity) > 0 ? Number(cartItem.quantity) : 0;
+      const isInCart = Boolean(cartItem);
+      const minCant = Number(p.minCant) > 0 ? Number(p.minCant) : 1;
+      const stock = Number(p.stock) > 0 ? Number(p.stock) : Infinity;
+      const minusDisabled = quantity <= minCant ? 'disabled' : '';
+      const plusDisabled = quantity + minCant > stock ? 'disabled' : '';
+
+      return `
+        <div class="swiper-slide">
+          <div class="product_card" title="Toca para elegir">
+            <input type="checkbox" name="products[]" id="product-${p.id}" value="${p.name}" class="product_checkbox" data-id="${p.id}" ${isInCart ? 'checked' : ''}>
+            <label for="product-${p.id}" class="product_card-label">
+              <span class="product_check-icon">
+                <i class="ri-heart-fill"></i>
+              </span>
+              <div class="product_image-wrap">
+                <img src="${p.image}" alt="${p.name}" />
+              </div>
+              <div class="product_card-info">
+                <h3 class="product_name">${p.name}</h3>
+                <p class="product_description">${p.description || ''}</p>
+                <div class="cart-item-info">
+                  <span class="bg_clip-text">${p.price} c/u</span>
+                  <div class="cart-item-qty">
+                    <button type="button" class="cart-qty-btn" data-action="decrease" data-id="${p.id}" aria-label="Restar cantidad" ${minusDisabled}>
+                      <i class="ri-subtract-line"></i>
+                    </button>
+                    <span class="cart-qty-value">${quantity || 0}</span>
+                    <button type="button" class="cart-qty-btn" data-action="increase" data-id="${p.id}" aria-label="Sumar cantidad" ${plusDisabled}>
+                      <i class="ri-add-line"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  if (formContainer) {
+    formContainer.innerHTML = productsCatalog.map((p) => {
+      const isInCart = cart.some((item) => String(item.id) === String(p.id));
+      return `
+        <input type="checkbox" name="products[]" id="product-form-${p.id}" value="${p.name}" class="product_checkbox" data-id="${p.id}" ${isInCart ? 'checked' : ''}>
+        <label for="product-form-${p.id}" class="product_label">
+          <img src="${p.image}" alt="${p.name}">
+          <span class="product_check-icon">
+          <i class="ri-check-line"></i>
+          </span>
+          <p class="product_check-name">${p.name}</p>
+        </label>
+      `;
+    }).join('');
+  }
+};
+
 window.addEventListener('DOMContentLoaded', async () => {
   const grid = document.getElementById('products-wrapper');
   const formContainer = document.getElementById('select_product-container');
@@ -163,62 +231,17 @@ window.addEventListener('DOMContentLoaded', async () => {
       : Array.isArray(payload?.products)
         ? payload.products
         : [];
-    const products = productList.map(normalizeProduct);
+    productsCatalog = productList.map(normalizeProduct);
 
     // Guardar para que el resto del script (carrito) pueda leerlos
-    localStorage.setItem('products', JSON.stringify(products));
-
-    // Obtener carrito actual para marcar productos seleccionados
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-
-    // Renderizar grid de productos (cards grandes)
-    if (grid) {
-      grid.innerHTML = products.map(p => {
-        const isInCart = cart.some(item => String(item.id) === String(p.id));
-        return `
-        <div class="swiper-slide">
-          <div class="product_card" title="Toca para elegir">
-            <input type="checkbox" name="products[]" id="product-${p.id}" value="${p.name}" class="product_checkbox" data-id="${p.id}" ${isInCart ? 'checked' : ''}>
-            <label for="product-${p.id}" class="product_card-label">
-              <span class="product_check-icon">
-                <i class="ri-heart-fill"></i>
-              </span>
-              <div class="product_image-wrap">
-                <img src="${p.image}" alt="${p.name}" />
-              </div>
-              <div class="product_card-info">
-                <h3 class="product_name">${p.name}</h3>
-                <p class="product_description">${p.description || ''}</p>
-                <div class="product_card-badge">+ Envío gratis incluido</div>
-              </div>
-            </label>
-          </div>
-        </div>
-      `}).join('');
-    }
-
-    // Renderizar checkboxes del formulario (miniaturas)
-    if (formContainer) {
-      formContainer.innerHTML = products.map(p => {
-        const isInCart = cart.some(item => String(item.id) === String(p.id));
-        return `
-          <input type="checkbox" name="products[]" id="product-form-${p.id}" value="${p.name}" class="product_checkbox" data-id="${p.id}" ${isInCart ? 'checked' : ''}>
-          <label for="product-form-${p.id}" class="product_label">
-            <img src="${p.image}" alt="${p.name}">
-            <span class="product_check-icon">
-            <i class="ri-check-line"></i>
-            </span>
-            <p class="product_check-name">${p.name}</p>
-          </label>
-        `;
-      }).join('');
-    }
+    localStorage.setItem('products', JSON.stringify(productsCatalog));
+    renderProductCards();
   } catch (error) {
     console.error('Error loading products:', error);
   } finally {
     // =============== SWIPERJS PRODUCTS ===============
     // Inicializar SwiperJS para productos después de que el DOM esté listo y los productos hayan sido cargados
-    const swiperProducts = new Swiper(".products_swiper", {
+    const swiperProducts = new Swiper('.products_swiper123', {
       autoplay: { delay: 5000, disableOnInteraction: true },
       loop: true,
       grabCursor: true,
@@ -346,8 +369,56 @@ document.addEventListener("DOMContentLoaded", () => {
         updateWhatsAppLink();
         // 🔄 Actualizar panel lateral del carrito
         renderCartPanel();
+        renderProductCards();
       }
     }
+  });
+
+  document.addEventListener("click", (e) => {
+    const qtyButton = e.target.closest(".product_card .cart-qty-btn");
+    if (!qtyButton) return;
+
+    const productId = qtyButton.getAttribute("data-id");
+    const action = qtyButton.getAttribute("data-action");
+    if (!productId || !action) return;
+
+    const products = JSON.parse(localStorage.getItem("products") || "[]");
+    const product = products.find((p) => String(p.id) === String(productId));
+    if (!product) return;
+
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const minCant = Number(product.minCant) > 0 ? Number(product.minCant) : 1;
+    const stock = Number(product.stock) > 0 ? Number(product.stock) : Infinity;
+    const existingIndex = cart.findIndex((item) => String(item.id) === String(productId));
+    const existingItem = existingIndex >= 0 ? cart[existingIndex] : null;
+    const currentQty = existingItem && Number(existingItem.quantity) > 0 ? Number(existingItem.quantity) : 0;
+
+    if (action === "increase") {
+      const nextQty = currentQty + minCant;
+      if (nextQty > stock) return;
+
+      if (existingItem) {
+        existingItem.quantity = nextQty;
+      } else {
+        cart.push({ ...product, quantity: minCant });
+      }
+    } else if (action === "decrease") {
+      if (!existingItem) return;
+
+      const nextQty = currentQty - minCant;
+      if (nextQty < minCant) {
+        cart.splice(existingIndex, 1);
+      } else {
+        existingItem.quantity = nextQty;
+      }
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartTooltip();
+    syncCartButtonStates();
+    updateWhatsAppLink();
+    renderCartPanel();
+    renderProductCards();
   });
 
   // =============== CARRITO LATERAL (PANEL DESLIZANTE) ===============
@@ -369,8 +440,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
     if (cart.length === 0) {
-      cartItemsContainer.innerHTML = `<p class="cart-empty">Todavía no agregaste productos.</p>`;
+      cartItemsContainer.innerHTML = `
+        <div class="checkout_empty">
+          <i class="ri-shopping-basket-2-line"></i>
+          <p>Tu carrito está vacío.</p>
+          <a href="/src/index.html#catalog" class="empty-cart-link">Ver productos</a>
+        </div>`;
+      
+      // Agregar evento para cerrar el carrito al hacer click en el enlace
+      const emptyCartLink = cartItemsContainer.querySelector('.empty-cart-link');
+      if (emptyCartLink) {
+        emptyCartLink.addEventListener('click', closeCart);
+      }
+      
       if (cartTotalEl) cartTotalEl.textContent = formatPrice(0);
+      // Deshabilitar botón de checkout cuando el carrito está vacío
+      if (cartCheckout) cartCheckout.classList.add("disabled");
       return;
     }
 
@@ -415,6 +500,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }).join("");
 
     if (cartTotalEl) cartTotalEl.textContent = formatPrice(total);
+    // Habilitar botón de checkout cuando hay productos
+    if (cartCheckout) cartCheckout.classList.remove("disabled");
   };
 
   /** 📂 Abrir / cerrar el panel lateral */
