@@ -144,7 +144,7 @@ const normalizeProduct = (product) => {
     image: imageUrl,
     tag: product?.tag || product?.category || product?.brand || '',
     minCant: Number(product?.minCount || product?.minCant || 1),
-    price: Number(product?.price || 0),
+    price: Number(product.price || 0).toLocaleString("es-AR"),
     stock: Number(product?.stock || 0),
   };
 };
@@ -224,7 +224,7 @@ const renderProductCards = ({ updatedProductId = null } = {}) => {
                     <button type="button" class="cart-qty-btn large" data-action="decrease" data-id="${p.id}" aria-label="Restar cantidad" ${minusDisabled ? 'disabled' : ''}>
                       <i class="ri-subtract-line"></i>
                     </button>
-                    <span class="cart-qty-value">${quantity || 0}u</span>
+                    <span class="cart-qty-value">${quantity || 0}</span>
                     <button type="button" class="cart-qty-btn large" data-action="increase" data-id="${p.id}" aria-label="Sumar cantidad" ${plusDisabled ? 'disabled' : ''}>
                       <i class="ri-add-line"></i>
                     </button>

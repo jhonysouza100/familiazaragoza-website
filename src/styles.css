@@ -7,7 +7,7 @@
 
   /*========== Colors ==========*/
   /*Color mode HSL(hue, saturation, lightness)*/
-  --first-color: hsl(31, 32%, 49%);
+  --first-color: rgb(165, 126, 85);
   --second-color: hsl(32, 38%, 58%);
   --second-color-alt: hsl(35, 26%, 73%);
   --gradient-color: linear-gradient(145deg,var(--first-color) 0%, var(--second-color) 50%, var(--second-color-alt) 100%);
@@ -1394,6 +1394,14 @@ footer {
   width: 2.25rem;
   height: 2.25rem;
   font-size: 1.25rem;
+}
+@media screen and (max-width: 767px) {
+  .cart-qty-btn.large {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.5rem;
+  }
+  
 }
 .cart-qty-btn:hover:not(:disabled) {
   background-color: hsl(0, 0%, 16%);
