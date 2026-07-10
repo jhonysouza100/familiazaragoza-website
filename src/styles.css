@@ -1390,6 +1390,11 @@ footer {
   line-height: 1;
   transition: background-color 0.2s ease, opacity 0.2s ease;
 }
+.cart-qty-btn.large {
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: 1.25rem;
+}
 .cart-qty-btn:hover:not(:disabled) {
   background-color: hsl(0, 0%, 16%);
 }

@@ -151,20 +151,58 @@ const normalizeProduct = (product) => {
 
 let productsCatalog = [];
 
-const renderProductCards = () => {
+const renderProductCards = ({ updatedProductId = null } = {}) => {
   const grid = document.getElementById('products-wrapper');
   const formContainer = document.getElementById('select_product-container');
   const cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
-  if (grid) {
+  const getProductState = (product) => {
+    const cartItem = cart.find((item) => String(item.id) === String(product.id));
+    const quantity = Number(cartItem?.quantity) > 0 ? Number(cartItem.quantity) : 0;
+    const isInCart = Boolean(cartItem);
+    const minCant = Number(product.minCant) > 0 ? Number(product.minCant) : 1;
+    const stock = Number(product.stock) > 0 ? Number(product.stock) : Infinity;
+
+    return {
+      quantity,
+      isInCart,
+      minCant,
+      stock,
+      minusDisabled: quantity <= minCant,
+      plusDisabled: quantity + minCant > stock,
+    };
+  };
+
+  const updateProductCard = (productId) => {
+    const product = productsCatalog.find((item) => String(item.id) === String(productId));
+    if (!product) return;
+
+    const state = getProductState(product);
+    const checkbox = grid?.querySelector(`.product_checkbox[data-id="${productId}"]`);
+    const productCard = checkbox?.closest('.product_card');
+
+    if (productCard) {
+      const cardCheckbox = productCard.querySelector('.product_checkbox');
+      const decreaseBtn = productCard.querySelector('.cart-qty-btn[data-action="decrease"]');
+      const increaseBtn = productCard.querySelector('.cart-qty-btn[data-action="increase"]');
+      const qtyValue = productCard.querySelector('.cart-item-qty .cart-qty-value');
+
+      if (cardCheckbox) cardCheckbox.checked = state.isInCart;
+      if (decreaseBtn) decreaseBtn.disabled = state.minusDisabled;
+      if (increaseBtn) increaseBtn.disabled = state.plusDisabled;
+      if (qtyValue) qtyValue.textContent = state.quantity || 0;
+    }
+
+    const formCheckbox = formContainer?.querySelector(`.product_checkbox[data-id="${productId}"]`);
+    if (formCheckbox) {
+      formCheckbox.checked = state.isInCart;
+    }
+  };
+
+  if (grid && !updatedProductId) {
     grid.innerHTML = productsCatalog.map((p) => {
-      const cartItem = cart.find((item) => String(item.id) === String(p.id));
-      const quantity = Number(cartItem?.quantity) > 0 ? Number(cartItem.quantity) : 0;
-      const isInCart = Boolean(cartItem);
-      const minCant = Number(p.minCant) > 0 ? Number(p.minCant) : 1;
-      const stock = Number(p.stock) > 0 ? Number(p.stock) : Infinity;
-      const minusDisabled = quantity <= minCant ? 'disabled' : '';
-      const plusDisabled = quantity + minCant > stock ? 'disabled' : '';
+      const state = getProductState(p);
+      const { quantity, isInCart, minCant, stock, minusDisabled, plusDisabled } = state;
 
       return `
         <div class="swiper-slide">
@@ -181,13 +219,13 @@ const renderProductCards = () => {
                 <h3 class="product_name">${p.name}</h3>
                 <p class="product_description">${p.description || ''}</p>
                 <div class="cart-item-info">
-                  <span class="bg_clip-text">${p.price} c/u</span>
+                  <h3 class="bg_clip-text">$${p.price} c/u</h3>
                   <div class="cart-item-qty">
-                    <button type="button" class="cart-qty-btn" data-action="decrease" data-id="${p.id}" aria-label="Restar cantidad" ${minusDisabled}>
+                    <button type="button" class="cart-qty-btn large" data-action="decrease" data-id="${p.id}" aria-label="Restar cantidad" ${minusDisabled ? 'disabled' : ''}>
                       <i class="ri-subtract-line"></i>
                     </button>
-                    <span class="cart-qty-value">${quantity || 0}</span>
-                    <button type="button" class="cart-qty-btn" data-action="increase" data-id="${p.id}" aria-label="Sumar cantidad" ${plusDisabled}>
+                    <span class="cart-qty-value">${quantity || 0}u</span>
+                    <button type="button" class="cart-qty-btn large" data-action="increase" data-id="${p.id}" aria-label="Sumar cantidad" ${plusDisabled ? 'disabled' : ''}>
                       <i class="ri-add-line"></i>
                     </button>
                   </div>
@@ -198,9 +236,11 @@ const renderProductCards = () => {
         </div>
       `;
     }).join('');
+  } else if (updatedProductId) {
+    updateProductCard(updatedProductId);
   }
 
-  if (formContainer) {
+  if (formContainer && !updatedProductId) {
     formContainer.innerHTML = productsCatalog.map((p) => {
       const isInCart = cart.some((item) => String(item.id) === String(p.id));
       return `
@@ -241,7 +281,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   } finally {
     // =============== SWIPERJS PRODUCTS ===============
     // Inicializar SwiperJS para productos después de que el DOM esté listo y los productos hayan sido cargados
-    const swiperProducts = new Swiper('.products_swiper123', {
+    const swiperProducts = new Swiper('.products_swiper', {
       autoplay: { delay: 5000, disableOnInteraction: true },
       loop: true,
       grabCursor: true,
@@ -369,7 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateWhatsAppLink();
         // 🔄 Actualizar panel lateral del carrito
         renderCartPanel();
-        renderProductCards();
+        renderProductCards({ updatedProductId: productId });
       }
     }
   });
@@ -418,7 +458,7 @@ document.addEventListener("DOMContentLoaded", () => {
     syncCartButtonStates();
     updateWhatsAppLink();
     renderCartPanel();
-    renderProductCards();
+    renderProductCards({ updatedProductId: productId });
   });
 
   // =============== CARRITO LATERAL (PANEL DESLIZANTE) ===============
