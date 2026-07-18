@@ -321,7 +321,11 @@ window.addEventListener('DOMContentLoaded', async () => {
     // Inicializar SwiperJS para productos después de que el DOM esté listo y los productos hayan sido cargados
     const swiperProducts = new Swiper('.products_swiper', {
       autoplay: false,
-      loop: true,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      loop: false,
       grabCursor: true,
       slidesPerView: 1,
       spaceBetween: 54,

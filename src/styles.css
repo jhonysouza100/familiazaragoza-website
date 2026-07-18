@@ -607,6 +607,20 @@ img {
   right: -6.5rem;
 }
 
+.swiper-button-prev,
+.swiper-button-next {
+  top: 40% !important;
+  width: 38px;
+  height: 38px;
+  color: var(--first-color);
+  transition: color .4s;
+}
+.swiper-button-next.swiper-button-disabled,
+.swiper-button-prev.swiper-button-disabled {
+  color: #663e23;
+}
+
+
 /* ==================== CONTACT ==================== */
 /* Contact form */
 .contact_form {
