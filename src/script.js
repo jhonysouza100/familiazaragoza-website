@@ -126,6 +126,43 @@ const swiperTestimonials = new Swiper(".testimonials_swiper", {
 });
 
 // =============== LOAD PRODUCTS SIMPLE ===============
+const parsePrice = (value) => {
+  if (typeof value !== 'string') {
+    return Number(value || 0);
+  }
+
+  const raw = value.trim();
+  const hasComma = raw.includes(',');
+  const hasDot = raw.includes('.');
+
+  if (hasComma && hasDot) {
+    // Formato AR / europeo: puntos de miles, coma decimal
+    return Number(raw.replace(/\./g, '').replace(',', '.')) || 0;
+  }
+
+  if (hasComma) {
+    // Solo coma: decimal
+    return Number(raw.replace(',', '.')) || 0;
+  }
+
+  if (hasDot) {
+    const lastDotIndex = raw.lastIndexOf('.');
+    const decimals = raw.slice(lastDotIndex + 1);
+
+    if (decimals.length === 3) {
+      // Probablemente miles: 3.200, 3.200.000
+      return Number(raw.replace(/\./g, '')) || 0;
+    }
+
+    // Probablemente decimal: 3200.00, 3.2
+    return Number(raw) || 0;
+  }
+
+  return Number(raw) || 0;
+};
+
+const formatPrice = (value) => `$${parsePrice(value).toLocaleString('es-AR')}`;
+
 const normalizeProduct = (product) => {
   const rawImages = product?.images;
   const images = typeof rawImages === 'string'
@@ -144,7 +181,7 @@ const normalizeProduct = (product) => {
     image: imageUrl,
     tag: product?.tag || product?.category || product?.brand || '',
     minCant: Number(product?.minCount || product?.minCant || 1),
-    price: Number(product.price || 0).toLocaleString("es-AR"),
+    price: parsePrice(product.price || 0),
     stock: Number(product?.stock || 0),
   };
 };
@@ -219,7 +256,7 @@ const renderProductCards = ({ updatedProductId = null } = {}) => {
                 <h3 class="product_name">${p.name}</h3>
                 <p class="product_description">${p.description || ''}</p>
                 <div class="cart-item-info">
-                  <h3 class="bg_clip-text">$${p.price} c/u</h3>
+                  <h3 class="bg_clip-text">${formatPrice(p.price)} c/u</h3>
                   <div class="cart-item-qty">
                     <button type="button" class="cart-qty-btn large" data-action="decrease" data-id="${p.id}" aria-label="Restar cantidad" ${minusDisabled ? 'disabled' : ''}>
                       <i class="ri-subtract-line"></i>
@@ -471,9 +508,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const cartItemsContainer = document.getElementById("cart-items");
   const cartTotalEl = document.getElementById("cart-total");
 
-  /** 💵 Formatea un número como precio en dólares */
-  const formatPrice = (value) => `$${Number(value || 0).toLocaleString("es-AR")}`;
-
   /** 🧾 Renderiza los productos del carrito dentro del panel y actualiza el total */
   const renderCartPanel = () => {
     if (!cartItemsContainer) return;
@@ -503,7 +537,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let total = 0;
 
     cartItemsContainer.innerHTML = cart.map((item) => {
-      const price = Number(item.price) || 0;
+      const price = parsePrice(item.price);
       const minCant = Number(item.minCant) > 0 ? Number(item.minCant) : 1;
       const stock = Number(item.stock) > 0 ? Number(item.stock) : Infinity;
       const quantity = Number(item.quantity) > 0 ? Number(item.quantity) : minCant;

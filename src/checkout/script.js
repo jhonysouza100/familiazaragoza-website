@@ -23,8 +23,37 @@ document.addEventListener("DOMContentLoaded", () => {
   /** 💾 Guarda el carrito en localStorage */
   const saveCart = (cart) => localStorage.setItem(CART_KEY, JSON.stringify(cart));
 
+  const parsePrice = (value) => {
+    if (typeof value !== 'string') {
+      return Number(value || 0);
+    }
+
+    const raw = value.trim();
+    const hasComma = raw.includes(',');
+    const hasDot = raw.includes('.');
+
+    if (hasComma && hasDot) {
+      return Number(raw.replace(/\./g, '').replace(',', '.')) || 0;
+    }
+
+    if (hasComma) {
+      return Number(raw.replace(',', '.')) || 0;
+    }
+
+    if (hasDot) {
+      const lastDotIndex = raw.lastIndexOf('.');
+      const decimals = raw.slice(lastDotIndex + 1);
+      if (decimals.length === 3) {
+        return Number(raw.replace(/\./g, '')) || 0;
+      }
+      return Number(raw) || 0;
+    }
+
+    return Number(raw) || 0;
+  };
+
   /** 💵 Formatea un número como precio (mismo formato que la página principal) */
-  const formatPrice = (value) => `$${Number(value || 0).toLocaleString("es-AR")}`;
+  const formatPrice = (value) => `$${parsePrice(value).toLocaleString('es-AR')}`;
 
   /** 🧾 Renderiza los productos del carrito y actualiza el total */
   const renderCart = () => {
@@ -47,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let total = 0;
 
     itemsContainer.innerHTML = cart.map((item) => {
-      const price = Number(item.price) || 0;
+      const price = parsePrice(item.price);
       const minCant = Number(item.minCant) > 0 ? Number(item.minCant) : 1;
       const stock = Number(item.stock) > 0 ? Number(item.stock) : Infinity;
       const quantity = Number(item.quantity) > 0 ? Number(item.quantity) : minCant;
@@ -216,7 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const total = cart.reduce((sum, item) => {
-      const price = Number(item.price) || 0;
+      const price = parsePrice(item.price);
       const minCant = Number(item.minCant) > 0 ? Number(item.minCant) : 1;
       const quantity = Number(item.quantity) > 0 ? Number(item.quantity) : minCant;
       return sum + price * quantity;
@@ -227,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
       items: cart.map((item) => ({
         id: item.id,
         name: item.name,
-        price: Number(item.price) || 0,
+        price: parsePrice(item.price),
         quantity: Number(item.quantity) || Number(item.minCant) || 1,
       })),
       total,
