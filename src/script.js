@@ -262,10 +262,11 @@ window.addEventListener('DOMContentLoaded', async () => {
   const formContainer = document.getElementById('select_product-container');
 
   try {
-    const res = await fetch('https://restful-api-v4.vercel.app/api/v1/products?tenant_id=3');
+    const res = await fetch('https://restful-api-v4.vercel.app/api/v1/products?tenant_id=2');
     if (!res.ok) throw new Error('Failed to load products: ' + res.status);
 
     const payload = await res.json();
+    
     const productList = Array.isArray(payload)
       ? payload
       : Array.isArray(payload?.products)
@@ -282,7 +283,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     // =============== SWIPERJS PRODUCTS ===============
     // Inicializar SwiperJS para productos después de que el DOM esté listo y los productos hayan sido cargados
     const swiperProducts = new Swiper('.products_swiper', {
-      autoplay: { delay: 5000, disableOnInteraction: true },
+      autoplay: false,
       loop: true,
       grabCursor: true,
       slidesPerView: 1,
