@@ -54,14 +54,31 @@
         <section class="checkout_form-wrap" aria-label="Datos de envío">
           <h2 class="checkout_block-title">Datos de envío</h2>
           <form class="checkout_form" id="shipping-form" novalidate>
-            <div class="form_field">
-              <label class="form_label" for="fullName">Nombre y apellido</label>
-              <input class="form_input" type="text" id="fullName" name="fullName" autocomplete="name" required />
+            <div class="form_row">
+              <div class="form_field">
+                <label class="form_label" for="firstName">Nombre</label>
+                <input class="form_input" type="text" id="firstName" name="firstName" autocomplete="given-name" required />
+              </div>
+              <div class="form_field">
+                <label class="form_label" for="lastName">Apellido</label>
+                <input class="form_input" type="text" id="lastName" name="lastName" autocomplete="family-name" required />
+              </div>
             </div>
 
+            <div class="form_row">
+              <div class="form_field">
+                <label class="form_label" for="phone">Teléfono</label>
+                <input class="form_input" type="tel" id="phone" name="phone" autocomplete="tel" required />
+              </div>
+              <div class="form_field">
+                <label class="form_label" for="dni">DNI</label>
+                <input class="form_input" type="text" inputmode="numeric" id="dni" name="dni" autocomplete="off" required />
+              </div>
+            </div>
+            
             <div class="form_field">
-              <label class="form_label" for="dni">DNI</label>
-              <input class="form_input" type="text" inputmode="numeric" id="dni" name="dni" autocomplete="off" required />
+              <label class="form_label" for="email">Email</label>
+              <input class="form_input" type="email" id="email" name="email" autocomplete="email" required />
             </div>
 
             <!--=============== MÉTODO DE ENTREGA ===============-->
@@ -126,7 +143,7 @@
 
             <p class="form_message" id="form-message" role="status" aria-live="polite"></p>
 
-            <button type="submit" class="button checkout_submit" id="submit-btn">
+            <button type="submit" class="button checkout_submit" id="submit-btn" disabled>
               Confirmar pedido
               <i class="ri-check-line"></i>
             </button>
@@ -157,109 +174,10 @@
         <span>Total a pagar</span>
         <span class="payment_modal-total" id="payment-order-total">$0</span>
       </div>
-      <button type="button" class="button payment_mp-btn" id="mp-checkout-btn">
-        <i class="ri-secure-payment-line"></i>
-        Pagar con Mercado Pago
-      </button>
+      <!-- JS Builder SDK-->
       <div id="walletBrick_container"></div>
       <script>
-        const mp = new MercadoPago('APP_USR-28a87365-abc1-49b7-b949-6fe097c1d4e7', { locale: "es-AR", });
-        const bricksBuilder = mp.bricks();
-        const renderWalletBrick = async (bricksBuilde) => {
-          
-          const settings = {
-            initialization: {
-              redirectMode: "modal", // modal, app, blank
-            },
-            customization: {
-              theme: "default",
-              valueProp: "security_safety",
-              customStyle: {
-                hideValueProp: false,
-                valuePropColor: "white", // blue, white, black
-                buttonHeight: "48px", // min 48px - max free
-                borderRadius: "6px",
-                verticalPadding: "8px", // min 8px - max free
-                horizontalPadding: "0px", // min 0px - max free
-              },
-              checkout: {
-                theme: {
-                  elementsColor: "#4287F5", // color hex code
-                  headerColor: "#4287F5", // color hex code
-                },
-              },
-            },
-            callbacks: {
-              onReady: () => {
-                /*
-                Callback called when Brick is ready.
-                Here you can hide loadings from your site, for example.
-                */
-              },
-              onSubmit: (formData) => {
-                /*
-                  Callback called when clicking Wallet Brick
-                  this is possible because the brick is a button
-                  at this time of submit, you must create the preference
-                  */
-                  const yourRequestBodyHere = {
-                  items: [
-                    {
-                    id: 1,
-                    title: "Producto para pruebas de MP",
-                    quantity: 1,
-                    price_with_discounts: 100,
-                    description:
-                      "Esta es la descripcion del producto para pruebas de MP SDK en entorno real",
-                    category: "PRUEBAS SDK",
-                    },
-                  ],
-                  tenant: {
-                    // usar variable de entorno en producción
-                    private_key: "APP_USR-8274839262963894-032900-6f9d88f73d5ae9e61f886f8ea5b250e3-2517431499",
-                    domain: "https://demostraciones.netlify.app",
-                    company: "Nombre de la empresa",
-                  },
-                  order_id: 666,
-                  back_urls: {
-                    success: "https://demostraciones.netlify.app/success",
-                    failure: "https://demostraciones.netlify.app/failure",
-                    pending: "https://demostraciones.netlify.app/pending",
-                  },
-                  };
-                  return new Promise((resolve, reject) => {
-                  fetch("https://restful-api-v4.vercel.app/api/v1/payments/mercadopago/preference", {
-                    method: "POST",
-                    headers: {
-                    "Content-Type": "application/json",
-                    "x-api-key": "api-123"
-                    },
-                    body: JSON.stringify(yourRequestBodyHere),
-                    // body: JSON.stringify(formData),
-                  })
-                    .then((response) => response.json())
-                    .then((response) => {
-                      // resolve the promise with the ID of the preference
-                      // resolve(response.preference_id);
-                      resolve(response.id);
-                    })
-                    .catch((error) => {
-                      // handle error response when trying to create preference
-                      reject();
-                    });
-                });
-              },
-            },
-          };
-
-          window.walletBrickController = await bricksBuilder.create(
-            "wallet",
-            "walletBrick_container",
-            settings,
-          );
-        };
-
-        renderWalletBrick(bricksBuilder);
+        
       </script>
       <p class="payment_modal-note">Serás redirigido al Checkout Pro seguro de Mercado Pago.</p>
     </div>

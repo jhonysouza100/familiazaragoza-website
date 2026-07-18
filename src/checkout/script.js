@@ -4,8 +4,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   const CART_KEY = "cart";
-  // TODO: reemplazar por el endpoint real cuando la API esté creada.
-  const ORDERS_ENDPOINT = "/api/orders";
+  const ORDERS_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/orders";
 
   const itemsContainer = document.getElementById("checkout-items");
   const totalEl = document.getElementById("checkout-total");
@@ -16,6 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const paymentModal = document.getElementById("payment-modal");
   const paymentModalClose = document.getElementById("payment-modal-close");
   const paymentModalOverlay = document.querySelector(".payment_modal-overlay");
+  const walletBrickContainer = document.getElementById("walletBrick_container");
+
+  const mp = new MercadoPago('APP_USR-28a87365-abc1-49b7-b949-6fe097c1d4e7', { locale: "es-AR" });
+  const bricksBuilder = mp.bricks();
+  let walletBrickController = null;
 
   /** 📦 Lee el carrito desde localStorage */
   const getCart = () => JSON.parse(localStorage.getItem(CART_KEY) || "[]");
@@ -70,8 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (submitBtn) submitBtn.disabled = true;
       return;
     }
-
-    if (submitBtn) submitBtn.disabled = false;
 
     let total = 0;
 
@@ -165,6 +167,13 @@ document.addEventListener("DOMContentLoaded", () => {
   /*=============== FORMULARIO DE ENVÍO ===============*/
 
   /** 🔀 Habilita/deshabilita el domicilio según el método de entrega */
+  const updateSubmitState = () => {
+    const cart = getCart();
+    const hasItems = cart.length > 0;
+    const isValid = form.checkValidity();
+    submitBtn.disabled = !hasItems || !isValid;
+  };
+
   const handleDeliveryChange = () => {
     const method = form.querySelector('input[name="deliveryMethod"]:checked')?.value;
     const isPickup = method === "sucursal";
@@ -173,15 +182,76 @@ document.addEventListener("DOMContentLoaded", () => {
       addressInput.required = !isPickup;
       if (isPickup) addressInput.value = "";
     }
+    updateSubmitState();
   };
   form.querySelectorAll('input[name="deliveryMethod"]').forEach((radio) => {
     radio.addEventListener("change", handleDeliveryChange);
+  });
+
+  form.querySelectorAll("input, select").forEach((control) => {
+    control.addEventListener("input", updateSubmitState);
+    control.addEventListener("change", updateSubmitState);
   });
 
   /** ✅ Muestra un mensaje de estado */
   const setMessage = (text, type = "") => {
     messageEl.textContent = text;
     messageEl.className = "form_message" + (type ? ` is-${type}` : "");
+  };
+
+  const unmountWalletBrick = () => {
+    if (walletBrickController && typeof walletBrickController.unmount === "function") {
+      walletBrickController.unmount();
+      walletBrickController = null;
+    }
+    if (walletBrickContainer) {
+      walletBrickContainer.innerHTML = "";
+    }
+  };
+
+  const renderWalletBrick = async (preferenceId) => {
+    if (!preferenceId || !walletBrickContainer) return;
+
+    unmountWalletBrick();
+
+    const settings = {
+      initialization: {
+        preferenceId,
+        redirectMode: "modal",
+      },
+      customization: {
+        theme: "default",
+        valueProp: "security_safety",
+        customStyle: {
+          hideValueProp: false,
+          valuePropColor: "white",
+          buttonHeight: "48px",
+          borderRadius: "6px",
+          verticalPadding: "8px",
+          horizontalPadding: "0px",
+        },
+        checkout: {
+          theme: {
+            elementsColor: "#4287F5",
+            headerColor: "#4287F5",
+          },
+        },
+      },
+      callbacks: {
+        onReady: () => {
+          // Brick ready.
+        },
+        onSubmit: () => {
+          // The wallet brick handles form submission internally here.
+        },
+      },
+    };
+
+    walletBrickController = await bricksBuilder.create(
+      "wallet",
+      "walletBrick_container",
+      settings,
+    );
   };
 
   /** 🔓 Abre el modal de pago */
@@ -195,6 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /** 🔒 Cierra el modal de pago */
   const closePaymentModal = () => {
+    unmountWalletBrick();
     paymentModal.setAttribute("aria-hidden", "true");
     paymentModal.style.display = "none";
     document.body.style.overflow = "";
@@ -234,16 +305,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const formData = new FormData(form);
-    const shipping = {
-      fullName: formData.get("fullName")?.trim(),
-      dni: formData.get("dni")?.trim(),
-      deliveryMethod: formData.get("deliveryMethod"),
-      address: formData.get("address")?.trim() || null,
-      city: formData.get("city")?.trim(),
-      postalCode: formData.get("postalCode")?.trim(),
-      province: formData.get("province"),
-    };
-
     const total = cart.reduce((sum, item) => {
       const price = parsePrice(item.price);
       const minCant = Number(item.minCant) > 0 ? Number(item.minCant) : 1;
@@ -252,15 +313,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 0);
 
     const payload = {
-      shipping,
       items: cart.map((item) => ({
-        id: item.id,
-        name: item.name,
-        price: parsePrice(item.price),
+        item_id: Number(item.id),
         quantity: Number(item.quantity) || Number(item.minCant) || 1,
       })),
-      total,
-      createdAt: new Date().toISOString(),
+      payment: {
+        method: "Mercadopago",
+      },
     };
 
     // Estado de carga
@@ -268,25 +327,34 @@ document.addEventListener("DOMContentLoaded", () => {
     setMessage("Enviando tu pedido...", "loading");
 
     try {
-      const response = await fetch("ORDERS_ENDPOINT", {
+      const response = await fetch(ORDERS_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": "x-api-123",
+        },
         body: JSON.stringify(payload),
       });
 
+      const responseData = await response.json();
       if (!response.ok) {
-        throw new Error(`El servidor respondió con estado ${response.status}`);
+        throw new Error(responseData?.message || `El servidor respondió con estado ${response.status}`);
       }
 
-      // Pedido enviado correctamente - abrir modal de pago
-      const orderId = `ORD-${Date.now()}`;
-      openPaymentModal(orderId, total);
+      const preferenceId = responseData?.payment?.preference_id;
+      if (!preferenceId) {
+        throw new Error("No se recibió preference id desde el servidor.");
+      }
+
+      const orderNumber = responseData?.id ? `ORD-${responseData.id}` : `ORD-${Date.now()}`;
+      const serverTotal = responseData?.total ? parsePrice(responseData.total) : total;
+
+      openPaymentModal(orderNumber, serverTotal);
+      await renderWalletBrick(preferenceId);
       localStorage.removeItem(CART_KEY);
       form.reset();
       renderCart();
     } catch (error) {
-      openPaymentModal(1, 100);
-      console.log("[v0] Error al enviar el pedido:", error.message);
       setMessage("No pudimos enviar el pedido. Revisá tu conexión e intentá nuevamente.", "error");
       submitBtn.disabled = false;
     }

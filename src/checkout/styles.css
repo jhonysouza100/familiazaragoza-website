@@ -89,7 +89,10 @@
   color: var(--text-color);
   font-family: var(--body-font);
   font-size: var(--normal-font-size);
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.form_input:disabled {
+  background-color: hsl(0, 0%, 45%);
 }
 .form_input:focus {
   outline: none;
@@ -272,21 +275,6 @@ select.form_input {
 .payment_modal-total {
   font-size: var(--h2-font-size);
   color: var(--first-color);
-}
-.payment_mp-btn {
-  width: 100%;
-  border: none;
-  cursor: pointer;
-  background-color: hsl(206, 100%, 45%);
-  color: hsl(0, 0%, 100%);
-  font-size: var(--normal-font-size);
-}
-.payment_mp-btn:hover {
-  background-color: hsl(206, 100%, 40%);
-}
-.payment_mp-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 .payment_modal-note {
   margin-top: 0.85rem;
