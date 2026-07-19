@@ -272,6 +272,28 @@ select.form_input {
   margin-bottom: 1.5rem;
   font-weight: var(--font-semi-bold);
 }
+.payment_modal-summary--details {
+  display:flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  row-gap: 1.25rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.payment_modal-summary--details div {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.payment_modal-summary--details div span {
+  display: inline-flex;
+  align-items: center;
+  column-gap: .5rem;
+}
+.payment_modal-summary--details div span i {
+  font-size: 1.25rem;
+}
 .payment_modal-total {
   font-size: var(--h2-font-size);
   color: var(--first-color);

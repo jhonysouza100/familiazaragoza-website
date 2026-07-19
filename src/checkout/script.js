@@ -5,7 +5,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const CART_KEY = "cart";
   const ORDERS_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/orders";
-  const SHIPMENT_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/shipments";
+  const SHIPMENT_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/shipments/generate/paqar";
 
   const itemsContainer = document.getElementById("checkout-items");
   const totalEl = document.getElementById("checkout-total");
@@ -189,6 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     updateSubmitState();
   };
+
   form.querySelectorAll('input[name="deliveryMethod"]').forEach((radio) => {
     radio.addEventListener("change", handleDeliveryChange);
   });
@@ -372,7 +373,7 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify(shippingData),
       }).then((response) => response.json())
       .then((response) => {
-        await renderWalletBrick(bricksBuilder);
+        renderWalletBrick(bricksBuilder);
         openPaymentModal(response.total, cartTotal);
         setMessage("Listo, confirma el pago en el modal.", "success");
         resolve(response.total);
