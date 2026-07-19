@@ -299,7 +299,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   const formContainer = document.getElementById('select_product-container');
 
   try {
-    const res = await fetch('https://restful-api-v4.vercel.app/api/v1/products?tenant_id=2');
+    const res = await fetch('https://restful-api-v4.vercel.app/api/v1/products?tenant_id=1');
     if (!res.ok) throw new Error('Failed to load products: ' + res.status);
 
     const payload = await res.json();

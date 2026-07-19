@@ -72,7 +72,7 @@
               </div>
               <div class="form_field">
                 <label class="form_label" for="dni">DNI</label>
-                <input class="form_input" type="text" inputmode="numeric" id="dni" name="dni" autocomplete="off" required />
+                <input class="form_input" type="text" inputmode="numeric" id="dni" name="dni" autocomplete="dni" required />
               </div>
             </div>
             
@@ -166,11 +166,18 @@
       </div>
       <h2 class="payment_modal-title" id="payment-modal-title">¡Pedido confirmado!</h2>
       <p class="payment_modal-text">
-        Tu pedido <strong id="payment-order-id">#—</strong> fue registrado correctamente.
         Completá el pago para finalizar la compra.
       </p>
 
       <div class="payment_modal-summary">
+        <span>Subtotal</span>
+        <span id="payment-order-cart-total">$0</span>
+      </div>
+      <div class="payment_modal-summary">
+        <span>Costo de envío</span>
+        <span id="payment-order-shipment">$0</span>
+      </div>
+      <div class="payment_modal-summary payment_modal-summary--total">
         <span>Total a pagar</span>
         <span class="payment_modal-total" id="payment-order-total">$0</span>
       </div>

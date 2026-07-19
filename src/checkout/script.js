@@ -5,6 +5,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const CART_KEY = "cart";
   const ORDERS_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/orders";
+  const SHIPMENT_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/shipments";
 
   const itemsContainer = document.getElementById("checkout-items");
   const totalEl = document.getElementById("checkout-total");
@@ -15,11 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const paymentModal = document.getElementById("payment-modal");
   const paymentModalClose = document.getElementById("payment-modal-close");
   const paymentModalOverlay = document.querySelector(".payment_modal-overlay");
-  const walletBrickContainer = document.getElementById("walletBrick_container");
-
-  const mp = new MercadoPago('APP_USR-28a87365-abc1-49b7-b949-6fe097c1d4e7', { locale: "es-AR" });
-  const bricksBuilder = mp.bricks();
-  let walletBrickController = null;
 
   /** 📦 Lee el carrito desde localStorage */
   const getCart = () => JSON.parse(localStorage.getItem(CART_KEY) || "[]");
@@ -58,6 +54,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /** 💵 Formatea un número como precio (mismo formato que la página principal) */
   const formatPrice = (value) => `$${parsePrice(value).toLocaleString('es-AR')}`;
+
+  const getCartTotal = () => {
+    return getCart().reduce((sum, item) => {
+      const price = parsePrice(item.price);
+      const minCant = Number(item.minCant) > 0 ? Number(item.minCant) : 1;
+      const quantity = Number(item.quantity) > 0 ? Number(item.quantity) : minCant;
+      return sum + price * quantity;
+    }, 0);
+  };
 
   /** 🧾 Renderiza los productos del carrito y actualiza el total */
   const renderCart = () => {
@@ -199,25 +204,26 @@ document.addEventListener("DOMContentLoaded", () => {
     messageEl.className = "form_message" + (type ? ` is-${type}` : "");
   };
 
-  const unmountWalletBrick = () => {
-    if (walletBrickController && typeof walletBrickController.unmount === "function") {
-      walletBrickController.unmount();
-      walletBrickController = null;
-    }
-    if (walletBrickContainer) {
-      walletBrickContainer.innerHTML = "";
-    }
-  };
+  /**
+   * ------ Mercado Pago SDK ------
+   * Atención!
+   * Cada vez que el usuario sale de la pantalla donde se
+   * muestra algún Brick, es necesario destruir la instancia
+   * actual con el comando window.walletBrickController.unmount().
+   * Al ingresar nuevamente se debe generar una nueva instancia.
+  */
+  function unmountWalletBrick() {
+    window.walletBrickController.unmount();
+  }
 
-  const renderWalletBrick = async (preferenceId) => {
-    if (!preferenceId || !walletBrickContainer) return;
-
-    unmountWalletBrick();
+  const mp = new MercadoPago('APP_USR-28a87365-abc1-49b7-b949-6fe097c1d4e7', { locale: "es-AR" });
+  const bricksBuilder = mp.bricks();
+  
+  const renderWalletBrick = async (bricksBuilder) => {
 
     const settings = {
       initialization: {
-        preferenceId,
-        redirectMode: "modal",
+        redirectMode: "modal", // modal, app, blank
       },
       customization: {
         theme: "default",
@@ -239,15 +245,61 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       callbacks: {
         onReady: () => {
-          // Brick ready.
+          /**
+           * Brick ready.
+           * Here you can hide loadings from your site, for example.
+          */
         },
+        
         onSubmit: () => {
-          // The wallet brick handles form submission internally here.
+          /** 
+           * The wallet brick handles form submission internally here.
+           * Callback called when clicking Wallet Brick
+           * this is possible because the brick is a button
+           * at this time of submit, you must create the preference
+           */
+          const cart = getCart();
+          if (cart.length === 0) {
+            setMessage("Tu carrito está vacío.", "error");
+            return;
+          }
+
+          const payload = {
+            items: cart.map((item) => ({
+              item_id: Number(item.id),
+              quantity: Number(item.quantity) || Number(item.minCant) || 1,
+            })),
+            payment: {
+              method: "Mercadopago",
+            },
+          };
+
+          
+          return new Promise((resolve, reject) => {
+            fetch(ORDERS_ENDPOINT, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-api-key": "x-api-123"
+              },
+              body: JSON.stringify(payload),
+            }).then((response) => response.json())
+            .then((response) => {
+              // resolve the promise with the ID of the preference
+              resolve(response.payment.preference_id);
+              localStorage.removeItem(CART_KEY);
+              form.reset();
+              renderCart();
+            }).catch((error) => {
+              // handle error response when trying to create preference
+              reject();
+            });
+          });
         },
       },
     };
 
-    walletBrickController = await bricksBuilder.create(
+    window.walletBrickController = await bricksBuilder.create(
       "wallet",
       "walletBrick_container",
       settings,
@@ -255,9 +307,11 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   /** 🔓 Abre el modal de pago */
-  const openPaymentModal = (orderId, total) => {
-    document.getElementById("payment-order-id").textContent = orderId;
-    document.getElementById("payment-order-total").textContent = formatPrice(total);
+  const openPaymentModal = (shipmentTotal, cartTotal) => {
+    normalizeShipmentTotal = Number(shipmentTotal) || 0;
+    document.getElementById("payment-order-cart-total").textContent = formatPrice(cartTotal);
+    document.getElementById("payment-order-shipment").textContent = formatPrice(normalizeShipmentTotal);
+    document.getElementById("payment-order-total").textContent = formatPrice(cartTotal + normalizeShipmentTotal);
     paymentModal.setAttribute("aria-hidden", "false");
     paymentModal.style.display = "flex";
     document.body.style.overflow = "hidden";
@@ -269,6 +323,8 @@ document.addEventListener("DOMContentLoaded", () => {
     paymentModal.setAttribute("aria-hidden", "true");
     paymentModal.style.display = "none";
     document.body.style.overflow = "";
+    setMessage("Compra en espera...", "loading");
+    submitBtn.disabled = false;
   };
 
   // Cerrar modal con botón close
@@ -276,10 +332,11 @@ document.addEventListener("DOMContentLoaded", () => {
     paymentModalClose.addEventListener("click", closePaymentModal);
   }
 
-  // Cerrar modal al hacer click en el overlay
+  /** Cerrar modal al hacer click en el overlay
   if (paymentModalOverlay) {
     paymentModalOverlay.addEventListener("click", closePaymentModal);
   };
+  */
 
   // Cerrar modal con tecla Escape
   document.addEventListener("keydown", (e) => {
@@ -292,12 +349,6 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const cart = getCart();
-    if (cart.length === 0) {
-      setMessage("Tu carrito está vacío.", "error");
-      return;
-    }
-
     // Validación nativa del formulario
     if (!form.checkValidity()) {
       form.reportValidity();
@@ -305,62 +356,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const formData = new FormData(form);
-    const total = cart.reduce((sum, item) => {
-      const price = parsePrice(item.price);
-      const minCant = Number(item.minCant) > 0 ? Number(item.minCant) : 1;
-      const quantity = Number(item.quantity) > 0 ? Number(item.quantity) : minCant;
-      return sum + price * quantity;
-    }, 0);
+    const shippingData = Object.fromEntries(formData.entries());
+    const cartTotal = getCartTotal();
 
-    const payload = {
-      items: cart.map((item) => ({
-        item_id: Number(item.id),
-        quantity: Number(item.quantity) || Number(item.minCant) || 1,
-      })),
-      payment: {
-        method: "Mercadopago",
-      },
-    };
-
-    // Estado de carga
     submitBtn.disabled = true;
-    setMessage("Enviando tu pedido...", "loading");
+    setMessage("Calculando costo de envío...", "loading");
 
-    try {
-      const response = await fetch(ORDERS_ENDPOINT, {
+    new Promise((resolve, reject) => {
+      fetch(SHIPMENT_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": "x-api-123",
+          "x-api-key": "x-api-123"
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(shippingData),
+      }).then((response) => response.json())
+      .then((response) => {
+        await renderWalletBrick(bricksBuilder);
+        openPaymentModal(response.total, cartTotal);
+        setMessage("Listo, confirma el pago en el modal.", "success");
+        resolve(response.total);
+      }).catch((error) => {
+        setMessage("No pudimos calcular el envío. Intentá nuevamente.", "error");
+        submitBtn.disabled = false;
+        reject();
       });
-
-      const responseData = await response.json();
-      if (!response.ok) {
-        throw new Error(responseData?.message || `El servidor respondió con estado ${response.status}`);
-      }
-
-      const preferenceId = responseData?.payment?.preference_id;
-      if (!preferenceId) {
-        throw new Error("No se recibió preference id desde el servidor.");
-      }
-
-      const orderNumber = responseData?.id ? `ORD-${responseData.id}` : `ORD-${Date.now()}`;
-      const serverTotal = responseData?.total ? parsePrice(responseData.total) : total;
-
-      openPaymentModal(orderNumber, serverTotal);
-      await renderWalletBrick(preferenceId);
-      localStorage.removeItem(CART_KEY);
-      form.reset();
-      renderCart();
-    } catch (error) {
-      setMessage("No pudimos enviar el pedido. Revisá tu conexión e intentá nuevamente.", "error");
-      submitBtn.disabled = false;
-    }
+    });
   });
 
   // Inicializar
   renderCart();
   handleDeliveryChange();
 });
+
