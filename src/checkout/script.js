@@ -1,7 +1,4 @@
 /*=============== CHECKOUT ===============*/
-// Reutiliza el mismo carrito guardado en localStorage por la página principal.
-// Clave: "cart" -> array de objetos producto { id, name, image, price, stock, minCant, quantity }
-
 document.addEventListener("DOMContentLoaded", () => {
   const CART_KEY = "cart";
   const ORDERS_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/orders";
