@@ -1,11 +1,8 @@
 /*=============== CHECKOUT ===============*/
-// Reutiliza el mismo carrito guardado en localStorage por la página principal.
-// Clave: "cart" -> array de objetos producto { id, name, image, price, stock, minCant, quantity }
-
 document.addEventListener("DOMContentLoaded", () => {
   const CART_KEY = "cart";
   const ORDERS_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/orders";
-  const SHIPMENT_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/shipments/micorreo/rates";
+  const SHIPMENT_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/shipments";
 
   const itemsContainer = document.getElementById("checkout-items");
   const totalEl = document.getElementById("checkout-total");
@@ -189,6 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     updateSubmitState();
   };
+
   form.querySelectorAll('input[name="deliveryMethod"]').forEach((radio) => {
     radio.addEventListener("change", handleDeliveryChange);
   });
@@ -386,18 +384,9 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         body: JSON.stringify(shippingData),
       }).then((response) => response.json())
-      .then(async (response) => {
-        const selectedRate = (response.rates || []).find(
-          (rate) =>
-            rate.deliveredType === shippingData.deliveredType &&
-            rate.productName === "Correo Argentino Clasico"
-        );
-
-        if (!selectedRate) {
-          throw new Error("No se encontró la tarifa solicitada.");
-        }
+      .then((response) => {
         await renderWalletBrick(bricksBuilder);
-        openPaymentModal(selectedRate.price, cartTotal);
+        openPaymentModal(response.total, cartTotal);
         setMessage("Listo, confirma el pago en el modal.", "success");
         resolve(response.total);
       }).catch((error) => {

@@ -1,13 +1,90 @@
-# 💎 Responsive NFT Website Design
+# 🛒 Familia Zaragoza Yerba Mate Website
 
-- Responsive NFT Website Design using HTML CSS & JavaScript
-- contains CSS & ScrollReveal animations.
-- Developed first with the Mobile First methodology, then for desktop.
-- Compatible with all mobile devices and with a beautiful and pleasant user interface.
+A modern e-tienda whith checkout built with **HTML, CSS and Vanilla JavaScript**, featuring a persistent shopping cart, real-time shipping quotes, and **Mercado Pago Checkout Bricks** integration.
 
-💙 Go to my website to see more projects like this [jhonysouza100.site](https://jhonysouza100.site) 💙
+The application calculates shipping costs dynamically, creates secure orders on the server, and keeps all payment-sensitive logic in the backend.
 
-![preview img](/preview.png)
+## ✨ Features
+
+- Responsive checkout built with HTML, CSS & JavaScript
+- Mobile First design
+- Shopping cart with LocalStorage persistence
+- Dynamic product catalog loaded from REST API
+- Quantity controls with stock validation
+- Real-time shipping cost calculation
+- Automatic subtotal, shipping and total calculation
+- Mercado Pago Checkout Bricks integration
+- Secure order creation on the backend
+- Shipping recalculated server-side before payment
+- WhatsApp integration with cart summary
+- SwiperJS product carousel
+- ScrollReveal animations
+- Optimized for desktop, tablet and mobile devices
+
+## 🚀 Checkout Flow
+
+1. Products are loaded from the REST API.
+2. The customer selects products.
+3. The shopping cart is stored in LocalStorage.
+4. Customer completes the checkout form.
+5. Shipping methods and costs are requested from the backend.
+6. The frontend updates:
+   - Shipping options
+   - Cart subtotal
+   - Shipping cost
+   - Final total
+7. The Mercado Pago Checkout Brick is initialized using:
+   - Cart items
+   - Customer information
+   - Shipping address
+   - Selected payment method
+
+> **Important:** At this stage the shipping cost is **not** sent to the server. Only the cart items and customer/shipping information are sent.
+
+8. When the customer clicks **Pay**:
+   - A request is sent to the **Orders API**.
+   - The backend creates the order.
+   - Shipping is calculated again on the server using the submitted address.
+   - The shipping cost is added as a separate item to the Mercado Pago preference.
+   - The Mercado Pago Preference is created.
+   - Only the generated `preference_id` is returned to the frontend.
+
+9. Checkout Bricks uses the received `preference_id` to complete the payment securely.
+
+## 🔒 Security
+
+All sensitive business logic is executed on the backend:
+
+- Shipping calculation
+- Order creation
+- Mercado Pago Preference creation
+- Final payment amount calculation
+
+The frontend never sends or manipulates the final shipping amount, preventing price tampering.
+
+## 🛠️ Technologies
+
+- HTML5
+- CSS3
+- Vanilla JavaScript (ES6+)
+- LocalStorage
+- SwiperJS
+- ScrollReveal
+- REST API
+- Mercado Pago Checkout Bricks
+
+## 📦 Backend Responsibilities
+
+- Product API
+- Shipping quotation endpoint
+- Order creation endpoint
+- Mercado Pago Preference generation
+- Shipping recalculation
+- Order validation
+
+💙 Visit my portfolio to see more projects like this: **https://jhonysouza100.site** 💙
+
+![preview](checkout.png)
 
 ## 📦 Vanilla HTML Deployment with Docker & Nginx
 Este repositorio contiene un ejemplo simple de cómo desplegar un sitio web estático construido con HTML puro (vanilla HTML) utilizando Docker y Nginx como servidor web.
