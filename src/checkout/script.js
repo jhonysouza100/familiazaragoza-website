@@ -5,7 +5,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const CART_KEY = "cart";
   const ORDERS_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/orders";
-  const SHIPMENT_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/shipments";
+  const SHIPMENT_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/shipments/micorreo/rates";
 
   const itemsContainer = document.getElementById("checkout-items");
   const totalEl = document.getElementById("checkout-total");
@@ -308,7 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /** 🔓 Abre el modal de pago */
   const openPaymentModal = (shipmentTotal, cartTotal) => {
-    normalizeShipmentTotal = Number(shipmentTotal) || 0;
+    normalizeShipmentTotal = formatPrice(shipmentTotal) || 0;
     document.getElementById("payment-order-cart-total").textContent = formatPrice(cartTotal);
     document.getElementById("payment-order-shipment").textContent = formatPrice(normalizeShipmentTotal);
     document.getElementById("payment-order-total").textContent = formatPrice(cartTotal + normalizeShipmentTotal);
@@ -356,8 +356,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const formData = new FormData(form);
-    const shippingData = Object.fromEntries(formData.entries());
     const cartTotal = getCartTotal();
+    const getCartTotal = () => {
+    const totalQuantity = getCart().reduce((sum, item) => {
+      return sum + item.quantity;
+     }, 0);
+    };
+
+    const shippingData = {
+      postalCodeDestination: formData.get("postalCodeDestination"),
+      deliveredType: formData.get("deliveryMethod") === "sucursal" ? "S" : "D",
+      dimensions: {
+        weight: 500 * totalQuantity,
+        height: 20,
+        width: 11,
+        length: 8 * totalQuantity,
+      },
+    };
 
     submitBtn.disabled = true;
     setMessage("Calculando costo de envío...", "loading");
@@ -367,13 +382,22 @@ document.addEventListener("DOMContentLoaded", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": "x-api-123"
+          "x-api-key": "x-api-fliazaragoza"
         },
         body: JSON.stringify(shippingData),
       }).then((response) => response.json())
-      .then((response) => {
+      .then(async (response) => {
+        const selectedRate = (response.rates || []).find(
+          (rate) =>
+            rate.deliveredType === shippingData.deliveredType &&
+            rate.productName === "Correo Argentino Clasico"
+        );
+
+        if (!selectedRate) {
+          throw new Error("No se encontró la tarifa solicitada.");
+        }
         await renderWalletBrick(bricksBuilder);
-        openPaymentModal(response.total, cartTotal);
+        openPaymentModal(selectedRate.price, cartTotal);
         setMessage("Listo, confirma el pago en el modal.", "success");
         resolve(response.total);
       }).catch((error) => {
