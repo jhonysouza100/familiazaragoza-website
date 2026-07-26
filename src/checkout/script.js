@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const CART_KEY = "cart";
   const ORDERS_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/orders";
   const SHIPMENT_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/shipments/micorreo/rates";
-
   const itemsContainer = document.getElementById("checkout-items");
   const totalEl = document.getElementById("checkout-total");
   const form = document.getElementById("shipping-form");
@@ -262,6 +261,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
           }
 
+          const formData = new FormData(form);
+
           const payload = {
             items: cart.map((item) => ({
               item_id: Number(item.id),
@@ -270,6 +271,18 @@ document.addEventListener("DOMContentLoaded", () => {
             payment: {
               method: "Mercadopago",
             },
+            shipment: {
+              deliveredType: formData.get("deliveryMethod") === "sucursal" ? "S" : "D",
+              pickupLocation: formData.get(""),
+              fullName: formData.get("fullName"),
+              dni: formData.get("dni"),
+              phone: formData.get("phone"),
+              email: formData.get("email"),
+              streetName: formData.get("address"),
+              city: formData.get("city"),
+              provinceCode: formData.get("provinceCode"),
+              postalCodeDestination:formData.get("postalCodeDestination")
+            }
           };
 
           
@@ -306,8 +319,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /** 🔓 Abre el modal de pago */
   const openPaymentModal = (shipmentTotal, cartTotal) => {
-    console.log(formatPrice(shipmentTotal))
-    console.log(formatPrice(cartTotal + shipmentTotal))
     document.getElementById("payment-order-cart-total").textContent = formatPrice(cartTotal);
     document.getElementById("payment-order-shipment").textContent = formatPrice(shipmentTotal);
     document.getElementById("payment-order-total").textContent = formatPrice(cartTotal + shipmentTotal);

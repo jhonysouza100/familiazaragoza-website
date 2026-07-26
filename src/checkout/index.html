@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!--=============== FAVICON ===============-->
-    <link rel="icon" type="image/png" href="/public/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/public/favicon.svg" />
-    <link rel="shortcut icon" type="image/x-icon" href="/public/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png" />
-    <!--=============== REMIXICONS ===============-->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
-    <!--=============== CSS ===============-->
-    <link rel="stylesheet" href="../styles.css" />
-    <link rel="stylesheet" href="styles.css" />
-    <title>Finalizar compra | Familia Zaragoza</title>
-    <script src="https://sdk.mercadopago.com/js/v2"></script>
-  </head>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--=============== FAVICON ===============-->
+  <link rel="icon" type="image/png" href="/public/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/public/favicon.svg" />
+  <link rel="shortcut icon" type="image/x-icon" href="/public/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png" />
+  <!--=============== REMIXICONS ===============-->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <!--=============== CSS ===============-->
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Finalizar compra | Familia Zaragoza</title>
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+</head>
+
 <body>
   <!--==================== HEADER ====================-->
   <header class="checkout_header">
@@ -54,15 +56,9 @@
         <section class="checkout_form-wrap" aria-label="Datos de envío">
           <h2 class="checkout_block-title">Datos de envío</h2>
           <form class="checkout_form" id="shipping-form" novalidate>
-            <div class="form_row">
-              <div class="form_field">
-                <label class="form_label" for="firstName">Nombre</label>
-                <input class="form_input" type="text" id="firstName" name="firstName" autocomplete="given-name" required />
-              </div>
-              <div class="form_field">
-                <label class="form_label" for="lastName">Apellido</label>
-                <input class="form_input" type="text" id="lastName" name="lastName" autocomplete="family-name" required />
-              </div>
+            <div class="form_field">
+              <label class="form_label" for="fullName">Nombre Completo</label>
+              <input class="form_input" type="text" id="fullName" name="fullName" autocomplete="given-name" required />
             </div>
 
             <div class="form_row">
@@ -72,10 +68,11 @@
               </div>
               <div class="form_field">
                 <label class="form_label" for="dni">DNI</label>
-                <input class="form_input" type="text" inputmode="numeric" id="dni" name="dni" autocomplete="dni" required />
+                <input class="form_input" type="text" inputmode="numeric" id="dni" name="dni" autocomplete="dni"
+                  required />
               </div>
             </div>
-            
+
             <div class="form_field">
               <label class="form_label" for="email">Email</label>
               <input class="form_input" type="email" id="email" name="email" autocomplete="email" required />
@@ -96,7 +93,8 @@
 
             <div class="form_field">
               <label class="form_label" for="address">Domicilio</label>
-              <input class="form_input" type="text" id="address" name="address" autocomplete="street-address" required />
+              <input class="form_input" type="text" id="address" name="address" autocomplete="street-address"
+                required />
             </div>
 
             <div class="form_row">
@@ -106,38 +104,39 @@
               </div>
               <div class="form_field">
                 <label class="form_label" for="postalCode">Código postal</label>
-                <input class="form_input" type="text" inputmode="numeric" id="postalCode" name="postalCodeDestination" autocomplete="postal-code" required />
+                <input class="form_input" type="text" inputmode="numeric" id="postalCode" name="postalCodeDestination"
+                  autocomplete="postal-code" required />
               </div>
             </div>
 
             <div class="form_field">
-              <label class="form_label" for="province">Provincia</label>
-              <select class="form_input" id="province" name="province" autocomplete="address-level1" required>
+              <label class="form_label" for="provinceCode">Provincia</label>
+              <select class="form_input" id="provinceCode" name="provinceCode" autocomplete="address-level1" required>
                 <option value="" disabled selected>Seleccioná una provincia</option>
-                <option value="Buenos Aires">Buenos Aires</option>
-                <option value="Ciudad Autónoma de Buenos Aires">Ciudad Autónoma de Buenos Aires</option>
-                <option value="Catamarca">Catamarca</option>
-                <option value="Chaco">Chaco</option>
-                <option value="Chubut">Chubut</option>
-                <option value="Córdoba">Córdoba</option>
-                <option value="Corrientes">Corrientes</option>
-                <option value="Entre Ríos">Entre Ríos</option>
-                <option value="Formosa">Formosa</option>
-                <option value="Jujuy">Jujuy</option>
-                <option value="La Pampa">La Pampa</option>
-                <option value="La Rioja">La Rioja</option>
-                <option value="Mendoza">Mendoza</option>
-                <option value="Misiones">Misiones</option>
-                <option value="Neuquén">Neuquén</option>
-                <option value="Río Negro">Río Negro</option>
-                <option value="Salta">Salta</option>
-                <option value="San Juan">San Juan</option>
-                <option value="San Luis">San Luis</option>
-                <option value="Santa Cruz">Santa Cruz</option>
-                <option value="Santa Fe">Santa Fe</option>
-                <option value="Santiago del Estero">Santiago del Estero</option>
-                <option value="Tierra del Fuego">Tierra del Fuego</option>
-                <option value="Tucumán">Tucumán</option>
+                <option value="B">Buenos Aires</option>
+                <option value="C">Ciudad Autónoma de Buenos Aires</option>
+                <option value="K">Catamarca</option>
+                <option value="H">Chaco</option>
+                <option value="U">Chubut</option>
+                <option value="X">Córdoba</option>
+                <option value="W">Corrientes</option>
+                <option value="E">Entre Ríos</option>
+                <option value="P">Formosa</option>
+                <option value="Y">Jujuy</option>
+                <option value="L">La Pampa</option>
+                <option value="F">La Rioja</option>
+                <option value="M">Mendoza</option>
+                <option value="N">Misiones</option>
+                <option value="Q">Neuquén</option>
+                <option value="R">Río Negro</option>
+                <option value="A">Salta</option>
+                <option value="J">San Juan</option>
+                <option value="D">San Luis</option>
+                <option value="Z">Santa Cruz</option>
+                <option value="S">Santa Fe</option>
+                <option value="G">Santiago del Estero</option>
+                <option value="V">Tierra del Fuego</option>
+                <option value="T">Tucumán</option>
               </select>
             </div>
 
@@ -154,7 +153,8 @@
   </main>
 
   <!--==================== MODAL PAGO (MERCADO PAGO) ====================-->
-  <div class="payment_modal" id="payment-modal" role="dialog" aria-modal="true" aria-labelledby="payment-modal-title" aria-hidden="true">
+  <div class="payment_modal" id="payment-modal" role="dialog" aria-modal="true" aria-labelledby="payment-modal-title"
+    aria-hidden="true">
     <div class="payment_modal-overlay" data-close-modal></div>
     <div class="payment_modal-content" role="document">
       <button type="button" class="payment_modal-close" id="payment-modal-close" aria-label="Cerrar">
@@ -186,7 +186,7 @@
       <!-- JS Builder SDK-->
       <div id="walletBrick_container"></div>
       <script>
-        
+
       </script>
       <p class="payment_modal-note">Serás redirigido a Mercado Pago.</p>
     </div>
@@ -219,17 +219,21 @@
 
       <div class="footer_bottom">
         <span class="footer_copyright">
-          © Copyright 2026, 
-          <a href="https://jhonysouza100.site" title="Developer website" target="_blank" rel="nofollow">ChillHop Studio</a>
+          © Copyright 2026,
+          <a href="https://jhonysouza100.site" title="Developer website" target="_blank" rel="nofollow">ChillHop
+            Studio</a>
         </span>
         <div class="footer_bottom-links">
-          
+
         </div>
         <div class="footer_socials">
-          <a href="https://www.instagram.com/familiazaragoza_ym/" class="footer_social-icon" aria-label="perfil de instagram" title="@familiazaragoza_ym" rel="nofollow" target="_blank">
+          <a href="https://www.instagram.com/familiazaragoza_ym/" class="footer_social-icon"
+            aria-label="perfil de instagram" title="@familiazaragoza_ym" rel="nofollow" target="_blank">
             <i class="ri-instagram-line"></i>
           </a>
-          <a href="https://web.facebook.com/profile.php?id=61558365211172&ref=NONE_xav_ig_profile_page_web" class="footer_social-icon" aria-label="perfil de facebook" title="Perfil de Facebook" rel="nofollow" target="_blank">
+          <a href="https://web.facebook.com/profile.php?id=61558365211172&ref=NONE_xav_ig_profile_page_web"
+            class="footer_social-icon" aria-label="perfil de facebook" title="Perfil de Facebook" rel="nofollow"
+            target="_blank">
             <i class="ri-facebook-fill"></i>
           </a>
         </div>
@@ -240,4 +244,5 @@
   <!--=============== MAIN JS ===============-->
   <script src="script.js"></script>
 </body>
+
 </html>
