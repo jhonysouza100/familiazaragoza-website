@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const mp = new MercadoPago('APP_USR-28a87365-abc1-49b7-b949-6fe097c1d4e7', { locale: "es-AR" });
   const bricksBuilder = mp.bricks();
-  
+
   const renderWalletBrick = async (bricksBuilder) => {
 
     const settings = {
@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
            * Here you can hide loadings from your site, for example.
           */
         },
-        
+
         onSubmit: () => {
           /** 
            * The wallet brick handles form submission internally here.
@@ -281,11 +281,11 @@ document.addEventListener("DOMContentLoaded", () => {
               streetName: formData.get("address"),
               city: formData.get("city"),
               provinceCode: formData.get("provinceCode"),
-              postalCodeDestination:formData.get("postalCodeDestination")
+              postalCodeDestination: formData.get("postalCodeDestination")
             }
           };
 
-          
+
           return new Promise((resolve, reject) => {
             fetch(ORDERS_ENDPOINT, {
               method: "POST",
@@ -295,16 +295,16 @@ document.addEventListener("DOMContentLoaded", () => {
               },
               body: JSON.stringify(payload),
             }).then((response) => response.json())
-            .then((response) => {
-              // resolve the promise with the ID of the preference
-              resolve(response.payment.preference_id);
-              localStorage.removeItem(CART_KEY);
-              form.reset();
-              renderCart();
-            }).catch((error) => {
-              // handle error response when trying to create preference
-              reject();
-            });
+              .then((response) => {
+                // resolve the promise with the ID of the preference
+                resolve(response.payment.preference_id);
+                localStorage.removeItem(CART_KEY);
+                form.reset();
+                renderCart();
+              }).catch((error) => {
+                // handle error response when trying to create preference
+                reject();
+              });
           });
         },
       },
@@ -367,18 +367,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const formData = new FormData(form);
     const cartTotal = getCartTotal();
-    const totalQuantity = getCart().reduce((sum, item) => {
-      return sum + item.quantity;
-    }, 0);
+
+    const calculateVolume = async () => {
+      const productsInCart = getCart();
+
+      const dimensions = productsInCart.reduce((acc, item) => {
+        const width = item?.dimensions?.width ?? 0;
+        const height = item?.dimensions?.height ?? 0;
+        const length = item?.dimensions?.length ?? 0;
+        const weight = item?.dimensions?.weight ?? 0;
+
+        // Volumen de una unidad
+        const volume = width * height * length;
+
+        return {
+          totalVolume: acc.totalVolume + (volume * item.quatity),
+          totalweight: acc.weight + (weight * item.quatity)
+        };
+      }, {
+        totalVolume: 0,
+        totalweight: 0,
+      });
+
+      // Lado del cubo equivalente
+      const cubeSide = Math.ceil(Math.cbrt(dimensions.totalVolume));
+
+      return {
+        width: cubeSide,
+        height: cubeSide,
+        length: cubeSide,
+        weight: Math.ceil(dimensions.totalweight)
+      };
+    };
+
+    const shipmentDimensions = await calculateVolume();
 
     const shippingData = {
       postalCodeDestination: formData.get("postalCodeDestination"),
       deliveredType: formData.get("deliveryMethod") === "sucursal" ? "S" : "D",
       dimensions: {
-        weight: 500 * totalQuantity,
-        height: 20,
-        width: 11,
-        length: 8 * totalQuantity,
+        weight: shipmentDimensions.weight,
+        height: shipmentDimensions.height,
+        width: shipmentDimensions.width,
+        length: shipmentDimensions.legth,
       },
     };
 
@@ -394,17 +425,17 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         body: JSON.stringify(shippingData),
       }).then((response) => response.json())
-      .then((response) => {
-        
-        renderWalletBrick(bricksBuilder);
-        openPaymentModal(response.rates.at(0).price                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             , cartTotal);
-        setMessage("Listo, confirma el pago en el modal.", "success");
-        resolve(response.total);
-      }).catch((error) => {
-        setMessage("No pudimos calcular el envío. Intentá nuevamente.", "error");
-        submitBtn.disabled = false;
-        reject();
-      });
+        .then((response) => {
+
+          renderWalletBrick(bricksBuilder);
+          openPaymentModal(response.rates.at(0).price, cartTotal);
+          setMessage("Listo, confirma el pago en el modal.", "success");
+          resolve(response.total);
+        }).catch((error) => {
+          setMessage("No pudimos calcular el envío. Intentá nuevamente.", "error");
+          submitBtn.disabled = false;
+          reject();
+        });
     });
   });
 
