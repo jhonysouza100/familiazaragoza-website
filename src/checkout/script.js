@@ -255,7 +255,16 @@ document.addEventListener("DOMContentLoaded", () => {
       // La API responde un array de arrays; lo aplanamos.
       const flat = Array.isArray(data) ? data.flat() : [];
       // Solo sucursales activas.
-      const activeAgencies = flat.filter((a) => a && a.status === "ACTIVE");
+      const activeAgencies = flat
+        .filter((a) => a && a.status === "ACTIVE")
+        .sort((a, b) => {
+          const cityA = a?.location?.address?.city || "";
+          const cityB = b?.location?.address?.city || "";
+
+          return cityA.localeCompare(cityB, "es", {
+            sensitivity: "base",
+          });
+        });
 
       saveAgencies(activeAgencies);
       populateCities(activeAgencies);
@@ -276,7 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /** 🏙️ Puebla el select de ciudades usando el índice de cada agencia como value */
   const populateCities = (agencies) => {
-    citySelect.innerHTML = '<option value="" disabled selected>Seleccioná una ciudad</option>';
+    citySelect.innerHTML = '<option value="" disabled selected>Seleccioná una sucursal</option>';
     agencies.forEach((agency, index) => {
       const city = agency?.location?.address?.city || agency?.name || "Sucursal";
       const option = document.createElement("option");
@@ -384,7 +393,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const bricksBuilder = mp.bricks();
 
   const renderWalletBrick = async (bricksBuilder) => {
-    
+
     const settings = {
       initialization: {
         redirectMode: "modal", // modal, app, blank
@@ -470,8 +479,8 @@ document.addEventListener("DOMContentLoaded", () => {
               },
               body: JSON.stringify(payload),
             })
-            .then((response) => response.json())
-            .then((response) => {
+              .then((response) => response.json())
+              .then((response) => {
                 // resolve the promise with the ID of the preference
                 resolve(response.payment.preference_id);
                 //localStorage.removeItem(CART_KEY);
