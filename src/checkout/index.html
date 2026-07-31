@@ -78,37 +78,7 @@
               <input class="form_input" type="email" id="email" name="email" autocomplete="email" required />
             </div>
 
-            <!--=============== MÉTODO DE ENTREGA ===============-->
-            <fieldset class="form_field form_delivery">
-              <legend class="form_label">Método de entrega</legend>
-              <label class="form_radio">
-                <input type="radio" name="deliveryMethod" value="domicilio" checked />
-                <span>Envío a domicilio</span>
-              </label>
-              <label class="form_radio">
-                <input type="radio" name="deliveryMethod" value="sucursal" />
-                <span>Retiro en sucursal</span>
-              </label>
-            </fieldset>
-
-            <div class="form_field">
-              <label class="form_label" for="address">Domicilio</label>
-              <input class="form_input" type="text" id="address" name="address" autocomplete="street-address"
-                required />
-            </div>
-
-            <div class="form_row">
-              <div class="form_field">
-                <label class="form_label" for="city">Ciudad</label>
-                <input class="form_input" type="text" id="city" name="city" autocomplete="address-level2" required />
-              </div>
-              <div class="form_field">
-                <label class="form_label" for="postalCode">Código postal</label>
-                <input class="form_input" type="text" inputmode="numeric" id="postalCode" name="postalCodeDestination"
-                  autocomplete="postal-code" required />
-              </div>
-            </div>
-
+            <!--=============== PROVINCIA ===============-->
             <div class="form_field">
               <label class="form_label" for="provinceCode">Provincia</label>
               <select class="form_input" id="provinceCode" name="provinceCode" autocomplete="address-level1" required>
@@ -138,6 +108,54 @@
                 <option value="V">Tierra del Fuego</option>
                 <option value="T">Tucumán</option>
               </select>
+            </div>
+
+            <!--=============== CIUDAD (dinámico) ===============-->
+            <div class="form_field" id="city-field" hidden>
+              <label class="form_label" for="city">Ciudad</label>
+              <select class="form_input" id="city" name="city" autocomplete="address-level2" required disabled>
+                <option value="" disabled selected>Seleccioná una ciudad</option>
+              </select>
+              <span class="form_hint" id="city-loading" hidden>Cargando sucursales...</span>
+            </div>
+
+            <!--=============== CÓDIGO POSTAL (dinámico, solo lectura) ===============-->
+            <div class="form_field" id="postal-field" hidden>
+              <label class="form_label" for="postalCode">Código postal</label>
+              <input class="form_input" type="text" id="postalCode" name="postalCodeDestination"
+                autocomplete="postal-code" readonly required />
+            </div>
+
+            <!--=============== MÉTODO DE ENTREGA (dinámico) ===============-->
+            <div class="form_field" id="delivery-field" hidden>
+              <label class="form_label" for="deliveryMethod">Método de entrega</label>
+              <select class="form_input" id="deliveryMethod" name="deliveryMethod" required disabled>
+                <option value="" disabled selected>Seleccioná un método</option>
+              </select>
+            </div>
+
+            <!--=============== RETIRO EN SUCURSAL (dinámico, solo lectura) ===============-->
+            <div class="form_row" id="pickup-fields" hidden>
+              <div class="form_field">
+                <label class="form_label" for="pickupStreetName">Calle de la sucursal</label>
+                <input class="form_input" type="text" id="pickupStreetName" name="pickupStreetName" readonly />
+              </div>
+              <div class="form_field">
+                <label class="form_label" for="pickupStreetNumber">Número</label>
+                <input class="form_input" type="text" id="pickupStreetNumber" name="pickupStreetNumber" readonly />
+              </div>
+            </div>
+
+            <!--=============== ENVÍO A DOMICILIO (dinámico, editable) ===============-->
+            <div class="form_row" id="home-fields" hidden>
+              <div class="form_field">
+                <label class="form_label" for="address">Nombre de la calle</label>
+                <input class="form_input" type="text" id="address" name="address" autocomplete="street-address" />
+              </div>
+              <div class="form_field">
+                <label class="form_label" for="streetNumber">Altura</label>
+                <input class="form_input" type="text" inputmode="numeric" id="streetNumber" name="streetNumber" />
+              </div>
             </div>
 
             <p class="form_message" id="form-message" role="status" aria-live="polite"></p>

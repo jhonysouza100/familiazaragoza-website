@@ -2,14 +2,31 @@
 document.addEventListener("DOMContentLoaded", () => {
   const CART_KEY = "cart";
   const ORDERS_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/orders";
+  const AGENCIES_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/shipments/micorreo/agencies?provinceCode="
   const SHIPMENT_ENDPOINT = "https://restful-api-v4.vercel.app/api/v1/shipments/micorreo/rates";
+  const AGENCIES_KEY = "agencies";
   const itemsContainer = document.getElementById("checkout-items");
   const totalEl = document.getElementById("checkout-total");
   const form = document.getElementById("shipping-form");
   const submitBtn = document.getElementById("submit-btn");
   const messageEl = document.getElementById("form-message");
-  const addressInput = document.getElementById("address");
   const paymentModal = document.getElementById("payment-modal");
+
+  /*=============== CAMPOS DINÁMICOS DE ENVÍO ===============*/
+  const provinceSelect = document.getElementById("provinceCode");
+  const cityField = document.getElementById("city-field");
+  const citySelect = document.getElementById("city");
+  const cityLoading = document.getElementById("city-loading");
+  const postalField = document.getElementById("postal-field");
+  const postalInput = document.getElementById("postalCode");
+  const deliveryField = document.getElementById("delivery-field");
+  const deliverySelect = document.getElementById("deliveryMethod");
+  const pickupFields = document.getElementById("pickup-fields");
+  const pickupStreetName = document.getElementById("pickupStreetName");
+  const pickupStreetNumber = document.getElementById("pickupStreetNumber");
+  const homeFields = document.getElementById("home-fields");
+  const addressInput = document.getElementById("address");
+  const streetNumberInput = document.getElementById("streetNumber");
   const paymentModalClose = document.getElementById("payment-modal-close");
   const paymentModalOverlay = document.querySelector(".payment_modal-overlay");
 
@@ -167,7 +184,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /*=============== FORMULARIO DE ENVÍO ===============*/
 
-  /** 🔀 Habilita/deshabilita el domicilio según el método de entrega */
+  /** 💾 Lee/guarda las sucursales cacheadas en localStorage */
+  const getAgencies = () => JSON.parse(localStorage.getItem(AGENCIES_KEY) || "[]");
+  const saveAgencies = (agencies) => localStorage.setItem(AGENCIES_KEY, JSON.stringify(agencies));
+
+  /** 🔎 Devuelve la agencia seleccionada según la ciudad elegida (índice guardado en el value) */
+  const getSelectedAgency = () => {
+    const index = citySelect.value;
+    if (index === "") return null;
+    return getAgencies()[Number(index)] || null;
+  };
+
+  /** ✅ Habilita el botón de envío solo si el carrito y el form son válidos */
   const updateSubmitState = () => {
     const cart = getCart();
     const hasItems = cart.length > 0;
@@ -175,20 +203,159 @@ document.addEventListener("DOMContentLoaded", () => {
     submitBtn.disabled = !hasItems || !isValid;
   };
 
+  /** 👁️ Muestra u oculta un contenedor de campos */
+  const toggleField = (el, show) => {
+    if (el) el.hidden = !show;
+  };
+
+  /** 🔻 Reinicia la cascada de campos a partir de la ciudad */
+  const resetFromCity = () => {
+    citySelect.innerHTML = '<option value="" disabled selected>Seleccioná una ciudad</option>';
+    citySelect.disabled = true;
+    resetFromPostal();
+  };
+
+  /** 🔻 Reinicia código postal, método de entrega y campos de dirección */
+  const resetFromPostal = () => {
+    postalInput.value = "";
+    deliverySelect.innerHTML = '<option value="" disabled selected>Seleccioná un método</option>';
+    deliverySelect.disabled = true;
+    deliverySelect.required = false;
+    toggleField(postalField, false);
+    toggleField(deliveryField, false);
+    resetDeliveryDetails();
+  };
+
+  /** 🔻 Limpia y oculta los campos de sucursal/domicilio */
+  const resetDeliveryDetails = () => {
+    toggleField(pickupFields, false);
+    toggleField(homeFields, false);
+    pickupStreetName.value = "";
+    pickupStreetNumber.value = "";
+    addressInput.value = "";
+    addressInput.required = false;
+    streetNumberInput.value = "";
+    streetNumberInput.required = false;
+  };
+
+  /** 🌐 Consulta las sucursales de la provincia y arma el select de ciudades */
+  const loadAgencies = async (provinceCode) => {
+    resetFromCity();
+    toggleField(cityField, true);
+    cityLoading.hidden = false;
+    citySelect.disabled = true;
+    updateSubmitState();
+
+    try {
+      const response = await fetch(AGENCIES_ENDPOINT + provinceCode, {
+        headers: { "x-api-key": "x-api-fliazaragoza" },
+      });
+      const data = await response.json();
+
+      // La API responde un array de arrays; lo aplanamos.
+      const flat = Array.isArray(data) ? data.flat() : [];
+      // Solo sucursales activas.
+      const activeAgencies = flat.filter((a) => a && a.status === "ACTIVE");
+
+      saveAgencies(activeAgencies);
+      populateCities(activeAgencies);
+
+      if (activeAgencies.length === 0) {
+        setMessage("No hay sucursales disponibles en esta provincia.", "error");
+      } else {
+        setMessage("");
+      }
+    } catch (error) {
+      saveAgencies([]);
+      setMessage("No pudimos cargar las sucursales. Intentá nuevamente.", "error");
+    } finally {
+      cityLoading.hidden = true;
+      updateSubmitState();
+    }
+  };
+
+  /** 🏙️ Puebla el select de ciudades usando el índice de cada agencia como value */
+  const populateCities = (agencies) => {
+    citySelect.innerHTML = '<option value="" disabled selected>Seleccioná una ciudad</option>';
+    agencies.forEach((agency, index) => {
+      const city = agency?.location?.address?.city || agency?.name || "Sucursal";
+      const option = document.createElement("option");
+      option.value = String(index);
+      option.textContent = `${city} - ${agency?.name || ""}`.trim();
+      citySelect.appendChild(option);
+    });
+    citySelect.disabled = agencies.length === 0;
+  };
+
+  /** 🏙️ Al elegir una ciudad: muestra el código postal y arma el método de entrega */
+  const handleCityChange = () => {
+    resetFromPostal();
+    const agency = getSelectedAgency();
+    if (!agency) {
+      updateSubmitState();
+      return;
+    }
+
+    // Código postal (solo lectura)
+    postalInput.value = agency?.location?.address?.postalCode || "";
+    toggleField(postalField, true);
+
+    // Método de entrega según los servicios habilitados
+    const services = agency?.services || {};
+    const canPickup = services.pickupAvailability === true;
+    const canDeliver = services.packageReception === true;
+
+    deliverySelect.innerHTML = '<option value="" disabled selected>Seleccioná un método</option>';
+    if (canDeliver) {
+      deliverySelect.insertAdjacentHTML("beforeend", '<option value="domicilio">Envío a domicilio</option>');
+    }
+    if (canPickup) {
+      deliverySelect.insertAdjacentHTML("beforeend", '<option value="sucursal">Retiro en sucursal</option>');
+    }
+
+    // Si solo hay una opción disponible, la seleccionamos automáticamente.
+    const options = deliverySelect.querySelectorAll('option[value]:not([value=""])');
+    deliverySelect.disabled = options.length === 0;
+    deliverySelect.required = options.length > 0;
+    toggleField(deliveryField, options.length > 0);
+
+    if (options.length === 1) {
+      deliverySelect.value = options[0].value;
+      handleDeliveryChange();
+    }
+
+    updateSubmitState();
+  };
+
+  /** 🚚 Al elegir el método de entrega: muestra los campos de sucursal o de domicilio */
   const handleDeliveryChange = () => {
-    const method = form.querySelector('input[name="deliveryMethod"]:checked')?.value;
-    const isPickup = method === "sucursal";
-    if (addressInput) {
-      addressInput.disabled = isPickup;
-      addressInput.required = !isPickup;
-      if (isPickup) addressInput.value = "";
+    resetDeliveryDetails();
+    const method = deliverySelect.value;
+    const agency = getSelectedAgency();
+
+    if (method === "sucursal") {
+      pickupStreetName.value = agency?.location?.address?.streetName || "";
+      pickupStreetNumber.value = agency?.location?.address?.streetNumber || "";
+      toggleField(pickupFields, true);
+    } else if (method === "domicilio") {
+      addressInput.required = true;
+      streetNumberInput.required = true;
+      toggleField(homeFields, true);
     }
     updateSubmitState();
   };
 
-  form.querySelectorAll('input[name="deliveryMethod"]').forEach((radio) => {
-    radio.addEventListener("change", handleDeliveryChange);
+  // Provincia → carga sucursales
+  provinceSelect.addEventListener("change", () => {
+    console.log("[v0] province change fired:", provinceSelect.value);
+    if (provinceSelect.value) loadAgencies(provinceSelect.value);
   });
+
+  // Ciudad → muestra código postal y método de entrega
+  citySelect.addEventListener("change", handleCityChange);
+
+  // Método de entrega → muestra campos de sucursal o domicilio
+  deliverySelect.addEventListener("change", handleDeliveryChange);
 
   form.querySelectorAll("input, select").forEach((control) => {
     control.addEventListener("input", updateSubmitState);
@@ -217,7 +384,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const bricksBuilder = mp.bricks();
 
   const renderWalletBrick = async (bricksBuilder) => {
-
+    
     const settings = {
       initialization: {
         redirectMode: "modal", // modal, app, blank
@@ -227,11 +394,11 @@ document.addEventListener("DOMContentLoaded", () => {
         valueProp: "security_safety",
         customStyle: {
           hideValueProp: false,
-          valuePropColor: "white",
-          buttonHeight: "48px",
+          valuePropColor: "white", // blue, white, black
+          buttonHeight: "48px", // min 48px - max free
           borderRadius: "6px",
-          verticalPadding: "8px",
-          horizontalPadding: "0px",
+          verticalPadding: "8px", // min 8px - max free
+          horizontalPadding: "0px" // min 0px - max free
         },
         checkout: {
           theme: {
@@ -262,6 +429,8 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
           const formData = new FormData(form);
+          const isPickup = formData.get("deliveryMethod") === "sucursal";
+          const agency = getSelectedAgency();
 
           const payload = {
             items: cart.map((item) => ({
@@ -272,35 +441,42 @@ document.addEventListener("DOMContentLoaded", () => {
               method: "Mercadopago",
             },
             shipment: {
-              deliveredType: formData.get("deliveryMethod") === "sucursal" ? "S" : "D",
-              pickupLocation: formData.get(""),
+              deliveredType: isPickup ? "S" : "D",
+              pickupLocation: isPickup ? (agency?.code || "") : "",
               fullName: formData.get("fullName"),
               dni: formData.get("dni"),
               phone: formData.get("phone"),
               email: formData.get("email"),
-              streetName: formData.get("address"),
-              city: formData.get("city"),
+              streetName: isPickup
+                ? (agency?.location?.address?.streetName || "")
+                : formData.get("address"),
+              streetNumber: isPickup
+                ? (agency?.location?.address?.streetNumber || "")
+                : formData.get("streetNumber"),
+              city: formData.get("city") && agency
+                ? (agency?.location?.address?.city || "")
+                : "",
               provinceCode: formData.get("provinceCode"),
               postalCodeDestination: formData.get("postalCodeDestination")
             }
           };
-
 
           return new Promise((resolve, reject) => {
             fetch(ORDERS_ENDPOINT, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                "x-api-key": "x-api-fliazaragoza"
+                "x-api-key": "x-api-123"
               },
               body: JSON.stringify(payload),
-            }).then((response) => response.json())
-              .then((response) => {
+            })
+            .then((response) => response.json())
+            .then((response) => {
                 // resolve the promise with the ID of the preference
                 resolve(response.payment.preference_id);
-                localStorage.removeItem(CART_KEY);
-                form.reset();
-                renderCart();
+                //localStorage.removeItem(CART_KEY);
+                //form.reset();
+                //renderCart();
               }).catch((error) => {
                 // handle error response when trying to create preference
                 reject();
@@ -372,17 +548,22 @@ document.addEventListener("DOMContentLoaded", () => {
       const productsInCart = getCart();
 
       const dimensions = productsInCart.reduce((acc, item) => {
-        const width = item?.dimensions?.width ?? 0;
-        const height = item?.dimensions?.height ?? 0;
-        const length = item?.dimensions?.length ?? 0;
-        const weight = item?.dimensions?.weight ?? 0;
+        const width = Number(item?.dimensions?.width) || 0;
+        const height = Number(item?.dimensions?.height) || 0;
+        const length = Number(item?.dimensions?.length) || 0;
+        const weight = Number(item?.dimensions?.weight) || 0;
+
+        // Cantidad de unidades del ítem (usa minCant como fallback)
+        const quantity = Number(item.quantity) > 0
+          ? Number(item.quantity)
+          : (Number(item.minCant) > 0 ? Number(item.minCant) : 1);
 
         // Volumen de una unidad
         const volume = width * height * length;
 
         return {
-          totalVolume: acc.totalVolume + (volume * item.quatity),
-          totalweight: acc.weight + (weight * item.quatity)
+          totalVolume: acc.totalVolume + (volume * quantity),
+          totalweight: acc.totalweight + (weight * quantity),
         };
       }, {
         totalVolume: 0,
@@ -409,7 +590,7 @@ document.addEventListener("DOMContentLoaded", () => {
         weight: shipmentDimensions.weight,
         height: shipmentDimensions.height,
         width: shipmentDimensions.width,
-        length: shipmentDimensions.legth,
+        length: shipmentDimensions.length,
       },
     };
 
@@ -441,6 +622,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Inicializar
   renderCart();
-  handleDeliveryChange();
+  updateSubmitState();
 });
-

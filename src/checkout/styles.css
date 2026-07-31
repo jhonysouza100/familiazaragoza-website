@@ -108,6 +108,21 @@ select.form_input {
 .form_input.has-error {
   border-color: var(--error-color);
 }
+.form_input[readonly] {
+  background-color: hsl(0, 0%, 14%);
+  color: var(--text-color-light);
+  cursor: default;
+}
+
+/* Los campos ocultos deben respetarse aunque .form_field use flex/grid */
+.form_field[hidden],
+.form_row[hidden] {
+  display: none;
+}
+.form_hint {
+  font-size: var(--smaller-font-size);
+  color: var(--text-color-light);
+}
 
 .form_row {
   display: grid;
