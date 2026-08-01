@@ -389,7 +389,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.walletBrickController.unmount();
   }
 
-  const mp = new MercadoPago('APP_USR-28a87365-abc1-49b7-b949-6fe097c1d4e7', { locale: "es-AR" });
+  const mp = new MercadoPago('APP_USR-e8aac406-e839-47f9-9865-b6b0874b9b2d', { locale: "es-AR" });
   const bricksBuilder = mp.bricks();
 
   const renderWalletBrick = async (bricksBuilder) => {
