@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--=============== FAVICON ===============-->
+  <link rel="icon" type="image/png" href="/public/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/public/favicon.svg" />
+  <link rel="shortcut icon" type="image/x-icon" href="/public/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png" />
+  <!--=============== REMIXICONS ===============-->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <!--=============== CSS ===============-->
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Finalizar compra | Familia Zaragoza</title>
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+</head>
+
+<body>
+  <!--==================== HEADER ====================-->
+  <header class="checkout_header">
+    <div class="checkout_header-inner container">
+      <a href="/" class="checkout_logo" aria-label="Volver al inicio">
+        <img class="checkout_logo-img" src="/public/img/favicon.png" alt="Familia Zaragoza Yerba Mate" />
+        Familia Zaragoza
+      </a>
+      <a href="/#catalog" class="checkout_back">
+        <i class="ri-arrow-left-line"></i>
+        Seguir comprando
+      </a>
+    </div>
+  </header>
+
+  <!--==================== MAIN ====================-->
+  <main class="checkout section">
+    <div class="container">
+      <h1 class="checkout_title">Finalizar Compra</h1>
+      <p class="checkout_subtitle">Revisá tu pedido y completá los datos para el envío.</p>
+
+      <div class="checkout_grid">
+        <!--=============== COLUMNA 1: DETALLE DEL CARRITO ===============-->
+        <section class="checkout_cart" aria-label="Detalle del pedido">
+          <h2 class="checkout_block-title">Tu pedido</h2>
+          <div class="checkout_items" id="checkout-items">
+            <!-- Dynamic with JS -->
+          </div>
+          <div class="checkout_shipment-cost" id="checkout-shipment-cost">
+            <!-- Dynamic with JS -->
+          </div>
+          <div class="checkout_total-row">
+            <span>Total</span>
+            <span class="checkout_total" id="checkout-total">$0</span>
+          </div>
+        </section>
+
+        <!--=============== COLUMNA 2: FORMULARIO DE ENVÍO ===============-->
+        <section class="checkout_form-wrap" aria-label="Datos de envío">
+          <h2 class="checkout_block-title">Datos de envío</h2>
+          <form class="checkout_form" id="shipping-form" novalidate>
+            <div class="form_field">
+              <label class="form_label" for="fullName">Nombre Completo</label>
+              <input class="form_input" type="text" id="fullName" name="fullName" autocomplete="given-name" required />
+            </div>
+
+            <div class="form_row">
+              <div class="form_field">
+                <label class="form_label" for="phone">Teléfono</label>
+                <input class="form_input" type="text" inputmode="numeric" pattern="[0-9]*" id="phone" name="phone" autocomplete="tel" required />
+              </div>
+              <div class="form_field">
+                <label class="form_label" for="dni">DNI</label>
+                <input class="form_input" type="text" inputmode="numeric" pattern="[0-9]*" id="dni" name="dni" autocomplete="dni"
+                  required />
+              </div>
+            </div>
+
+            <div class="form_field">
+              <label class="form_label" for="email">Email</label>
+              <input class="form_input" type="email" id="email" name="email" autocomplete="email" required />
+            </div>
+
+            <!--=============== PROVINCIA ===============-->
+            <div class="form_field">
+              <label class="form_label" for="provinceCode">Provincia</label>
+              <select class="form_input" id="provinceCode" name="provinceCode" autocomplete="address-level1" required>
+                <option value="" disabled selected>Seleccioná una provincia</option>
+                <option value="B">Buenos Aires</option>
+                <option value="C">Ciudad Autónoma de Buenos Aires</option>
+                <option value="K">Catamarca</option>
+                <option value="H">Chaco</option>
+                <option value="U">Chubut</option>
+                <option value="X">Córdoba</option>
+                <option value="W">Corrientes</option>
+                <option value="E">Entre Ríos</option>
+                <option value="P">Formosa</option>
+                <option value="Y">Jujuy</option>
+                <option value="L">La Pampa</option>
+                <option value="F">La Rioja</option>
+                <option value="M">Mendoza</option>
+                <option value="N">Misiones</option>
+                <option value="Q">Neuquén</option>
+                <option value="R">Río Negro</option>
+                <option value="A">Salta</option>
+                <option value="J">San Juan</option>
+                <option value="D">San Luis</option>
+                <option value="Z">Santa Cruz</option>
+                <option value="S">Santa Fe</option>
+                <option value="G">Santiago del Estero</option>
+                <option value="V">Tierra del Fuego</option>
+                <option value="T">Tucumán</option>
+              </select>
+            </div>
+
+            <!--=============== CÓDIGO POSTAL (dinámico, solo lectura) ===============-->
+            <div class="form_field" id="postal-field" hidden>
+              <label class="form_label" for="postalCode">Código postal</label>
+              <input class="form_input" type="text" id="postalCode" name="postalCodeDestination"
+                autocomplete="postal-code" required />
+            </div>
+
+            <!--=============== CIUDAD (dinámico) ===============-->
+            <div class="form_field" id="city-field" hidden>
+              <label class="form_label" for="city">Sucursal de Correo Argentino</label>
+              <select class="form_input" id="city" name="city" autocomplete="address-level2" required disabled>
+                <option value="" disabled selected>Seleccioná una ciudad</option>
+              </select>
+              <span class="form_hint" id="city-loading" hidden>Cargando sucursales...</span>
+            </div>
+
+            <!--=============== MÉTODO DE ENTREGA (dinámico) ===============-->
+            <div class="form_field" id="delivery-field" hidden>
+              <label class="form_label" for="deliveryMethod">Método de entrega</label>
+              <select class="form_input" id="deliveryMethod" name="deliveryMethod" required disabled>
+                <option value="" disabled selected>Seleccioná un método</option>
+              </select>
+            </div>
+
+            <!--=============== RETIRO EN SUCURSAL (dinámico, solo lectura) ===============-->
+            <div class="form_row" id="pickup-fields" hidden>
+              <div class="form_field">
+                <label class="form_label" for="pickupStreetName">Calle de la sucursal</label>
+                <input class="form_input" type="text" id="pickupStreetName" name="pickupStreetName" readonly />
+              </div>
+              <div class="form_field">
+                <label class="form_label" for="pickupStreetNumber">Número</label>
+                <input class="form_input" type="text" id="pickupStreetNumber" name="pickupStreetNumber" readonly />
+              </div>
+            </div>
+
+            <!--=============== ENVÍO A DOMICILIO (dinámico, editable) ===============-->
+            <div class="form_row" id="home-fields" hidden>
+              <div class="form_field">
+                <label class="form_label" for="address">Nombre de la calle</label>
+                <input class="form_input" type="text" id="address" name="address" autocomplete="street-address" />
+              </div>
+              <div class="form_field">
+                <label class="form_label" for="streetNumber">Altura</label>
+                <input class="form_input" type="text" inputmode="numeric" id="streetNumber" name="streetNumber" />
+              </div>
+            </div>
+
+            <p class="form_message" id="form-message" role="status" aria-live="polite"></p>
+
+            <button type="submit" class="button checkout_submit" id="submit-btn" disabled>
+              Listo para pagar
+              <i class="ri-check-line"></i>
+            </button>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!--==================== MODAL PAGO (MERCADO PAGO) ====================-->
+  <div class="payment_modal" id="payment-modal" role="dialog" aria-modal="true" aria-labelledby="payment-modal-title"
+    aria-hidden="true">
+    <div class="payment_modal-overlay" data-close-modal></div>
+    <div class="payment_modal-content" role="document">
+      <button type="button" class="payment_modal-close" id="payment-modal-close" aria-label="Cerrar">
+        <i class="ri-close-line"></i>
+      </button>
+
+      <div class="payment_modal-icon">
+        <i class="ri-checkbox-circle-line"></i>
+      </div>
+      <h2 class="payment_modal-title" id="payment-modal-title">Pedido confirmado!</h2>
+      <p class="payment_modal-text">
+        Completá el pago para finalizar la compra.
+      </p>
+
+      <div class="payment_modal-summary--details">
+        <div>
+          <span><i class="ri-money-dollar-circle-line"></i> Subtotal</span>
+          <span id="payment-order-cart-total">$0</span>
+        </div>
+        <div>
+          <span><i class="ri-truck-line"></i> Costo de envío</span>
+          <span id="payment-order-shipment">$0</span>
+        </div>
+      </div>
+      <div class="payment_modal-summary payment_modal-summary--total">
+        <span>Total a pagar</span>
+        <span class="payment_modal-total" id="payment-order-total">$0</span>
+      </div>
+      <!-- JS Builder SDK-->
+      <div id="walletBrick_container"></div>
+      <script>
+
+      </script>
+      <p class="payment_modal-note">Serás redirigido a Mercado Pago.</p>
+    </div>
+  </div>
+
+  <!--==================== FOOTER ====================-->
+  <footer class="footer section">
+    <div class="footer_inner container">
+      <div class="footer_content">
+        <div>
+          <div class="footer_top">
+            <div class="footer_logo">
+              <img class="logo_img" src="/public/img/favicon.png" alt="Familia Zaragoza Yerba Mate">
+              Famila Zaragoza
+            </div>
+          </div>
+          <div class="footer_columns">
+            <div class="footer_col">
+              <div class="footer_col-title">Información</div>
+              <div class="footer_phone">+54 9 3755 53-1691</div>
+              <p>hola@familiazaragoza.com</p>
+              <p>Papa Francisco, San Cayetano 01, N3370 Puerto Iguazú, Misiones</p>
+            </div>
+            <div class="footer_col">
+              <div class="footer_col-title"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer_bottom">
+        <span class="footer_copyright">
+          © Copyright 2026,
+          <a href="https://jhonysouza100.site" title="Developer website" target="_blank" rel="nofollow">ChillHop
+            Studio</a>
+        </span>
+        <div class="footer_bottom-links">
+
+        </div>
+        <div class="footer_socials">
+          <a href="https://www.instagram.com/familiazaragoza_ym/" class="footer_social-icon"
+            aria-label="perfil de instagram" title="@familiazaragoza_ym" rel="nofollow" target="_blank">
+            <i class="ri-instagram-line"></i>
+          </a>
+          <a href="https://web.facebook.com/profile.php?id=61558365211172&ref=NONE_xav_ig_profile_page_web"
+            class="footer_social-icon" aria-label="perfil de facebook" title="Perfil de Facebook" rel="nofollow"
+            target="_blank">
+            <i class="ri-facebook-fill"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!--=============== MAIN JS ===============-->
+  <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,5 +1,7 @@
 # *
 User-agent: *
+Disallow: /checkout/
+Disallow: /payment/success/
 Allow: /
 
 # Host
