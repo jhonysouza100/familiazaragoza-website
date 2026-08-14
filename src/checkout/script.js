@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const paymentModal = document.getElementById("payment-modal");
   let currentShipmentCost = 0;
 
+
   /*=============== CAMPOS DINÁMICOS DE ENVÍO ===============*/
   const provinceSelect = document.getElementById("provinceCode");
   const cityField = document.getElementById("city-field");
@@ -456,7 +457,7 @@ document.addEventListener("DOMContentLoaded", () => {
         toggleField(postalField, true);
         const postalCode = getShipmentPostalCode();
         if (postalCode) {
-          postalField.value = postalCode;
+          postalInput.value = postalCode;
           const filteredAgencies = filtrarPorCodigoPostal(activeAgencies, postalCode);
           populateCities(filteredAgencies);
         }
@@ -493,7 +494,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Código postal (solo lectura)
-    postalInput.value = agency?.location?.address?.postalCode || "";
+    const postalCode = agency?.location?.address?.postalCode.match(/\d+/g)?.join("") || "";
+    postalInput.value = postalCode;
     toggleField(postalField, true);
 
     // Método de entrega según los servicios habilitados
@@ -527,8 +529,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const handlePostalCodeChange = (e) => {
     const postalCode = e.target.value.trim();
     if (!postalCode) {
-      resetFromPostal();
       updateSubmitState();
+      const agencies = getAgencies();
+      populateCities(agencies);
       return;
     }
 
@@ -537,7 +540,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (filteredAgencies.length === 0) {
       setMessage("No hay sucursales disponibles para este código postal.", "error");
-      resetFromPostal();
       updateSubmitState();
       return;
     }
