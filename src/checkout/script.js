@@ -532,6 +532,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateSubmitState();
       const agencies = getAgencies();
       populateCities(agencies);
+      setMessage("");
       return;
     }
 
