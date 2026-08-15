@@ -242,7 +242,7 @@ const renderProductCards = ({ updatedProductId = null } = {}) => {
       if (cardCheckbox) cardCheckbox.checked = state.isInCart;
       if (decreaseBtn) decreaseBtn.disabled = state.minusDisabled;
       if (increaseBtn) increaseBtn.disabled = state.plusDisabled;
-      if (qtyValue) qtyValue.textContent = state.quantity || 0;
+      if (qtyValue) qtyValue.textContent = state.isInCart ? state.quantity || 0 : 0;
     }
 
     const formCheckbox = formContainer?.querySelector(`.product_checkbox[data-id="${productId}"]`);
@@ -281,6 +281,7 @@ const renderProductCards = ({ updatedProductId = null } = {}) => {
                     <button type="button" class="cart-qty-btn large" data-action="increase" data-id="${p.id}" aria-label="Sumar cantidad" ${plusDisabled ? 'disabled' : ''}>
                       <i class="ri-add-line"></i>
                     </button>
+                    <button class="button add_to_cart-button santiago-class">Agregar al carrito</button>
                   </div>
                 </div>
               </div>
@@ -353,7 +354,7 @@ window.addEventListener('DOMContentLoaded', async () => {
           spaceBetween: 24,
         },
         // desktops
-        767: {
+        970: {
           // Asegurarte de que tu slider tenga al menos el doble de diapositivas que el valor asignado a slidesPerView, o desactivar el loop dinámicamente si no hay suficientes elementos.
           loop: false,
           slidesPerView: 3,

@@ -261,6 +261,13 @@ img {
   align-items: center;
   justify-content: center;
   font-weight: 700;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity .3s, transform .3s;
+}
+.cart-badge.tooltip-active {
+  opacity: 1;
+  transform: scale(1);
 }
 .nav_close {
   display: flex;
@@ -1459,6 +1466,7 @@ footer {
 .cart-qty-btn.large {
   width: 2.25rem;
   height: 2.25rem;
+  aspect-ratio: 1/1;
   font-size: 1.25rem;
 }
 @media screen and (max-width: 767px) {
@@ -1476,6 +1484,13 @@ footer {
   opacity: 0.35;
   cursor: not-allowed;
 }
+.add_to_cart-button {
+  border-radius: 8px;
+  padding: .75rem .5rem;
+  pointer-events: none;
+  margin-left: auto;
+}
+
 .cart-qty-value {
   min-width: 2ch;
   text-align: center;
