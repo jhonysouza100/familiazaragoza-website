@@ -46,12 +46,12 @@
           <div class="checkout_items" id="checkout-items">
             <!-- Dynamic with JS -->
           </div>
-          <div class="checkout_shipment-cost" id="checkout-shipment-cost">
-            <!-- Dynamic with JS -->
-          </div>
           <div class="checkout_total-row">
             <span>Total</span>
             <span class="checkout_total" id="checkout-total">$0</span>
+          </div>
+          <div class="checkout-shipment-panel" id="checkout-shipment-cost">
+            <!-- Dynamic with JS -->
           </div>
         </section>
 
@@ -112,14 +112,13 @@
                 <option value="T">Tucumán</option>
               </select>
             </div>
-
+            
             <!--=============== CÓDIGO POSTAL (dinámico, solo lectura) ===============-->
             <div class="form_field" id="postal-field" hidden>
               <label class="form_label" for="postalCode">Código postal</label>
               <input class="form_input" type="text" id="postalCode" name="postalCodeDestination"
                 autocomplete="postal-code" required />
             </div>
-
             <!--=============== CIUDAD (dinámico) ===============-->
             <div class="form_field" id="city-field" hidden>
               <label class="form_label" for="city">Sucursal de Correo Argentino</label>
@@ -128,6 +127,7 @@
               </select>
               <span class="form_hint" id="city-loading" hidden>Cargando sucursales...</span>
             </div>
+
 
             <!--=============== MÉTODO DE ENTREGA (dinámico) ===============-->
             <div class="form_field" id="delivery-field" hidden>

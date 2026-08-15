@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const messageEl = document.getElementById("form-message");
   const paymentModal = document.getElementById("payment-modal");
   let currentShipmentCost = 0;
-
+  let shipmentOptions = { S: null, D: null };
 
   /*=============== CAMPOS DINÁMICOS DE ENVÍO ===============*/
   const provinceSelect = document.getElementById("provinceCode");
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const streetNumberInput = document.getElementById("streetNumber");
   const paymentModalClose = document.getElementById("payment-modal-close");
   const paymentModalOverlay = document.querySelector(".payment_modal-overlay");
-
+  
   /** ✅ Muestra un mensaje de estado */
   const setMessage = (text, type = "") => {
     messageEl.textContent = text;
@@ -144,13 +144,62 @@ document.addEventListener("DOMContentLoaded", () => {
         </article>`;
     }).join("");
 
-    totalEl.textContent = formatPrice(total + currentShipmentCost);
+    totalEl.textContent = formatPrice(total);
     renderShipmentCalculator();
   };
 
   /**
-   * Calcula las dimensiones y peso totales del carrito para la API de envío.
+   * Devuelve la etiqueta legible para cada tipo de envío.
    */
+  const getShipmentLabel = (type) => {
+    if (type === "S") return "Retiro en sucursal";
+    if (type === "D") return "Envío a domicilio";
+    return "Envío";
+  };
+
+  /**
+   * Selecciona la tarifa clásica para un tipo de entrega.
+   */
+  const pickClassicRate = (rates, type) => {
+    const matching = rates.filter((rate) => rate?.deliveredType === type);
+    if (matching.length === 0) return null;
+    const classic = matching.find((rate) => /clasico/i.test(rate?.productName));
+    return classic || matching[0];
+  };
+
+  const extractShipmentOptions = (rates = []) => ({
+    S: pickClassicRate(rates, "S"),
+    D: pickClassicRate(rates, "D"),
+  });
+
+  const renderShipmentOptions = (cartTotal) => {
+    const optionElements = ["S", "D"].map((type) => {
+      const option = shipmentOptions[type];
+      if (!option || Number(option.price) <= 0) return "";
+      const total = cartTotal + Number(option.price);
+      const eta = option.deliveryTimeMin && option.deliveryTimeMax
+        ? ` (${option.deliveryTimeMin}-${option.deliveryTimeMax} días)`
+        : "";
+      return `
+        <div class="shipment-card">
+          <div class="shipment-card__image" title="Correo Argentino">
+            <img src="https://www.correoargentino.com.ar/MiCorreo/public/img/favicon.png" alt="Correo Argentino" />
+          </div>
+          <div class="shipment-card__content">
+          <div class="shipment-card__info">
+            <span class="shipment-card__title">${getShipmentLabel(type)}: <b>${formatPrice(option.price)}</b></span>
+            </div>
+          <div class="shipment-card__header">
+            <span class="shipment-card__total">Total con envío</span>
+            <span class="shipment-card__price">${formatPrice(total)}</span>
+          </div>
+          </div>
+        </div>`;
+    }).filter(Boolean).join("");
+
+    return optionElements || "<p>No se encontraron opciones de envío.</p>";
+  };
+
   const calculateCartDimensions = () => {
     return getCart().reduce(
       (acc, item) => {
@@ -172,21 +221,22 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   };
 
-  const updateShipmentResultDisplay = (value, show = true, isLoading = false) => {
+  const renderShipmentResults = ({ show = true, isLoading = false } = {}) => {
     const resultEl = shipmentContainer.querySelector("#shipment-result");
-    const valueEl = shipmentContainer.querySelector("#shipment-cost-value");
+    const optionsEl = shipmentContainer.querySelector("#shipment-options");
     const loadingEl = shipmentContainer.querySelector("#shipment-loading");
-    if (!resultEl || !valueEl || !loadingEl) return;
+    if (!resultEl || !optionsEl || !loadingEl) return;
 
     if (isLoading) {
-      valueEl.hidden = true;
+      optionsEl.hidden = true;
       loadingEl.hidden = false;
       resultEl.hidden = false;
       return;
     }
 
-    valueEl.textContent = formatPrice(value);
-    valueEl.hidden = !show;
+    const cartTotal = getCartTotal();
+    optionsEl.innerHTML = renderShipmentOptions(cartTotal);
+    optionsEl.hidden = !show;
     loadingEl.hidden = true;
     resultEl.hidden = !show;
   };
@@ -201,25 +251,45 @@ document.addEventListener("DOMContentLoaded", () => {
     const previousPostal = shipmentContainer.querySelector("#shipment-postal-code")?.value || "";
 
     shipmentContainer.innerHTML = `
-    <form id="shipment-calculator-form" class="checkout_shipment-form shipment-calculator-container">
-      <div class="form_field">
-        <input class="form_input" id="shipment-postal-code" name="shipmentPostalCode" type="text" inputmode="numeric" pattern="[0-9]{4,4}" title="Ingresá exactamente 4 dígitos" placeholder="C.P" value="${previousPostal}" required />
-      </div>
-      <button type="submit" class="button checkout_submit" id="shipment-calculate-btn">
-        Calcular envío
-      </button>
-    </form>
-    <div class="checkout_shipment-result" id="shipment-result" ${currentShipmentCost > 0 ? "" : "hidden"}>
-      <div class="shipment-loading" id="shipment-loading" hidden>
-        <i class="ri-loader-2-line shipment-loading-icon" aria-hidden="true"></i>
-      </div>
-      <strong id="shipment-cost-value" ${currentShipmentCost > 0 ? "" : "hidden"}>${formatPrice(currentShipmentCost)}</strong>
+    <div class="checkout_shipment-panel__form">
+      <form id="shipment-calculator-form" class="checkout_shipment-form shipment-calculator-container">
+        <div class="form_field">
+          <input class="form_input" id="shipment-postal-code" name="shipmentPostalCode" type="text" inputmode="numeric" pattern="[0-9]{4,4}" title="Ingresá exactamente 4 dígitos" placeholder="C.P" value="${previousPostal}" required />
+        </div>
+        <button type="submit" class="button checkout_submit" id="shipment-calculate-btn" data-loading="false">
+          <span class="shipment-button-text">Calcular envío</span>
+          <span class="shipment-button-loading" id="shipment-loading" hidden>
+            <i class="ri-loader-2-line shipment-loading-icon" aria-hidden="true"></i>
+          </span>
+        </button>
+      </form>
     </div>
-      `;
+    <div class="checkout-shipment-result" id="shipment-result" hidden>
+      <div id="shipment-options" class="shipment-option-list"></div>
+    </div>
+    `;
+
+    if ((shipmentOptions.S || shipmentOptions.D) && previousPostal) {
+      renderShipmentResults({ show: true, isLoading: false });
+    }
   };
 
   const getShipmentPostalCode = () => {
     return shipmentContainer.querySelector("#shipment-postal-code")?.value.trim() || "";
+  };
+
+  const setShipmentButtonLoading = (isLoading) => {
+    const postalCode = getShipmentPostalCode();
+    if (!postalCode) return;
+
+    const shipmentButton = shipmentContainer.querySelector("#shipment-calculate-btn");
+    const shipmentText = shipmentContainer.querySelector(".shipment-button-text");
+    const shipmentLoading = shipmentContainer.querySelector(".shipment-button-loading");
+    if (!shipmentButton || !shipmentText || !shipmentLoading) return;
+
+    shipmentButton.disabled = isLoading;
+    shipmentText.hidden = isLoading;
+    shipmentLoading.hidden = !isLoading;
   };
 
   const calculateShipmentCost = async (postalCodeDestination) => {
@@ -243,36 +313,45 @@ document.addEventListener("DOMContentLoaded", () => {
         length: cubeSide,
       },
     };
-
+    
     const response = await fetch(SHIPMENT_ENDPOINT, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
     });
 
     const data = await response.json();
-    const price = Number(data?.rates?.[0]?.price) || 0;
-    if (price <= 0) {
-      throw new Error("No se pudo obtener el costo de envío.");
+    const rates = Array.isArray(data?.rates) ? data.rates : [];
+    shipmentOptions = extractShipmentOptions(rates);
+    if (!shipmentOptions.S && !shipmentOptions.D) {
+      throw new Error("No se pudo obtener las tarifas de envío.");
     }
 
-    currentShipmentCost = price;
-    updateShipmentResultDisplay(price, true, false);
+    currentShipmentCost = 0;
     renderCart();
-    return price;
+    renderShipmentResults({ show: true, isLoading: false });
+    return shipmentOptions;
   };
 
   const recalculateShipmentIfPostalExists = () => {
     const postalCode = getShipmentPostalCode();
     if (!postalCode) return;
-    updateShipmentResultDisplay(0, true, true);
-    calculateShipmentCost(postalCode).catch(() => {
-      currentShipmentCost = 0;
-      updateShipmentResultDisplay(0, false, false);
-      renderCart();
-    });
+
+    setShipmentButtonLoading(true);
+    renderShipmentResults({ show: true, isLoading: true });
+
+    calculateShipmentCost(postalCode)
+      .catch(() => {
+        currentShipmentCost = 0;
+        shipmentOptions = { S: null, D: null };
+        renderShipmentResults({ show: false, isLoading: false });
+        renderCart();
+      })
+      .finally(() => {
+        setShipmentButtonLoading(false);
+      });
   };
 
   shipmentContainer.addEventListener("submit", async (e) => {
@@ -282,21 +361,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const postalCode = getShipmentPostalCode();
     if (!postalCode) {
-      setMessage("Ingresá un código postal para calcular el envío.", "error");
       return;
     }
 
     submitBtn.disabled = true;
-    updateShipmentResultDisplay(0, true, true);
-    setMessage("Calculando costo de envío...", "loading");
+    setShipmentButtonLoading(true);
+    renderShipmentResults({ show: true, isLoading: true });
     try {
       await calculateShipmentCost(postalCode);
-      setMessage("Costo de envío actualizado.", "success");
     } catch (error) {
       currentShipmentCost = 0;
-      updateShipmentResultDisplay(0, false, false);
-      setMessage(error.message || "No pudimos calcular el envío. Intentá nuevamente.", "error");
+      shipmentOptions = { S: null, D: null };
+      renderShipmentResults({ show: false, isLoading: false });
     } finally {
+      setShipmentButtonLoading(false);
       submitBtn.disabled = false;
     }
   });
@@ -525,7 +603,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateSubmitState();
   };
 
-  /** 📄 Al cambiar el código postal: filtra las sucursales */
+   /** 📄 Al cambiar el código postal: filtra las sucursales */
   const handlePostalCodeChange = (e) => {
     const postalCode = e.target.value.trim();
     if (!postalCode) {
@@ -575,7 +653,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (provinceSelect.value) loadAgencies(provinceSelect.value);
   });
 
-  // 
+  // Código postal → filtra sucursales
   postalInput.addEventListener("change", handlePostalCodeChange);
 
   // Ciudad → muestra código postal y método de entrega
@@ -821,14 +899,31 @@ document.addEventListener("DOMContentLoaded", () => {
       fetch(SHIPMENT_ENDPOINT, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(shippingData),
       }).then((response) => response.json())
         .then((response) => {
+          const rates = Array.isArray(response.rates)
+            ? response.rates
+            : Array.isArray(response?.data?.rates)
+              ? response.data.rates
+              : [];
+          const deliveryMethod = formData.get("deliveryMethod");
+          const selectedType = deliveryMethod === "sucursal" ? "S" : deliveryMethod === "domicilio" ? "D" : "";
+          const selectedRate = rates.find((rate) => {
+            const type = String(rate?.deliveredType || rate?.deliveryType || "").toUpperCase();
+            return type === selectedType;
+          }) || rates[0] || null;
+
+          if (!selectedRate || Number(selectedRate.price) <= 0) {
+            throw new Error("No se encontró la tarifa de envío para el método seleccionado.");
+          }
+
+          const selectedPrice = Number(selectedRate.price);
 
           renderWalletBrick(bricksBuilder);
-          openPaymentModal(response.rates.at(0).price, cartTotal);
+          openPaymentModal(selectedPrice, cartTotal);
           setMessage("Listo, confirma el pago en el modal.", "success");
           resolve(response.total);
         }).catch((error) => {
