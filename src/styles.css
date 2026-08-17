@@ -541,7 +541,6 @@ img {
 /* Label clickeable que envuelve toda la card */
 .product_card-label {
   display: grid;
-  cursor: pointer;
   position: relative;
   height: stretch;
 }
@@ -1485,10 +1484,24 @@ footer {
   cursor: not-allowed;
 }
 .add_to_cart-button {
+  display: inline-flex;
+  column-gap: .5rem;
+  width: max-content;
   border-radius: 8px;
-  padding: .75rem .5rem;
-  pointer-events: none;
+  padding: 1rem;
   margin-left: auto;
+  font-size: .75rem;
+  z-index: 10;
+  transition: all .3s;
+}
+.add_to_cart-button.product_added {
+  display: inline-flex;
+}
+.add_to_cart-button i {
+  font-size: 1.25rem;
+}
+.add_to_cart-button:hover {
+  box-shadow: 0 0 12px var(--second-color);
 }
 
 .cart-qty-value {

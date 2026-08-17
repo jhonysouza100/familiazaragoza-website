@@ -224,6 +224,23 @@ const renderProductCards = ({ updatedProductId = null } = {}) => {
     };
   };
 
+  const updateCartLabel = (productId, isInCart) => {
+    const label = document.querySelector(
+      `label[for="product-${productId}"]`
+    );
+
+    if (!label) return;
+
+    label.innerHTML = `
+      ${isInCart ? "QUITAR" : "AGREGAR"}
+      ${
+        isInCart
+          ? "<i class='ri-dislike-line'></i>"
+          : "<i class='ri-heart-add-line'></i>"
+      }
+    `;
+  };
+
   const updateProductCard = (productId) => {
     const product = productsCatalog.find((item) => String(item.id) === String(productId));
     if (!product) return;
@@ -231,6 +248,8 @@ const renderProductCards = ({ updatedProductId = null } = {}) => {
     const state = getProductState(product);
     const checkbox = grid?.querySelector(`.product_checkbox[data-id="${productId}"]`);
     const productCard = checkbox?.closest('.product_card');
+
+    updateCartLabel(product.id, state.isInCart);
 
     if (productCard) {
       const cardCheckbox = productCard.querySelector('.product_checkbox');
@@ -261,7 +280,7 @@ const renderProductCards = ({ updatedProductId = null } = {}) => {
         <div class="swiper-slide">
           <div class="product_card" title="Toca para elegir o eliminar">
             <input type="checkbox" name="products[]" id="product-${p.id}" value="${p.name}" class="product_checkbox" data-id="${p.id}" ${isInCart ? 'checked' : ''}>
-            <label for="product-${p.id}" class="product_card-label">
+            <div class="product_card-label">
               <span class="product_check-icon">
                 <i class="ri-heart-fill"></i>
               </span>
@@ -281,11 +300,15 @@ const renderProductCards = ({ updatedProductId = null } = {}) => {
                     <button type="button" class="cart-qty-btn large" data-action="increase" data-id="${p.id}" aria-label="Sumar cantidad" ${plusDisabled ? 'disabled' : ''}>
                       <i class="ri-add-line"></i>
                     </button>
-                    <button class="button add_to_cart-button santiago-class">Agregar al carrito</button>
+                    
+                    <label for="product-${p.id}" class="button add_to_cart-button santiago-class">
+                      ${isInCart ? "Quitar" : "Agregar"}
+                      ${isInCart ? "<i class='ri-dislike-line'></i>" : "<i class='ri-heart-add-line'></i>" }
+                    </label>
                   </div>
                 </div>
               </div>
-            </label>
+            </div>
           </div>
         </div>
       `;
@@ -313,6 +336,8 @@ const renderProductCards = ({ updatedProductId = null } = {}) => {
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
+  // Limpiar favoritos al iniciar la página
+  localStorage.setItem('favorites', '[]');
   const grid = document.getElementById('products-wrapper');
   const formContainer = document.getElementById('select_product-container');
 

@@ -174,19 +174,26 @@
 }
 
 .shipment-card__header {
-  display: flex;
-  justify-content: space-between;
+  text-align: start;
+  display: flex;                                                                                                                  
   gap: 0.75rem;
-  align-items: flex-start;
+  align-items: center;
   font-weight: 600;
 }
 
 .shipment-card__title {
+  text-align: start;
+  display: flex;                                                                                                                  
+  gap: 0.75rem;
+  align-items: center;
   color: var(--title-color);
+  align-items: center;
+  font-size: 1.25rem;
 }
 
 .shipment-card__price {
   color: var(--first-color);
+  font-weight: 700;
 }
 
 .shipment-card__info {

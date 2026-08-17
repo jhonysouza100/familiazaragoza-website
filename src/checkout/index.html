@@ -117,7 +117,7 @@
             <div class="form_field" id="postal-field" hidden>
               <label class="form_label" for="postalCode">Código postal</label>
               <input class="form_input" type="text" id="postalCode" name="postalCodeDestination"
-                autocomplete="postal-code" required />
+                autocomplete="postal-code" required inputmode="numeric" pattern="[0-9]{4,4}" title="Ingresá exactamente 4 dígitos" />
             </div>
             <!--=============== CIUDAD (dinámico) ===============-->
             <div class="form_field" id="city-field" hidden>

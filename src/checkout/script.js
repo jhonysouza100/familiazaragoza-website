@@ -187,11 +187,13 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <div class="shipment-card__content">
           <div class="shipment-card__info">
-            <span class="shipment-card__title">${getShipmentLabel(type)}: <b>${formatPrice(option.price)}</b></span>
+            <span class="shipment-card__title">${getShipmentLabel(type)}: 
+              <span class="shipment-card__price">${formatPrice(option.price)}</span>
+            </span>
             </div>
           <div class="shipment-card__header">
-            <span class="shipment-card__total">Total con envío</span>
-            <span class="shipment-card__price">${formatPrice(total)}</span>
+            <span class="shipment-card__total">Total con envío:</span>
+            <b>${formatPrice(total)}</b>
           </div>
           </div>
         </div>`;
@@ -325,6 +327,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const data = await response.json();
     const rates = Array.isArray(data?.rates) ? data.rates : [];
     shipmentOptions = extractShipmentOptions(rates);
+
+    /** sumarle el 8% al precio actual y redondear el resultado
+    shipmentOptions = Object.fromEntries(
+      Object.entries(shipmentOptions).map(([key, option]) => [
+        key,
+        {
+          ...option,
+          price: Math.round(option.price * 1.08),
+        },
+      ])
+    );
+    */
+
     if (!shipmentOptions.S && !shipmentOptions.D) {
       throw new Error("No se pudo obtener las tarifas de envío.");
     }
