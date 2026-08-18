@@ -568,7 +568,6 @@ document.addEventListener("DOMContentLoaded", () => {
       setMessage("No pudimos cargar las sucursales. Intentá nuevamente.", "error");
     } finally {
       cityLoading.hidden = true;
-      updateSubmitState();
     }
   };
 
@@ -640,9 +639,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const agencies = getAgencies();
     const filteredAgencies = filtrarPorCodigoPostal(agencies, postalCode);
 
-    submitBtn.disabled = true;
-    setMessage("");
-
+    
     if (filteredAgencies.length === 0) {
       setMessage("El código postal no coincide con la provincia seleccionada.", "error");
       return;
@@ -652,7 +649,7 @@ document.addEventListener("DOMContentLoaded", () => {
     citySelect.disabled = false;
     toggleField(cityField, true);
     setMessage("");
-    updateSubmitState();
+    submitBtn.disabled = true;
   }
 
   /** 🚚 Al elegir el método de entrega: muestra los campos de sucursal o de domicilio */
