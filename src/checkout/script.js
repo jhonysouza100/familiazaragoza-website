@@ -545,7 +545,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (activeAgencies.length === 0) {
         setMessage("No hay sucursales disponibles en esta provincia.", "error");
       } else {
-        setMessage("");
         // Código postal (Habilitado) para buscar por código postal dentro de la provincia
         toggleField(postalField, true);
         const postalCode = getShipmentPostalCode();
@@ -556,6 +555,8 @@ document.addEventListener("DOMContentLoaded", () => {
           // Si el codigo postal no coincide con la provincia, mostramos un mensaje de error y dejamos el select vacío.
           if (filteredAgencies.length === 0) {
             setMessage("El código postal no coincide con la provincia seleccionada.", "error");
+          } else {
+            setMessage("");
           }
           // Desactivar el button de submit en este punto, para evitar el poder enviar el formulario antes de tiempo.
           submitBtn.disabled = true;
@@ -639,9 +640,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const agencies = getAgencies();
     const filteredAgencies = filtrarPorCodigoPostal(agencies, postalCode);
 
+    submitBtn.disabled = true;
+    setMessage("");
+
     if (filteredAgencies.length === 0) {
       setMessage("El código postal no coincide con la provincia seleccionada.", "error");
-      updateSubmitState();
       return;
     }
 
